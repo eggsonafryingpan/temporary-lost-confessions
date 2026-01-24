@@ -3,6 +3,8 @@ console.log(world);
 const width = 1400;
 const height = 788;
 world.style.backgroundImage = "url('imgs/room.png')";
+const dpr = window.devicePixelRatio || 1;
+
 world.style.width = `${width * dpr / dpr}px`;
 world.style.height = `${height * dpr / dpr}px`;
 document.addEventListener('mousemove', (e) => {
@@ -11,4 +13,3 @@ document.addEventListener('mousemove', (e) => {
     console.log(mouseX, mouseY);
 })
 
-const dpr = window.devicePixelRatio || 1;
