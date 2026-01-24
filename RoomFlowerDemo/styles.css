@@ -1,11 +1,7 @@
 #world {
-    width: 1400px;
-    height: 788px;
+
     position: relative;
     border: 1px solid rgb(0, 0, 0);
-    background-size: 1400px 788px;
-    image-rendering: pixelated;
-    image-rendering: crisp-edges;
 }
 
 #screen {
