@@ -5,8 +5,8 @@ const height = 788;
 world.style.backgroundImage = "url('imgs/room.png')";
 const dpr = window.devicePixelRatio || 1;
 
-world.style.width = `${width * dpr / dpr}px`;
-world.style.height = `${height * dpr / dpr}px`;
+world.style.width = `${width}px`;
+world.style.height = `${height}px`;
 document.addEventListener('mousemove', (e) => {
     const mouseX = e.clientX;
     const mouseY = e.clientY;
