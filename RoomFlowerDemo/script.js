@@ -1,3 +1,5 @@
+import { Object } from './Object.js';
+
 const world = document.getElementById("world");
 console.log(world);
 const width = 1400;
@@ -11,4 +13,8 @@ document.addEventListener('mousemove', (e) => {
     const mouseY = e.clientY;
     console.log(mouseX, mouseY);
 })
+
+const flower = new Object("flower", 100, 100, 'imgs/flower.png');
+flower.load();
+
 
