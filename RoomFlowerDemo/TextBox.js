@@ -1,4 +1,3 @@
-import { GameObject } from "./GameObject";
 import { width, height } from "./script";
 
 export class TextBox {
