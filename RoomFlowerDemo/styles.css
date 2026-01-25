@@ -1,6 +1,8 @@
 #world {
     position: relative;
     border: 1px solid #000000;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 #screen {
@@ -15,4 +17,26 @@
 body {
     padding: 0;
     margin: 0;
+}
+
+#textBox {
+    display: none;
+    width: 906px;
+    height: 156px;
+    position: relative;
+    transform: translate(-50%, -50%);
+    user-select: none;
+    -webkit-user-select: none;
+    transition: .1s ease-in;
+}
+
+#textBox img {
+    position: absolute;
+    -webkit-user-drag: none;
+}
+
+#textBoxText {
+    position: absolute;
+    padding: 20px;
+    font-size: 20px;
 }

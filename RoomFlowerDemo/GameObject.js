@@ -33,6 +33,7 @@ export class GameObject {
         this.img.style.left = this.x + 'px';
         this.img.style.top = this.y + 'px';
         this.img.style.display = this.state;
+        this.img.draggable = false;
     }
 
     setOnClick(func) {

@@ -1,19 +1,23 @@
-import { width, height } from "./script";
+import { width, height } from "./script.js";
 
-export class TextBox {
+export class GameTextBox {
     constructor(text) {
         const world = document.getElementById("world");
-        this.textBox = document.createElement("div");
+        textBox = document.createElement("img");
         world.appendChild(this.textBox);
-        this.textBox.innerHTML = text;
-        this.textBox.style.backgroundImage = "url('imgs/textBox.png')"
-        this.textBox.style.backgroundPosition = 'center';
-        this.textBox.style.transform = "translate(-50%, -50%)";
-        this.textBox.style.position = 'absolute';
-        this.textBox.style.left = width / 2 + 'px';
-        this.textBox.style.bottom = 150
-        this.textBox.style.width = '900px';
-        this.textBox.style.height = '150px';
+        this.text = document.createElement("div");
+        this.textBox.appendChild(this.textBox);
+
+        textBox.innerHTML = text;
+        textBox.style.backgroundImage = "url('imgs/textBox.png')"
+        textBox.style.backgroundPosition = 'center';
+        textBox.style.padding =
+            textBox.style.transform = "translate(-50%, -50%)";
+        textBox.style.position = 'absolute';
+        textBox.style.left = width / 2 + 'px';
+        textBox.style.top = '650px'
+        textBox.style.width = '900px';
+        textBox.style.height = '150px';
     }
 
 }
