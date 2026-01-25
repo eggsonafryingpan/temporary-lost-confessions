@@ -27,7 +27,6 @@ body {
     transform: translate(-50%, -50%);
     user-select: none;
     -webkit-user-select: none;
-    transition: .1s ease-in;
 }
 
 #textBox img {
