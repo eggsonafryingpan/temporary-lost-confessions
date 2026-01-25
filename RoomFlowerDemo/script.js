@@ -1,5 +1,5 @@
 import { GameObject } from './GameObject.js';
-import { TextBox } from './TextBox.js';
+import { TextBox } from './GameTextBox.js';
 const world = document.getElementById("world");
 export const width = 1400;
 export const height = 788;
