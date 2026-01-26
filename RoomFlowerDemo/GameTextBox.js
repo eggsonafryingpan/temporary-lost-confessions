@@ -32,8 +32,10 @@ export class GameTextBox {
     }
 
     setText(text) {
-        this.show(this.box);
-        this.Text.innerHTML = text;
+        if (!this.confirming) {
+            this.show(this.box);
+            this.Text.innerHTML = text;
+        }
     }
     setTextConfirm(text, yes = null, no = null) {
         this.setText(text);

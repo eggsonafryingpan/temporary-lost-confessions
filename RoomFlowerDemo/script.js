@@ -19,7 +19,6 @@ function setTextBox(text) {
     textBox.setText(text);
 
 }
-
 function setTextBoxConfirm(text, yes, no) {
     textBox.setTextConfirm(text, yes, no);
 }
@@ -36,14 +35,40 @@ document.addEventListener('mousemove', (e) => {
 
 
 
-//                                x     y     path to img           room
-// const flower = new GameObject(750, 470, 'flower', test);
+//KATEEEEE this is how u make a new object:
+// const [objName] = new GameObject(
+// [x],
+// [y],
+// [file name without .png or the folders its in],
+// [room its in aka the folder its in],
+// [z index/layer its on])
+
+//Example (the img is at imgs/test/flower.png but you only need to put 'flower')
+// const flower = new GameObject(750, 470, 'flower', test, 5);
+
+
+//How to set what it does when its click:
+// [varName].setOnClick( () => {[function where something happens]})
+// In the example I use setTextBox() and setTextBoxConfirm()
+
+// How to use setTextBox():
+//setTextBox([text that pops up])  --> function handles the rest
+
+//How to use setTextBoxConfirm():
+//setTextBoxConfirm([text],[function of what happen when you click yes], [function of what happens when you click no]);
+
+//Example:
 // flower.setOnClick(() => { setTextBox("A flower.") });
+// flower.setOnClick(() => { setTextBoxConfirm("Do u want the flower?, yesFunction(), noFunction()")});
+// yesFunction() {
+//  blah blah blah
+// }
+// noFunction() {
+//  blah blah blah
+// }
 
 // room 1 loading
-// const alarmclock = new GameObject(300, 300, 'alarmclock', bedroom);
-// alarmclock.setOnClick(() => { setTextBox("An alarm clock. It's 7:00 am.") });
-// const bed = new GameObject(,,'bed')
+
 const gameWindow = new GameObject(167, 259, 'window', bedroom);
 gameWindow.setOnClick(() => {
     if (gameWindow.state == "") {
@@ -56,7 +81,7 @@ gameWindow.setOnClick(() => {
 
 const bed = new GameObject(255, 483, 'bed', bedroom, 2);
 // bed.setOnClick(() => { setTextBox("A comfy bed.") });
-bed.setOnClick(() => { setTextBoxConfirm("A comfy bed.", () => { console.log("yes") }, () => { console.log("no") }) });
+bed.setOnClick(() => { setTextBox("A comfy bed.") });
 
 const calender = new GameObject(915, 346, 'calender', bedroom, 3);
 // calender.setOnClick();
@@ -80,12 +105,11 @@ const alarmclock = new GameObject(222, 597, 'alarmclock', bedroom, 4);
 alarmclock.setOnClick(() => { setTextBox("An alarm clock. It's 7:00 am.") });
 
 const cd = new GameObject(282, 623, 'cd', bedroom, 4);
-cd.setOnClick(() => { setTextBox('A cd titled "Schubert - Serenade", your favorite.') });
-//ADD YES NO
+cd.setOnClick(() => { setTextBoxConfirm('A cd titled "Schubert - Serenade", your favorite. Pick it up?', () => { cd.hide() }) });
+
 
 const cds = new GameObject(277, 658, 'cds', bedroom, 4)
 cds.setOnClick(() => { setTextBox('A cd collection.') });
-
 
 
 const desk = new GameObject(1027, 330, 'desk', bedroom, 3);
@@ -109,7 +133,7 @@ const todo = new GameObject(1153, 420, 'todo', bedroom, 4);
 
 const cdPlayer = new GameObject(1170, 519, 'cdPlayer', bedroom, 5);
 //change
-cdPlayer.setOnClick(() => { setTextBox("A cd player. It was your 20th birthday present") });
+cdPlayer.setOnClick(() => { setTextBox("A cd player. It was your 20th birthday present.") });
 cdPlayer.setTranslate("bottomRight");
 
 const drawer = new GameObject(1031, 508, 'drawer', bedroom, 4);
