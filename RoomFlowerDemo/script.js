@@ -88,6 +88,7 @@ const serenade = new Audio('sound/schubertSerenade.mp3');
 
 // room 1 loading
 
+//testing change later
 const gameWindow = new GameObject(167, 259, 'window', bedroom);
 gameWindow.setOnClick(() => {
     if (gameWindow.state == "") {
@@ -125,10 +126,8 @@ alarmclock.setOnClick(() => { setTextBox("An alarm clock. It's 7:00 am.") });
 const cd = new GameObject(282, 623, 'cd', bedroom, 4);
 cd.setOnClick(() => { setTextBoxConfirm('A cd titled in black pen: "Serenade - Franz Schubert". It\'s your favorite song. Pick it up?', () => { inventory.push(cd), cd.hide() }) });
 
-
 const cds = new GameObject(277, 658, 'cds', bedroom, 4)
 cds.setOnClick(() => { setTextBox('A cd collection.') });
-
 
 const desk = new GameObject(1027, 330, 'desk', bedroom, 3);
 desk.setOnClick(() => { setTextBox("A desk. You built it yourself.") });
@@ -143,8 +142,19 @@ const picture = new GameObject(1124, 361, 'picture', bedroom, 4);
 picture.setOnClick(() => { setTextBox("A photo of you and someone else. You look happy.") });
 
 const penContainer = new GameObject(1248, 528, 'penContainer', bedroom, 4);
-//penContainer.setOnClick(() => {setTextBox("A comfy bed.")});
 penContainer.setTranslate("bottomRight");
+penContainer.setOnClick(() => {
+    if (penContainer.state != 'PenOut') {
+        setTextBoxConfirm("Three pens you got from a job fair. Take one?",
+            () => {
+                penContainer.setImgState('PenOut');
+                inventory.push(penContainer); //change to pen not pen container
+            })
+    } else {
+        setTextBox("Two pens you got from a job fair.");
+    }
+});
+
 
 const todo = new GameObject(1153, 420, 'todo', bedroom, 4);
 //todo.setOnClick(() => {setTextBox("A comfy bed.")});
@@ -156,7 +166,7 @@ cdPlayer.setOnClick(() => {
         textChain([
             () => setTextBoxConfirm(
                 "Place the cd in the cd player?",
-                () => { // yes func
+                () => {
                     cdPlayer.setImgState("Closed");
                     inventoryRemove(cd);
                     serenade.play();
@@ -174,6 +184,7 @@ cdPlayer.setOnClick(() => {
 
 
 const resume = new GameObject(1053, 529, 'resume', bedroom, 7);
+resume.hide();
 resume.setOnClick(() => {
     setTextBoxConfirm("It's your resume! You need it for the job interview today. Pick it up?",
         () => {
@@ -182,16 +193,17 @@ resume.setOnClick(() => {
         }
     )
 });
-resume.hide();
+
 
 const letter = new GameObject(1057, 527, 'letter', bedroom, 6);
+letter.hide();
 letter.setOnClick(
     () => setTextBoxConfirm("A letter... Take it?", () => { console.log("kitty cat appears") })
 );
-letter.hide();
+
 
 const drawer = new GameObject(1031, 508, 'drawer', bedroom, 4);
-drawer.setOnClick(() => { setTextBox("A drawer. It's a normal drawer.") });
+drawer.setOnClick(() => setTextBox("A drawer. It's a normal drawer."));
 
 const puzzleDrawer = new GameObject(1122, 558, 'puzzleDrawer', bedroom, 5);
 puzzleDrawer.unlocked = false;
