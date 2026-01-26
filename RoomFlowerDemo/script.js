@@ -4,8 +4,10 @@ export const width = 1400;
 export const height = 788;
 
 
+const bedroom = document.getElementById("bedroom");
+console.log(bedroom);
+let currRoom = bedroom;
 const world = document.getElementById("world");
-world.style.backgroundImage = "url('imgs/room.png')";
 world.style.width = width + 'px';
 world.style.height = height + 'px';
 
@@ -33,7 +35,7 @@ document.addEventListener('mousemove', (e) => {
 
 
 
-const flower = new GameObject("flower", 750, 470, 'imgs/flower.png');
+const flower = new GameObject("flower", 750, 470, 'imgs/test/flower.png', bedroom);
 
 flower.setOnClick(() => { setTextBox("A flower.") });
 
