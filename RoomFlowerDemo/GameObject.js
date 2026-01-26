@@ -22,11 +22,11 @@ export class GameObject {
     }
 
     hide() {
-        if (this.img.style.display == 'none') {
-            this.img.style.display = 'block';
-        } else {
-            this.img.style.display = 'none';
-        }
+        this.img.style.display = 'none';
+    }
+
+    show() {
+        this.img.style.display = 'block';
     }
 
     setImgState(imgState) {

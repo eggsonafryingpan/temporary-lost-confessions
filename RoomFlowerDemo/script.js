@@ -6,7 +6,6 @@ export const height = 788;
 
 
 const bedroom = document.getElementById("bedroom");
-console.log(bedroom);
 let currRoom = bedroom;
 const world = document.getElementById("world");
 world.style.width = width + 'px';
@@ -15,14 +14,31 @@ world.style.height = height + 'px';
 
 const textBox = new GameTextBox();
 
+
+async function textChain(arr) {
+    for (const func of arr) {
+        await func();
+    }
+}
+
 function setTextBox(text) {
     textBox.setText(text);
-
+    return textBox.textPromise;
 }
+
 function setTextBoxConfirm(text, yes, no) {
     textBox.setTextConfirm(text, yes, no);
+    return textBox.textPromise;
 }
 
+const inventory = [];
+
+function inventoryRemove(o) {
+    let index = inventory.indexOf(o);
+    if (index != -1) {
+        inventory.splice(index, 1);
+    }
+}
 
 
 document.addEventListener('mousemove', (e) => {
@@ -30,9 +46,12 @@ document.addEventListener('mousemove', (e) => {
     let mouseY = e.clientY;
     if (innerWidth > width) mouseX -= ((innerWidth - width) / 2);
     if (innerHeight > height) mouseY -= ((innerHeight - height) / 2);
-    console.log(mouseX, mouseY);
+    // console.log(mouseX, mouseY);
 })
 
+
+const click = new Audio('sound/click.wav');
+const serenade = new Audio('sound/schubertSerenade.mp3');
 
 
 //KATEEEEE this is how u make a new object:
@@ -72,7 +91,6 @@ document.addEventListener('mousemove', (e) => {
 const gameWindow = new GameObject(167, 259, 'window', bedroom);
 gameWindow.setOnClick(() => {
     if (gameWindow.state == "") {
-        console.log("dsjlkfjs");
         gameWindow.setImgState("Poster");
     } else { gameWindow.setImgState("") };
 });
@@ -105,7 +123,7 @@ const alarmclock = new GameObject(222, 597, 'alarmclock', bedroom, 4);
 alarmclock.setOnClick(() => { setTextBox("An alarm clock. It's 7:00 am.") });
 
 const cd = new GameObject(282, 623, 'cd', bedroom, 4);
-cd.setOnClick(() => { setTextBoxConfirm('A cd titled "Schubert - Serenade", your favorite. Pick it up?', () => { cd.hide() }) });
+cd.setOnClick(() => { setTextBoxConfirm('A cd titled in black pen: "Serenade - Franz Schubert". It\'s your favorite song. Pick it up?', () => { inventory.push(cd), cd.hide() }) });
 
 
 const cds = new GameObject(277, 658, 'cds', bedroom, 4)
@@ -132,21 +150,66 @@ const todo = new GameObject(1153, 420, 'todo', bedroom, 4);
 //todo.setOnClick(() => {setTextBox("A comfy bed.")});
 
 const cdPlayer = new GameObject(1170, 519, 'cdPlayer', bedroom, 5);
-//change
-cdPlayer.setOnClick(() => { setTextBox("A cd player. It was your 20th birthday present.") });
 cdPlayer.setTranslate("bottomRight");
+cdPlayer.setOnClick(() => {
+    if (inventory.includes(cd)) {
+        textChain([
+            () => setTextBoxConfirm(
+                "Place the cd in the cd player?",
+                () => { // yes func
+                    cdPlayer.setImgState("Closed");
+                    inventoryRemove(cd);
+                    serenade.play();
+                    setTimeout(() => {
+                        click.play();
+                        puzzleDrawer.unlocked = true;
+                    }, 1000);
+                }),//2nd in sequence
+            () => setTextBox('"Serenade - Franz Schubert" plays. You hear a click from under the desk.')
+        ]);
+    } else if (cdPlayer.state == "Closed") {
+        setTextBox("A beautiful classical piece plays.");
+    } else { setTextBox("A cd player. It was your 20th birthday present.") };
+});
+
+
+const resume = new GameObject(1053, 529, 'resume', bedroom, 7);
+resume.setOnClick(() => {
+    setTextBoxConfirm("It's your resume! You need it for the job interview today. Pick it up?",
+        () => {
+            inventory.push(resume);
+            resume.hide();
+        }
+    )
+});
+resume.hide();
+
+const letter = new GameObject(1057, 527, 'letter', bedroom, 6);
+letter.setOnClick(
+    () => setTextBoxConfirm("A letter... Take it?", () => { console.log("kitty cat appears") })
+);
+letter.hide();
 
 const drawer = new GameObject(1031, 508, 'drawer', bedroom, 4);
 drawer.setOnClick(() => { setTextBox("A drawer. It's a normal drawer.") });
 
 const puzzleDrawer = new GameObject(1122, 558, 'puzzleDrawer', bedroom, 5);
-puzzleDrawer.setOnClick(() => { setTextBox("A drawer. There's a black box with wires. You spent a lot of time working on that.") });
+puzzleDrawer.unlocked = false;
+puzzleDrawer.setOnClick(() => {
+    if (!puzzleDrawer.unlocked)
+        setTextBox("A locked drawer. There's a black box with wires. You spent a lot of time working on that.");
+    else if (puzzleDrawer.state == "")
+        setTextBoxConfirm("It's unlocked. Open it?", () => {
+            puzzleDrawer.setImgState("Open")
+            resume.show();
+            letter.show();
+        })
+    else {
+        setTextBox("The mechanism worked.");
+    }
+});
 puzzleDrawer.setTranslate("bottomRight");
 
-const resume = new GameObject(1053, 529, 'resume', bedroom, 7);
-resume.hide();
-const letter = new GameObject(1057, 527, 'letter', bedroom, 6);
-letter.hide();
 
 const spacePaper = new GameObject(1296, 357, 'spacePaper', bedroom, 2);
 //spacePaper.setOnClick(() => {setTextBox("A comfy bed.")});

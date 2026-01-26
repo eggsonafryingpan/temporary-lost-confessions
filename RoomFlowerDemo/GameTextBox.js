@@ -3,7 +3,7 @@ import { width, height } from "./script.js";
 export class GameTextBox {
     constructor() {
         this.box = document.getElementById("textBox");
-        this.Text = document.getElementById("textBoxText");
+        this.text = document.getElementById("textBoxText");
         this.confirmBox = document.getElementById("textBoxConfirm");
         this.confirmYes = document.getElementById("textBoxConfirmYes");
         this.confirmNo = document.getElementById("textBoxConfirmNo");
@@ -11,12 +11,41 @@ export class GameTextBox {
         this.box.style.top = height * 0.85 + 'px';
         this.yesFunc = null;
         this.noFunc = null;
-        this.confirmYes.addEventListener('click', () => { if (this.yesFunc != null) this.yesFunc(); });
-        this.confirmYes.addEventListener('click', () => { this.hideConfirming() })
-        this.confirmNo.addEventListener('click', () => { if (this.noFunc != null) this.noFunc(); });
-        this.confirmNo.addEventListener('click', () => { this.hideConfirming() })
+        this.textPromise = null;
+        this.textResolve = null;
         this.confirming = false;
-        this.box.addEventListener('click', () => { if (!this.confirming) this.hide(this.box); });
+
+        this.confirmYes.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.hideConfirming();
+            if (this.yesFunc != null) this.yesFunc();
+            if (this.textResolve) {
+                this.textResolve();
+            }
+        }) 
+
+
+        this.confirmNo.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.hideConfirming();
+            if (this.noFunc != null) this.noFunc();
+            if (this.textResolve) { //!!!! delete if u dont want chaintext running when clicked no
+                this.textResolve();
+            }
+        })
+
+        
+        this.box.addEventListener('click', () => {
+            if (!this.confirming) {
+                this.hide(this.box);
+                if (this.textResolve) {
+                    this.textResolve();
+                }
+            }
+        });
+
+
+
     }
     show(box) {
         box.style.display = 'block';
@@ -34,14 +63,21 @@ export class GameTextBox {
     setText(text) {
         if (!this.confirming) {
             this.show(this.box);
-            this.Text.innerHTML = text;
+            this.text.innerHTML = text;
+            this.textPromise = new Promise(resolve => {
+                this.textResolve = resolve;
+            });
         }
     }
     setTextConfirm(text, yes = null, no = null) {
-        this.setText(text);
+        this.show(this.box);
         this.show(this.confirmBox);
+        this.text.innerHTML = text;
         this.yesFunc = yes;
         this.noFunc = no;
+        this.textPromise = new Promise(resolve => {
+            this.textResolve = resolve;
+        });
         this.confirming = true;
     }
 }
