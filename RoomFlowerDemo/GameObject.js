@@ -1,5 +1,5 @@
 export class GameObject {
-    constructor(x = 0, y = 0, imgSrc = "", parent = null, zIndex = 2) {
+    constructor(x = 0, y = 0, imgSrc = "", parent = null, zIndex = 3) {
         this.imgSrc = imgSrc;
         this.x = x;
         this.y = y;
@@ -20,6 +20,14 @@ export class GameObject {
         return this.img;
     }
 
+    hide() {
+        if (this.img.style.display == 'none') {
+            this.img.style.display = 'block';
+        } else {
+            this.img.style.display = 'none';
+        }
+    }
+
     setImgState(imgState) {
         this.state = imgState;
         console.log(this.imgSrc + this.state + ".png");
@@ -38,6 +46,12 @@ export class GameObject {
         this.img.style.display = this.state;
         this.img.draggable = false;
         this.img.style.zIndex = this.zIndex;
+    }
+
+    setTranslate(translate) {
+        if (translate == "bottomRight") {
+            this.img.style.transform = 'translate(-100%, -100%)';
+        }
     }
 
     setOnClick(func) {
