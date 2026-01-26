@@ -1,11 +1,11 @@
 export class GameObject {
-    constructor(name = "null", x = 0, y = 0, imgSrc = "", parent = null, state = "block") {
+    constructor(x = 0, y = 0, imgSrc = "", parent = null, zIndex = 2) {
         this.imgSrc = imgSrc;
-        this.name = name;
         this.x = x;
         this.y = y;
-        this.state = state;
+        this.state = "";
         this.parent = parent;
+        this.zIndex = zIndex;
         this.load();
     }
 
@@ -20,20 +20,24 @@ export class GameObject {
         return this.img;
     }
 
-    getName() {
-        return this.name;
+    setImgState(imgState) {
+        this.state = imgState;
+        console.log(this.imgSrc + this.state + ".png");
+        this.img.src = this.imgSrc + this.state + ".png";
     }
 
     load() {
         this.img = document.createElement("img");
         this.parent.appendChild(this.img);
-        this.img.src = this.imgSrc;
-        this.img.style.transform = "translate(-50%, -50%)";
+        this.imgSrc = 'imgs/' + this.parent.id + '/' + this.imgSrc;
+        this.img.src = this.imgSrc + '.png';
+        // this.img.style.transform = "translate(-50%, -50%)";
         this.img.style.position = 'absolute';
         this.img.style.left = this.x + 'px';
         this.img.style.top = this.y + 'px';
         this.img.style.display = this.state;
         this.img.draggable = false;
+        this.img.style.zIndex = this.zIndex;
     }
 
     setOnClick(func) {

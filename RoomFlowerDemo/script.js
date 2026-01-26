@@ -27,15 +27,25 @@ function setTextBox(text) {
 document.addEventListener('mousemove', (e) => {
     let mouseX = e.clientX;
     let mouseY = e.clientY;
-    if (window.innerWidth > width) mouseX -= ((window.innerWidth - width) / 2);
-    if (window.innerHeight > height) mouseY -= ((window.innerHeight - height) / 2);
+    if (innerWidth > width) mouseX -= ((innerWidth - width) / 2);
+    if (innerHeight > height) mouseY -= ((innerHeight - height) / 2);
     console.log(mouseX, mouseY);
 })
 
 
 
+//                                x     y     path to img           room
+// const flower = new GameObject(750, 470, 'flower', test);
+// flower.setOnClick(() => { setTextBox("A flower.") });
 
-const flower = new GameObject("flower", 750, 470, 'imgs/test/flower.png', bedroom);
-
-flower.setOnClick(() => { setTextBox("A flower.") });
-
+// room 1 loading
+// const alarmclock = new GameObject(300, 300, 'alarmclock', bedroom);
+// alarmclock.setOnClick(() => { setTextBox("An alarm clock. It's 7:00 am.") });
+// const bed = new GameObject(,,'bed')
+const gameWindow = new GameObject(167, 259, 'window', bedroom);
+gameWindow.setOnClick(() => {
+    if (gameWindow.state == "") {
+        console.log("dsjlkfjs");
+        gameWindow.setImgState("Poster");
+    } else { gameWindow.setImgState("") };
+});
