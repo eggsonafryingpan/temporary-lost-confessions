@@ -12,6 +12,21 @@ world.style.width = width + 'px';
 world.style.height = height + 'px';
 
 
+const zoom = document.getElementById("zoom");
+const zoomImg = document.getElementById("zoomImg");
+
+zoom.addEventListener('click', () => zoom.style.display = 'none');
+
+function setZoom(o) {
+    if (textBox.isHidden()) {
+        const zoom = document.getElementById("zoom");
+        const zoomImg = document.getElementById("zoomImg");
+        console.log(zoomImg);
+        zoom.style.display = 'flex';
+        zoomImg.src = o.imgSrc + "Zoom.png";
+    }
+}
+
 const textBox = new GameTextBox();
 
 
@@ -103,7 +118,7 @@ const bed = new GameObject(255, 483, 'bed', bedroom, 2);
 bed.setOnClick(() => { setTextBox("A comfy bed.") });
 
 const calender = new GameObject(915, 346, 'calender', bedroom, 3);
-// calender.setOnClick();
+calender.setOnClick(() => { setZoom(calender); });
 
 const hamper = new GameObject(704, 551, 'hamper', bedroom, 2);
 hamper.setOnClick(() => { setTextBox("A hamper. You have to do the laundry on Sunday.") });
@@ -157,7 +172,7 @@ penContainer.setOnClick(() => {
 
 
 const todo = new GameObject(1153, 420, 'todo', bedroom, 4);
-//todo.setOnClick(() => {setTextBox("A comfy bed.")});
+todo.setOnClick(() => { setZoom(todo); });
 
 const cdPlayer = new GameObject(1170, 519, 'cdPlayer', bedroom, 5);
 cdPlayer.setTranslate("bottomRight");
@@ -224,7 +239,7 @@ puzzleDrawer.setTranslate("bottomRight");
 
 
 const spacePaper = new GameObject(1296, 357, 'spacePaper', bedroom, 2);
-//spacePaper.setOnClick(() => {setTextBox("A comfy bed.")});
+spacePaper.setOnClick(() => { setZoom(spacePaper); });
 
 const poster1 = new GameObject(425, 309, 'poster1', bedroom, 2);
 poster1.setOnClick(() => { setTextBox("A poster of your favorite movie.") });

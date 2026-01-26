@@ -22,7 +22,7 @@ export class GameTextBox {
             if (this.textResolve) {
                 this.textResolve();
             }
-        }) 
+        })
 
 
         this.confirmNo.addEventListener('click', (e) => {
@@ -34,7 +34,7 @@ export class GameTextBox {
             }
         })
 
-        
+
         this.box.addEventListener('click', () => {
             if (!this.confirming) {
                 this.hide(this.box);
@@ -52,6 +52,14 @@ export class GameTextBox {
     }
     hide(box) {
         box.style.display = 'none';
+    }
+
+    isHidden() {
+        if (window.getComputedStyle(this.box).display == 'none') {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     hideConfirming() {
