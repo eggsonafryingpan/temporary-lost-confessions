@@ -48,3 +48,32 @@ body {
     font-size: 20px;
     z-index: 10;
 }
+
+#textBoxConfirm {
+    display: none;
+    left: 80%;
+    top: 60%;
+    position: absolute;
+    font-size: 20px;
+    z-index: 10;
+}
+
+#textBoxConfirmYes {
+    display: inline-block;
+    padding: 0 20px 0 20px;
+}
+
+#textBoxConfirmYes:hover {
+    color: rgb(255, 255, 255);
+    background-color: rgb(141, 142, 212);
+}
+
+#textBoxConfirmNo {
+    display: inline-block;
+    padding: 0 20px 0 20px;
+}
+
+#textBoxConfirmNo:hover {
+    color: rgb(255, 255, 255);
+    background-color: rgb(141, 142, 212);
+}

@@ -6,6 +6,7 @@ export class GameObject {
         this.state = "";
         this.parent = parent;
         this.zIndex = zIndex;
+        this.onClick = null;
         this.load();
     }
 
@@ -46,6 +47,11 @@ export class GameObject {
         this.img.style.display = this.state;
         this.img.draggable = false;
         this.img.style.zIndex = this.zIndex;
+        this.img.addEventListener('click', () => {
+            if (this.onClick != null) {
+                this.onClick();
+            }
+        });
     }
 
     setTranslate(translate) {
@@ -55,7 +61,7 @@ export class GameObject {
     }
 
     setOnClick(func) {
-        this.img.addEventListener('click', func);
+        this.onClick = func;
     }
 
     remove() {

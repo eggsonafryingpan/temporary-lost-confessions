@@ -1,4 +1,5 @@
 import { GameObject } from './GameObject.js';
+import { GameTextBox } from './GameTextBox.js';
 
 export const width = 1400;
 export const height = 788;
@@ -11,15 +12,16 @@ const world = document.getElementById("world");
 world.style.width = width + 'px';
 world.style.height = height + 'px';
 
-const textBox = document.getElementById("textBox");
-const textBoxText = document.getElementById("textBoxText");
-textBox.style.left = width / 2 + 'px';
-textBox.style.top = height * 0.85 + 'px';
-textBox.addEventListener('click', () => { textBox.style.display = 'none' });
+
+const textBox = new GameTextBox();
 
 function setTextBox(text) {
-    textBox.style.display = 'block';
-    textBoxText.innerHTML = text;
+    textBox.setText(text);
+
+}
+
+function setTextBoxConfirm(text, yes, no) {
+    textBox.setTextConfirm(text, yes, no);
 }
 
 
@@ -53,7 +55,8 @@ gameWindow.setOnClick(() => {
 
 
 const bed = new GameObject(255, 483, 'bed', bedroom, 2);
-bed.setOnClick(() => { setTextBox("A comfy bed.") });
+// bed.setOnClick(() => { setTextBox("A comfy bed.") });
+bed.setOnClick(() => { setTextBoxConfirm("A comfy bed.", () => { console.log("yes") }, () => { console.log("no") }) });
 
 const calender = new GameObject(915, 346, 'calender', bedroom, 3);
 // calender.setOnClick();
