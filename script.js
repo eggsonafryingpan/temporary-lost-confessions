@@ -94,7 +94,7 @@ serenade.loop = true;
 
 //Example:
 // flower.setOnClick(() => { setTextBox("A flower.") });
-// flower.setOnClick(() => { setTextBoxConfirm("Do u want the flower?, yesFunction(), noFunction()")});
+// flower.setOnClick(() => { setTextBoxConfirm("Do u want the flower?", () => {yesFunction()}, () = {noFunction()})});
 // yesFunction() {
 //  blah blah blah
 // }
@@ -102,14 +102,13 @@ serenade.loop = true;
 //  blah blah blah
 // }
 
+
 // room 1 loading
 
 //testing change later
 const gameWindow = new GameObject(167, 259, 'window', bedroom);
 gameWindow.setOnClick(() => {
-    if (gameWindow.state == "") {
-        gameWindow.setImgState("Poster");
-    } else { gameWindow.setImgState("") };
+    setTextBox("A window. It's cold outside, you should probably keep it closed.");
 });
 
 
@@ -177,6 +176,7 @@ todo.setOnClick(() => { setZoom(todo); });
 
 const cdPlayer = new GameObject(1170, 519, 'cdPlayer', bedroom, 5);
 cdPlayer.setTranslate("bottomRight");
+cdPlayer.sound = serenade;
 cdPlayer.setOnClick(() => {
     if (inventory.includes(cd)) {
         textChain([
@@ -185,13 +185,13 @@ cdPlayer.setOnClick(() => {
                 () => {
                     cdPlayer.setImgState("Closed");
                     inventoryRemove(cd);
-                    serenade.play();
+                    cdPlayer.sound.play();
                     setTimeout(() => {
                         click.play();
                         puzzleDrawer.unlocked = true;
                     }, 1000);
                 }),//2nd in sequence
-            () => setTextBox('"Serenade - Franz Schubert" plays. You hear a click from the locked drawer.')
+            () => setTextBox('"Serenade - Franz Schubert" plays. You hear a click from the desk drawer.')
         ]);
     } else if (cdPlayer.state == "Closed") {
         setTextBox("A beautiful classical piece plays.");
