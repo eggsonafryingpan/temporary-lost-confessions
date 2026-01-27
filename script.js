@@ -27,6 +27,12 @@ function setZoom(o) {
     }
 }
 
+function setRoom(room) {
+    currRoom.style.display = 'none';
+    room.style.display = 'block';
+    currRoom = room;
+}
+
 const textBox = new GameTextBox();
 
 
@@ -188,10 +194,10 @@ cdPlayer.setOnClick(() => {
                     serenade.play();
                     setTimeout(() => {
                         click.play();
-                        puzzleDrawer.unlocked = true;
+                        puzzleDrawer.setImgState("SlightlyOpen");
                     }, 1000);
                 }),//2nd in sequence
-            () => setTextBox('"Serenade - Franz Schubert" plays. You hear a click from under the desk.')
+            () => setTextBox('"Serenade - Franz Schubert" plays. You hear a click from the desk drawer.')
         ]);
     } else if (cdPlayer.state == "Closed") {
         setTextBox("A beautiful classical piece plays.");
@@ -214,7 +220,9 @@ resume.setOnClick(() => {
 const letter = new GameObject(1057, 527, 'letter', bedroom, 6);
 letter.hide();
 letter.setOnClick(
-    () => setTextBoxConfirm("A letter... Take it?", () => { console.log("kitty cat appears") })
+    () => setTextBoxConfirm("A letter... Take it?", () => {
+        console.log("kitty cat appears")//TODO cat animation 
+    })
 );
 
 
@@ -222,18 +230,17 @@ const drawer = new GameObject(1031, 508, 'drawer', bedroom, 4);
 drawer.setOnClick(() => setTextBox("A drawer. It's a normal drawer."));
 
 const puzzleDrawer = new GameObject(1122, 558, 'puzzleDrawer', bedroom, 5);
-puzzleDrawer.unlocked = false;
 puzzleDrawer.setOnClick(() => {
-    if (!puzzleDrawer.unlocked)
-        setTextBox("A locked drawer. There's a black box with wires. You spent a lot of time working on that.");
-    else if (puzzleDrawer.state == "")
+    if (puzzleDrawer.state == "")
+        setTextBox('A locked drawer.There\'s a sticky note. It says: "Open with favorite song".');
+    else if (puzzleDrawer.state == "SlightlyOpen")
         setTextBoxConfirm("It's unlocked. Open it?", () => {
-            puzzleDrawer.setImgState("Open")
+            puzzleDrawer.setImgState("Open");
             resume.show();
             letter.show();
         })
     else {
-        setTextBox("The mechanism worked.");
+        setTextBox("The secret drawer worked.");
     }
 });
 puzzleDrawer.setTranslate("bottomRight");
