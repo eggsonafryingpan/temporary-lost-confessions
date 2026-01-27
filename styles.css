@@ -95,3 +95,29 @@ body {
     -webkit-user-select: none;
     z-index: 16;
 }
+
+@keyframes upDown {
+    0% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}
+
+#arrow {
+    position: absolute;
+    left: 850px;
+    top: 35px;
+    animation: upDown 1.2s ease-in-out infinite;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid rgb(38, 41, 95);
+}

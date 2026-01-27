@@ -139,10 +139,10 @@ const alarmclock = new GameObject(222, 597, 'alarmclock', bedroom, 4);
 alarmclock.setOnClick(() => { setTextBox("An alarm clock. It's 7:00 am.") });
 
 const cd = new GameObject(282, 623, 'cd', bedroom, 4);
-cd.setOnClick(() => { setTextBoxConfirm('A cd titled in black pen: "Serenade - Franz Schubert". It\'s your favorite song. Pick it up?', () => { inventory.push(cd), cd.hide() }) });
+cd.setOnClick(() => { setTextBoxConfirm('A CD titled in black pen: "Serenade - Franz Schubert". It\'s your favorite song. Pick it up?', () => { inventory.push(cd), cd.hide() }) });
 
 const cds = new GameObject(277, 658, 'cds', bedroom, 4)
-cds.setOnClick(() => { setTextBox('A cd collection.') });
+cds.setOnClick(() => { setTextBox('A CD collection.') });
 
 const desk = new GameObject(1027, 330, 'desk', bedroom, 3);
 desk.setOnClick(() => { setTextBox("A desk. You built it yourself.") });
@@ -180,7 +180,7 @@ cdPlayer.setOnClick(() => {
     if (inventory.includes(cd)) {
         textChain([
             () => setTextBoxConfirm(
-                "Place the cd in the cd player?",
+                "Place the CD in the CD player?",
                 () => {
                     cdPlayer.setImgState("Closed");
                     inventoryRemove(cd);
@@ -194,7 +194,7 @@ cdPlayer.setOnClick(() => {
         ]);
     } else if (cdPlayer.state == "Closed") {
         setTextBox("A beautiful classical piece plays.");
-    } else { setTextBox("A cd player. It was your 20th birthday present.") };
+    } else { setTextBox("A CD player. It was your 20th birthday present.") };
 });
 
 
