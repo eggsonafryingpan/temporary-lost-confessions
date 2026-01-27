@@ -67,6 +67,7 @@ document.addEventListener('mousemove', (e) => {
 
 const click = new Audio('sound/click.wav');
 const serenade = new Audio('sound/schubertSerenade.mp3');
+serenade.loop = true;
 
 
 //KATEEEEE this is how u make a new object:
@@ -190,7 +191,7 @@ cdPlayer.setOnClick(() => {
                         puzzleDrawer.unlocked = true;
                     }, 1000);
                 }),//2nd in sequence
-            () => setTextBox('"Serenade - Franz Schubert" plays. You hear a click from under the desk.')
+            () => setTextBox('"Serenade - Franz Schubert" plays. You hear a click from the locked drawer.')
         ]);
     } else if (cdPlayer.state == "Closed") {
         setTextBox("A beautiful classical piece plays.");
