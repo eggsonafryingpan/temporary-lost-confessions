@@ -67,7 +67,6 @@ document.addEventListener('mousemove', (e) => {
 
 const click = new Audio('sound/click.wav');
 const serenade = new Audio('sound/schubertSerenade.mp3');
-serenade.loop = true;
 
 
 //KATEEEEE this is how u make a new object:
@@ -94,7 +93,7 @@ serenade.loop = true;
 
 //Example:
 // flower.setOnClick(() => { setTextBox("A flower.") });
-// flower.setOnClick(() => { setTextBoxConfirm("Do u want the flower?", () => {yesFunction()}, () = {noFunction()})});
+// flower.setOnClick(() => { setTextBoxConfirm("Do u want the flower?, yesFunction(), noFunction()")});
 // yesFunction() {
 //  blah blah blah
 // }
@@ -102,13 +101,14 @@ serenade.loop = true;
 //  blah blah blah
 // }
 
-
 // room 1 loading
 
 //testing change later
 const gameWindow = new GameObject(167, 259, 'window', bedroom);
 gameWindow.setOnClick(() => {
-    setTextBox("A window. It's cold outside, you should probably keep it closed.");
+    if (gameWindow.state == "") {
+        gameWindow.setImgState("Poster");
+    } else { gameWindow.setImgState("") };
 });
 
 
@@ -176,7 +176,6 @@ todo.setOnClick(() => { setZoom(todo); });
 
 const cdPlayer = new GameObject(1170, 519, 'cdPlayer', bedroom, 5);
 cdPlayer.setTranslate("bottomRight");
-cdPlayer.sound = serenade;
 cdPlayer.setOnClick(() => {
     if (inventory.includes(cd)) {
         textChain([
@@ -185,13 +184,13 @@ cdPlayer.setOnClick(() => {
                 () => {
                     cdPlayer.setImgState("Closed");
                     inventoryRemove(cd);
-                    cdPlayer.sound.play();
+                    serenade.play();
                     setTimeout(() => {
                         click.play();
                         puzzleDrawer.unlocked = true;
                     }, 1000);
                 }),//2nd in sequence
-            () => setTextBox('"Serenade - Franz Schubert" plays. You hear a click from the desk drawer.')
+            () => setTextBox('"Serenade - Franz Schubert" plays. You hear a click from under the desk.')
         ]);
     } else if (cdPlayer.state == "Closed") {
         setTextBox("A beautiful classical piece plays.");
@@ -249,7 +248,12 @@ const poster2 = new GameObject(580, 349, 'poster2', bedroom, 2);
 poster2.setOnClick(() => { setTextBox("A poster of your favorite game.") });
 
 
-
-
+//when player walks out and back in
+function changeBedroom() {
+    alarmclock.setImgState("777");
+    alarmclock.setOnClick(() => { setTextBox("An alarm clock. It's 7:77 am.") });
+    gameWindow.setImgState("Poster");
+    gameWindow.setOnClick(() => { setTextBox("A poster of a window. How odd.") })
+}
 
 
