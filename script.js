@@ -105,11 +105,12 @@ const serenade = new Audio('sound/schubertSerenade.mp3');
 
 //testing change later
 const gameWindow = new GameObject(167, 259, 'window', bedroom);
-gameWindow.setOnClick(() => {
-    if (gameWindow.state == "") {
-        gameWindow.setImgState("Poster");
-    } else { gameWindow.setImgState("") };
-});
+// gameWindow.setOnClick(() => {
+//     if (gameWindow.state == "") {
+//         gameWindow.setImgState("Poster");
+//     } else { gameWindow.setImgState("") };
+// });
+gameWindow.setOnClick(() => { setTextBox("A window. It's cold outside, you should probably keep it closed.") });
 
 
 
