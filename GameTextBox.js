@@ -7,6 +7,7 @@ export class GameTextBox {
         this.confirmBox = document.getElementById("textBoxConfirm");
         this.confirmYes = document.getElementById("textBoxConfirmYes");
         this.confirmNo = document.getElementById("textBoxConfirmNo");
+        this.arrow = document.getElementById("arrow");
         this.box.style.left = width / 2 + 'px';
         this.box.style.top = height * 0.85 + 'px';
         this.yesFunc = null;
@@ -71,6 +72,7 @@ export class GameTextBox {
     setText(text) {
         if (!this.confirming) {
             this.show(this.box);
+            this.show(this.arrow);
             this.text.innerHTML = text;
             this.textPromise = new Promise(resolve => {
                 this.textResolve = resolve;
@@ -78,6 +80,7 @@ export class GameTextBox {
         }
     }
     setTextConfirm(text, yes = null, no = null) {
+        this.hide(this.arrow);
         this.show(this.box);
         this.show(this.confirmBox);
         this.text.innerHTML = text;
