@@ -121,7 +121,6 @@ gameWindow.setOnClick(() => { setTextBox("A window. It's cold outside, you shoul
 
 
 const bed = new GameObject(255, 483, 'bed', bedroom, 2);
-// bed.setOnClick(() => { setTextBox("A comfy bed.") });
 bed.setOnClick(() => { setTextBox("A comfy bed.") });
 
 const calender = new GameObject(915, 346, 'calender', bedroom, 3);
@@ -134,7 +133,16 @@ const mirror = new GameObject(731, 314, 'mirror', bedroom, 2);
 mirror.setOnClick(() => { setTextBox("You see yourself in a nice dress shirt.") });
 
 const door = new GameObject(861, 286, 'door', bedroom, 2);
-door.setOnClick(() => { setTextBox("You try to leave, but you feel like you forgot something.") });
+door.setOnClick(() => {
+    if (!inventory.includes(resume)) {
+        setTextBox("You try to leave, but you feel like you forgot something.");
+    } else if (door.state != "Cat") {
+        setTextBox("You feel strangely pulled to the letter"); // TODO change later
+    } else {
+        setTextBoxConfirm("There's a cat shaped hole. Open the door?") // TODO add event        
+    }
+});
+
 
 const nightstand = new GameObject(152, 607, 'nightstand', bedroom, 2);
 nightstand.setOnClick(() => { setTextBox("A nightstand.") });
@@ -201,7 +209,7 @@ cdPlayer.setOnClick(() => {
         ]);
     } else if (cdPlayer.state == "Closed") {
         setTextBox("A beautiful classical piece plays.");
-    } else { setTextBox("A CD player. It was your 20th birthday present.") };
+    } else { setTextBox("A CD player. There's no CD inside. It was your 20th birthday present.") };
 });
 
 
@@ -232,7 +240,7 @@ drawer.setOnClick(() => setTextBox("A drawer. It's a normal drawer."));
 const puzzleDrawer = new GameObject(1122, 558, 'puzzleDrawer', bedroom, 5);
 puzzleDrawer.setOnClick(() => {
     if (puzzleDrawer.state == "")
-        setTextBox('A locked drawer.There\'s a sticky note. It says: "Open with favorite song".');
+        setTextBox('A locked drawer. There\'s a sticky note. It says: "Secret Drawer: Open with     favorite song".');
     else if (puzzleDrawer.state == "SlightlyOpen")
         setTextBoxConfirm("It's unlocked. Open it?", () => {
             puzzleDrawer.setImgState("Open");
@@ -240,7 +248,7 @@ puzzleDrawer.setOnClick(() => {
             letter.show();
         })
     else {
-        setTextBox("The secret drawer worked.");
+        setTextBox('An opened drawer. There\'s a sticky note. It says: "Secret Drawer: Open with favorite song"');
     }
 });
 puzzleDrawer.setTranslate("bottomRight");
@@ -261,7 +269,8 @@ function changeBedroom() {
     alarmclock.setImgState("777");
     alarmclock.setOnClick(() => { setTextBox("An alarm clock. It's 7:77 am.") });
     gameWindow.setImgState("Poster");
-    gameWindow.setOnClick(() => { setTextBox("A poster of a window. How odd.") })
+    gameWindow.setOnClick(() => { setTextBox("A poster of a window. It's peeling from the wall.") })
+    mirror.setOnClick(() => { setTextBox("You don't see anyone in the mirror.") })
 }
 
 
