@@ -195,7 +195,7 @@ cdPlayer.setOnClick(() => {
         ]);
     } else if (cdPlayer.state == "Closed") {
         setTextBox("A beautiful classical piece plays.");
-    } else { setTextBox("A CD player. It was your 20th birthday present.") };
+    } else { setTextBox("A CD player. It was your 16th birthday present.") };
 });
 
 
