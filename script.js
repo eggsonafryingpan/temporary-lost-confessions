@@ -27,6 +27,12 @@ function setZoom(o) {
     }
 }
 
+function setRoom(room) {
+    currRoom.style.display = 'none';
+    room.style.display = 'block';
+    currRoom = room;
+}
+
 const textBox = new GameTextBox();
 
 
@@ -67,7 +73,6 @@ document.addEventListener('mousemove', (e) => {
 
 const click = new Audio('sound/click.wav');
 const serenade = new Audio('sound/schubertSerenade.mp3');
-serenade.loop = true;
 
 
 //KATEEEEE this is how u make a new object:
@@ -94,7 +99,7 @@ serenade.loop = true;
 
 //Example:
 // flower.setOnClick(() => { setTextBox("A flower.") });
-// flower.setOnClick(() => { setTextBoxConfirm("Do u want the flower?", () => {yesFunction()}, () = {noFunction()})});
+// flower.setOnClick(() => { setTextBoxConfirm("Do u want the flower?, yesFunction(), noFunction()")});
 // yesFunction() {
 //  blah blah blah
 // }
@@ -102,19 +107,20 @@ serenade.loop = true;
 //  blah blah blah
 // }
 
-
 // room 1 loading
 
 //testing change later
 const gameWindow = new GameObject(167, 259, 'window', bedroom);
-gameWindow.setOnClick(() => {
-    setTextBox("A window. It's cold outside, you should probably keep it closed.");
-});
+// gameWindow.setOnClick(() => {
+//     if (gameWindow.state == "") {
+//         gameWindow.setImgState("Poster");
+//     } else { gameWindow.setImgState("") };
+// });
+gameWindow.setOnClick(() => { setTextBox("A window. It's cold outside, you should probably keep it closed.") });
 
 
 
 const bed = new GameObject(255, 483, 'bed', bedroom, 2);
-// bed.setOnClick(() => { setTextBox("A comfy bed.") });
 bed.setOnClick(() => { setTextBox("A comfy bed.") });
 
 const calender = new GameObject(915, 346, 'calender', bedroom, 3);
@@ -127,7 +133,16 @@ const mirror = new GameObject(731, 314, 'mirror', bedroom, 2);
 mirror.setOnClick(() => { setTextBox("You see yourself in a nice dress shirt.") });
 
 const door = new GameObject(861, 286, 'door', bedroom, 2);
-door.setOnClick(() => { setTextBox("You try to leave, but you feel like you forgot something.") });
+door.setOnClick(() => {
+    if (!inventory.includes(resume)) {
+        setTextBox("You try to leave, but you feel like you forgot something.");
+    } else if (door.state != "Cat") {
+        setTextBox("You feel strangely pulled to the letter"); // TODO change later
+    } else {
+        setTextBoxConfirm("There's a cat shaped hole. Open the door?") // TODO add event        
+    }
+});
+
 
 const nightstand = new GameObject(152, 607, 'nightstand', bedroom, 2);
 nightstand.setOnClick(() => { setTextBox("A nightstand.") });
@@ -176,7 +191,6 @@ todo.setOnClick(() => { setZoom(todo); });
 
 const cdPlayer = new GameObject(1170, 519, 'cdPlayer', bedroom, 5);
 cdPlayer.setTranslate("bottomRight");
-cdPlayer.sound = serenade;
 cdPlayer.setOnClick(() => {
     if (inventory.includes(cd)) {
         textChain([
@@ -185,10 +199,10 @@ cdPlayer.setOnClick(() => {
                 () => {
                     cdPlayer.setImgState("Closed");
                     inventoryRemove(cd);
-                    cdPlayer.sound.play();
+                    serenade.play();
                     setTimeout(() => {
                         click.play();
-                        puzzleDrawer.unlocked = true;
+                        puzzleDrawer.setImgState("SlightlyOpen");
                     }, 1000);
                 }),//2nd in sequence
             () => setTextBox('"Serenade - Franz Schubert" plays. You hear a click from the desk drawer.')
@@ -214,7 +228,9 @@ resume.setOnClick(() => {
 const letter = new GameObject(1057, 527, 'letter', bedroom, 6);
 letter.hide();
 letter.setOnClick(
-    () => setTextBoxConfirm("A letter... Take it?", () => { console.log("kitty cat appears") })
+    () => setTextBoxConfirm("A letter... Take it?", () => {
+        console.log("kitty cat appears")//TODO cat animation 
+    })
 );
 
 
@@ -222,18 +238,17 @@ const drawer = new GameObject(1031, 508, 'drawer', bedroom, 4);
 drawer.setOnClick(() => setTextBox("A drawer. It's a normal drawer."));
 
 const puzzleDrawer = new GameObject(1122, 558, 'puzzleDrawer', bedroom, 5);
-puzzleDrawer.unlocked = false;
 puzzleDrawer.setOnClick(() => {
-    if (!puzzleDrawer.unlocked)
-        setTextBox("A locked drawer. There's a black box with wires. You spent a lot of time working on that.");
-    else if (puzzleDrawer.state == "")
+    if (puzzleDrawer.state == "")
+        setTextBox('A locked drawer. There\'s a sticky note. It says: "Secret Drawer: Open with     favorite song".');
+    else if (puzzleDrawer.state == "SlightlyOpen")
         setTextBoxConfirm("It's unlocked. Open it?", () => {
-            puzzleDrawer.setImgState("Open")
+            puzzleDrawer.setImgState("Open");
             resume.show();
             letter.show();
         })
     else {
-        setTextBox("The mechanism worked.");
+        setTextBox('An opened drawer. There\'s a sticky note. It says: "Secret Drawer: Open with favorite song"');
     }
 });
 puzzleDrawer.setTranslate("bottomRight");
@@ -249,7 +264,13 @@ const poster2 = new GameObject(580, 349, 'poster2', bedroom, 2);
 poster2.setOnClick(() => { setTextBox("A poster of your favorite game.") });
 
 
-
-
+//when player walks out and back in
+function changeBedroom() {
+    alarmclock.setImgState("777");
+    alarmclock.setOnClick(() => { setTextBox("An alarm clock. It's 7:77 am.") });
+    gameWindow.setImgState("Poster");
+    gameWindow.setOnClick(() => { setTextBox("A poster of a window. It's peeling from the wall.") })
+    mirror.setOnClick(() => { setTextBox("You don't see anyone in the mirror.") })
+}
 
 
