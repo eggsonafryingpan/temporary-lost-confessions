@@ -67,4 +67,14 @@ export class GameObject {
     remove() {
         this.img.remove();
     }
+
+    //only add if highlighted image is in imgs
+    addHighlight() {
+        this.img.addEventListener('mouseenter', () => {
+            this.img.src = this.imgSrc + "Highlight" + ".png";
+        })
+        this.img.addEventListener('mouseleave', () => {
+            this.img.src = this.imgSrc + ".png";
+        })
+    }
 }
