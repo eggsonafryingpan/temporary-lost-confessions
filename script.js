@@ -136,10 +136,10 @@ const door = new GameObject(861, 286, 'door', bedroom, 2);
 door.setOnClick(() => {
     if (!inventory.includes(resume)) {
         setTextBox("You try to leave, but you feel like you forgot something.");
-    } else if (door.state != "Cat") {
-        setTextBox("You feel strangely pulled to the letter"); // TODO change later
+        // } else if (door.state != "Cat") {
+        //     setTextBox("You feel strangely pulled to the letter"); // TODO change later
     } else {
-        setTextBoxConfirm("There's a cat shaped hole. Open the door?") // TODO add event        
+        setTextBoxConfirm("There's a cat shaped hole. Open the door?", () => { setRoom("flowerRoom") }); // TODO add event        
     }
 });
 
