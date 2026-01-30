@@ -8,8 +8,9 @@ export const height = 788;
 const bedroom = document.getElementById("bedroom");
 const flowerRoom = document.getElementById("flowerRoom");
 const escalatorRoom = document.getElementById("escalatorRoom");
+const bentHallway = document.getElementById("bentHallway");
 let currRoom = bedroom;
-setRoom(flowerRoom);
+setRoom(bedroom);
 const world = document.getElementById("world");
 world.style.width = width + 'px';
 world.style.height = height + 'px';
@@ -289,11 +290,11 @@ loadBedroom();
 function loadFlowerRoom() {
     const door1 = new GameObject(112, 146, 'door1', flowerRoom, 2);
     door1.setOnClick(() => { setRoom(escalatorRoom) });
-    door1.addHighlight();
+    door1.setHighlight();
 
     const door2 = new GameObject(594, 206, 'door2', flowerRoom, 2);
     //door2.setOnClick(() => { door2.setImgState("Highlight") });
-    door2.addHighlight();
+    door2.setHighlight();
 
     const flowerFrame = new GameObject(1109, 260, 'flowerFrame', flowerRoom, 2);
     flowerFrame.setOnClick(() => { setTextBox("A wooden frame. It's missing something.") });
@@ -308,11 +309,12 @@ loadFlowerRoom();
 
 function loadEscalatorRoom() {
     const door1 = new GameObject(1145, 197, 'door1', escalatorRoom, 2);
-    door1.addHighlight();
+    door1.setHighlight();
     door1.setOnClick(() => { setRoom(flowerRoom) });
 
     const door2 = new GameObject(499, 193, 'door2', escalatorRoom, 2);
-    door2.addHighlight();
+    door2.setHighlight();
+    door2.setOnClick(() => { setRoom(bentHallway) });
 
 
     const escalator = new GameObject(60, 224, 'escalator', escalatorRoom, 3);
@@ -320,3 +322,13 @@ function loadEscalatorRoom() {
 }
 
 loadEscalatorRoom();
+
+
+function loadBentHallway() {
+    const highlight = new GameObject(10, 10, 'highlight', bentHallway, 3);
+    highlight.setInvisibleHighlight();
+    const lipstickPoster = new GameObject(1100, 150, 'lipstickPoster', bentHallway, 3);
+    lipstickPoster.setOnClick(() => { setTextBox("f.l.e 50% SALE") });
+}
+
+loadBentHallway();

@@ -7,6 +7,8 @@ export class GameObject {
         this.parent = parent;
         this.zIndex = zIndex;
         this.onClick = null;
+        this.onEnter = null;
+        this.onLeave = null;
         this.load();
     }
 
@@ -52,6 +54,8 @@ export class GameObject {
                 this.onClick();
             }
         });
+        this.img.addEventListener('mouseenter', () => { if (onEnter) onEnter() });
+        this.img.addEventListener('mouseleave', () => { if (onLeave) onLeave() });
     }
 
     setTranslate(translate) {
@@ -69,12 +73,17 @@ export class GameObject {
     }
 
     //only add if highlighted image is in imgs
-    addHighlight() {
-        this.img.addEventListener('mouseenter', () => {
-            this.img.src = this.imgSrc + "Highlight" + ".png";
-        })
-        this.img.addEventListener('mouseleave', () => {
-            this.img.src = this.imgSrc + ".png";
-        })
+    setHighlight() {
+        this.onEnter = () => { this.imgSrc + "Highlight" + ".png" };
+        this.onLeave = () => { this.imgSrc + ".png" };
+    }
+
+    setInvisibleHighlight() {
+        this.onEnter = () => {
+            this.img.style.display = 'block';
+        }
+        this.onLeave = () => {
+            this.img.style.display = 'none';
+        }
     }
 }
