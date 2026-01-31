@@ -141,10 +141,28 @@ body {
 
 }
 
+#zoomContainer {
+    z-index: 15;
+    display: inline-block;
+    pointer-events: none;
+    position: relative;
+}
+
 #zoomImg {
+    display: block;
     user-select: none;
     -webkit-user-select: none;
     z-index: 16;
+}
+
+#diaryText {
+    top: 0;
+    left: 0;
+    z-index: 17;
+    position: absolute;
+    padding: 60px;
+    font-size: 20px;
+    font-family: 'handwriting', serif;
 }
 
 @keyframes upDown {
@@ -171,4 +189,12 @@ body {
     border-left: 10px solid transparent;
     border-right: 10px solid transparent;
     border-top: 10px solid rgb(38, 41, 95);
+}
+
+@font-face {
+    font-family: 'handwriting';
+    src: url('fonts/handwritingFont.ttf');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
 }

@@ -1,5 +1,6 @@
 import { GameObject } from './GameObject.js';
 import { GameTextBox } from './GameTextBox.js';
+import { GameIcon } from './GameIcon.js';
 
 export const width = 1400;
 export const height = 788;
@@ -9,8 +10,10 @@ const bedroom = document.getElementById("bedroom");
 const flowerRoom = document.getElementById("flowerRoom");
 const escalatorRoom = document.getElementById("escalatorRoom");
 const bentHallway = document.getElementById("bentHallway");
-let currRoom = bedroom;
-setRoom(bedroom);
+const mallRoom = document.getElementById("mallRoom");
+const museumRoom = document.getElementById("museumRoom");
+let currRoom = mallRoom;
+setRoom(currRoom);
 const world = document.getElementById("world");
 world.style.width = width + 'px';
 world.style.height = height + 'px';
@@ -20,16 +23,25 @@ const freeze = document.getElementById("freeze");
 
 const zoom = document.getElementById("zoom");
 const zoomImg = document.getElementById("zoomImg");
-
+const diaryText = document.getElementById("diaryText");
 zoom.addEventListener('click', () => zoom.style.display = 'none');
 
 
 
 function setZoom(o) {
-    if (textBox.isHidden()) {
-        console.log(zoomImg);
+    if (textBox.isHidden()) { //maybe change
         zoom.style.display = 'flex';
-        zoomImg.src = o.imgSrc + "Zoom.png";
+        if (o) {
+            zoomImg.src = o.imgSrc + "Zoom.png";
+        }
+    }
+}
+
+function setDiary(date) {
+    setZoom(null);
+    if (textBox.isHidden()) {
+        zoomImg.src = "imgs/diary.png";
+        diaryText.innerHTML = diaryEntries.get(date);
     }
 }
 
@@ -58,24 +70,35 @@ function setTextBoxConfirm(text, yes, no) {
     return textBox.textPromise;
 }
 
-const inventory = [];
-const inventoryBox = document.getElementById("inventory");
 
-function inventoryRemove(o) {
-    let index = inventory.indexOf(o);
-    if (index != -1) {
-        inventory.splice(index, 1);
-    }
+//INVENTORY HANDLING
+const inventory = new Map();
+
+
+function inventoryRemove(name = "") {
+    inventory.get(name).hide();
+    inventory.delete(name);
 }
 
-function inventoryAdd(o, onclick = null) {
-    inventory.push(o);
-    const frame = document.createElement("img");
-    frame.src = o.imgSrc + '.png';
-    //TODO change inventory look
-    inventoryBox.appendChild(frame);
-    frame.addEventListener('click', () => { if (onclick) onclick() });
+function inventoryAdd(name = "", onclick) {
+    const icon = new GameIcon(name, onclick);
+    icon.show();
+    inventory.set(name, icon);
 }
+
+const diaryEntries = new Map([
+    ["oct23", ""]
+]);
+
+
+diaryEntries.forEach((_, date) => {
+    fetch('diary/' + date + '.txt')
+        .then(response => response.text())
+        .then(text => {
+            diaryEntries.set(date, text);
+        })
+
+});
 
 
 document.addEventListener('mousemove', (e) => {
@@ -160,12 +183,12 @@ function loadBedroom() {
     const alarmclock = new GameObject(222, 597, 'alarmclock', bedroom, 4);
     alarmclock.setOnClick(() => { setTextBox("An alarm clock. It's 7:00 am.") });
 
-    const cd = new GameObject(282, 623, 'cd', bedroom, 4);
-    cd.setOnClick(() => {
+    const serenadeCD = new GameObject(282, 623, 'serenadeCD', bedroom, 4);
+    serenadeCD.setOnClick(() => {
         setTextBoxConfirm('A CD titled in black pen: "Serenade - Franz Schubert". It\'s your favorite song. Pick it up?',
             () => {
-                inventoryAdd(cd, () => { setTextBox('"Serenade - Franz Schubert"') });
-                cd.hide()
+                inventoryAdd("serenadeCD", () => { setTextBox('"Serenade - Franz Schubert"') });
+                serenadeCD.hide()
             })
     });
 
@@ -194,7 +217,7 @@ function loadBedroom() {
             setTextBoxConfirm("Three pens you got from a job fair. Take one?",
                 () => {
                     penContainer.setImgState('PenOut');
-                    inventoryAdd(penContainer); //change to pen not pen container
+                    inventoryAdd("pen", () => { textBox("A pen.") }); //change to pen not pen container
                 })
         } else {
             setTextBox("Two pens you got from a job fair.");
@@ -208,13 +231,13 @@ function loadBedroom() {
     const cdPlayer = new GameObject(1170, 519, 'cdPlayer', bedroom, 5);
     cdPlayer.setTranslate("bottomRight");
     cdPlayer.setOnClick(() => {
-        if (inventory.includes(cd)) {
+        if (inventory.has("serenadeCD")) {
             textChain([
                 () => setTextBoxConfirm(
                     "Place the CD in the CD player?",
                     () => {
                         cdPlayer.setImgState("Closed");
-                        inventoryRemove(cd);
+                        inventoryRemove("serenadeCD");
                         serenade.play();
                         setTimeout(() => {
                             click.play();
@@ -228,13 +251,12 @@ function loadBedroom() {
         } else { setTextBox("A CD player. It was your 16th birthday present.") };
     });
 
-
     const resume = new GameObject(1053, 529, 'resume', bedroom, 7);
     resume.hide();
     resume.setOnClick(() => {
         setTextBoxConfirm("It's your resume! You need it for the job interview today. Pick it up?",
             () => {
-                inventoryAdd(resume, () => { setTextBox("Your resume.") });
+                inventoryAdd("resume", () => { setTextBox("Your resume.") });
                 resume.hide();
             }
         )
@@ -274,7 +296,7 @@ function loadBedroom() {
 
     const door = new GameObject(861, 286, 'door', bedroom, 2);
     door.setOnClick(() => {
-        if (!inventory.includes(resume)) {
+        if (!inventory.has("resume")) {
             setTextBox("You try to leave, but you feel like you forgot something.");
         } else {
             setTextBox("You feel strangely pulled to the letter in the drawer.");
@@ -410,6 +432,7 @@ loadEscalatorRoom();
 function loadBentHallway() {
     const highlight = new GameObject(556, 226, 'exitHighlight', bentHallway, 3);
     highlight.setInvisibleHighlight();
+    highlight.setOnClick(() => { setRoom(mallRoom) });
     const lipstickPoster = new GameObject(1100, 150, 'lipstickPoster', bentHallway, 3);
     lipstickPoster.setOnClick(() => { setTextBox("f.l.e 50% SALE") });
 
@@ -420,3 +443,53 @@ function loadBentHallway() {
 }
 
 loadBentHallway();
+
+function loadMallRoom() {
+    const joeShop = new GameObject(1039, 231, 'joeShop', mallRoom, 2);
+    joeShop.setOnClick(() => { setTextBox("A store that sells records and CDs. It looks very familiar.") });
+    const cdDisplay = new GameObject(897, 307, 'cdDisplay', mallRoom, 2);
+    cdDisplay.setOnClick(() => { setTextBox("An empty display for Joe's Records and CDs.") });
+    const swanCDStand = new GameObject(943, 332, 'cdStand', mallRoom, 3);
+    swanCDStand.hide(); //TODO KEYCHAIN
+    swanCDStand.img.addEventListener("DOMContentLoaded", () => { if (inventory.has("keychain")) swanCDStand.show() });
+    swanCDStand.setOnClick(() => {
+        setTextBoxConfirm('A CD. It\'s titled "The Swan (Carnaval of the Animals) - Best of Saint-Saëns".', () => {
+            inventoryAdd("swanCD");
+        })
+    })
+    const exit1 = new GameObject(344, 289, 'exit1', mallRoom, 2);
+    exit1.setHighlight();
+    exit1.setOnClick(() => { setRoom(gatchaRoom) })
+
+    const display = new GameObject(93, 229, 'display', mallRoom, 2);
+    display.setOnClick(() => { setTextBox("An empty display case.") })
+    const diary = new GameObject(556, 361, 'diary', mallRoom, 2);
+    diary.setOnClick(() => { setDiary("oct23") });
+    const exit2 = new GameObject(627, 404, 'exit2Highlight', mallRoom, 2);
+    exit2.setInvisibleHighlight();
+    exit2.setOnClick(() => { setRoom(museumRoom) });
+
+    const bottomHighlight = new GameObject(0, 678, 'bottomHighlight', mallRoom, 3);
+    bottomHighlight.setInvisibleHighlight();
+    bottomHighlight.setOnClick(() => { setRoom(bentHallway) });
+
+}
+
+loadMallRoom();
+
+
+function loadMuseumRoom() {
+    const painting = new GameObject(462, 220, 'painting', museumRoom, 2);
+    painting.setOnClick(() => { setTextBox("An oil painting littered with geometric shapes. It's very blue.") })
+    const sign = new GameObject(959, 451, 'sign', museumRoom, 2);
+    sign.setOnClick(() => { setTextBox('The sign reads: "The Sea On a Rainy Night by Anonymous".') })
+    const exit = new GameObject(1106, 385, 'exit', museumRoom, 2);
+    exit.setHighlight();
+    exit.setOnClick(() => { setRoom(swanRoom) });
+    const bottomHighlight = new GameObject(0, 678, 'bottomHighlight', museumRoom, 3);
+    bottomHighlight.setInvisibleHighlight();
+    bottomHighlight.setOnClick(() => { setRoom(mallRoom) });
+}
+
+
+loadMuseumRoom();
