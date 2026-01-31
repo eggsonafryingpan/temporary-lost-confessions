@@ -3,6 +3,7 @@ export class GameObject {
         this.imgSrc = imgSrc;
         this.x = x;
         this.y = y;
+        this.img
         this.state = "";
         this.parent = parent;
         this.zIndex = zIndex;
@@ -54,8 +55,8 @@ export class GameObject {
                 this.onClick();
             }
         });
-        this.img.addEventListener('mouseenter', () => { if (onEnter) onEnter() });
-        this.img.addEventListener('mouseleave', () => { if (onLeave) onLeave() });
+        this.img.addEventListener('mouseenter', () => { if (this.onEnter) this.onEnter() });
+        this.img.addEventListener('mouseleave', () => { if (this.onLeave) this.onLeave() });
     }
 
     setTranslate(translate) {

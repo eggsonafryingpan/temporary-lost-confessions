@@ -233,9 +233,7 @@ function loadBedroom() {
     letter.hide();
     letter.setOnClick(
         () => setTextBoxConfirm("A letter... Take it?", () => {
-            letter.hide();
-            console.log("kitty cat appears")//TODO cat animation 
-            changeBedroom();
+            handOpen.show();
         })
     );
 
@@ -268,6 +266,43 @@ function loadBedroom() {
 
     const poster2 = new GameObject(580, 349, 'poster2', bedroom, 2);
     poster2.setOnClick(() => { setTextBox("A poster of your favorite game.") });
+
+    const handClosed = new GameObject(1000, 556, 'handClosed', bedroom, 7);
+    handClosed.hide();
+    const handOpen = new GameObject(1000, -552, 'handOpen', bedroom, 7);
+    handOpen.hide();
+
+    const downKF = [
+        { transform: 'translateY(0px)' },
+        { transform: 'translateY(552px)' }
+    ];
+    const downOpt = {
+        duration: 1500,
+        easing: 'ease-in-out',
+        fill: 'forwards'
+    };
+    const downAnim = handOpen.img.animate(downKF, downOpt);
+
+    downAnim.onfinish = () => {
+        handOpen.hide();
+        letter.hide();
+        handClosed.show();
+    };
+    const upKF = [
+        { transform: 'translateY(0px)' },
+        { transform: 'translateY(-556px)' }
+    ];
+    const upOpt = {
+        duration: 1500,
+        easing: 'ease-in-out',
+        fill: 'forwards'
+    };
+    const upAnim = handClosed.img.animate(upKF, upOpt);
+    upAnim.onfinish = () => {
+        handClosed.hide();
+    };
+
+
 
     //when player walks out and back in
     function changeBedroom() {
@@ -325,7 +360,7 @@ loadEscalatorRoom();
 
 
 function loadBentHallway() {
-    const highlight = new GameObject(10, 10, 'highlight', bentHallway, 3);
+    const highlight = new GameObject(10, 10, 'exitHighlight', bentHallway, 3);
     highlight.setInvisibleHighlight();
     const lipstickPoster = new GameObject(1100, 150, 'lipstickPoster', bentHallway, 3);
     lipstickPoster.setOnClick(() => { setTextBox("f.l.e 50% SALE") });
