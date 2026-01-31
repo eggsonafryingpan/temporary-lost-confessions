@@ -24,6 +24,7 @@ const zoomImg = document.getElementById("zoomImg");
 zoom.addEventListener('click', () => zoom.style.display = 'none');
 
 
+
 function setZoom(o) {
     if (textBox.isHidden()) {
         console.log(zoomImg);
@@ -58,12 +59,22 @@ function setTextBoxConfirm(text, yes, no) {
 }
 
 const inventory = [];
+const inventoryBox = document.getElementById("inventory");
 
 function inventoryRemove(o) {
     let index = inventory.indexOf(o);
     if (index != -1) {
         inventory.splice(index, 1);
     }
+}
+
+function inventoryAdd(o, onclick = null) {
+    inventory.push(o);
+    const frame = document.createElement("img");
+    frame.src = o.imgSrc + '.png';
+    //TODO change inventory look
+    inventoryBox.appendChild(frame);
+    frame.addEventListener('click', () => { if (onclick) onclick() });
 }
 
 
@@ -150,7 +161,16 @@ function loadBedroom() {
     alarmclock.setOnClick(() => { setTextBox("An alarm clock. It's 7:00 am.") });
 
     const cd = new GameObject(282, 623, 'cd', bedroom, 4);
-    cd.setOnClick(() => { setTextBoxConfirm('A CD titled in black pen: "Serenade - Franz Schubert". It\'s your favorite song. Pick it up?', () => { inventory.push(cd), cd.hide() }) });
+    cd.setOnClick(() => {
+        setTextBoxConfirm('A CD titled in black pen: "Serenade - Franz Schubert". It\'s your favorite song. Pick it up?',
+            () => {
+                inventoryAdd(cd, () => { setTextBox('"Serenade - Franz Schubert"') });
+                cd.hide()
+            })
+    });
+
+
+
 
     const cds = new GameObject(277, 658, 'cds', bedroom, 4)
     cds.setOnClick(() => { setTextBox('A CD collection.') });
@@ -174,7 +194,7 @@ function loadBedroom() {
             setTextBoxConfirm("Three pens you got from a job fair. Take one?",
                 () => {
                     penContainer.setImgState('PenOut');
-                    inventory.push(penContainer); //change to pen not pen container
+                    inventoryAdd(penContainer); //change to pen not pen container
                 })
         } else {
             setTextBox("Two pens you got from a job fair.");
@@ -214,7 +234,7 @@ function loadBedroom() {
     resume.setOnClick(() => {
         setTextBoxConfirm("It's your resume! You need it for the job interview today. Pick it up?",
             () => {
-                inventory.push(resume);
+                inventoryAdd(resume, () => { setTextBox("Your resume.") });
                 resume.hide();
             }
         )
@@ -265,7 +285,7 @@ function loadBedroom() {
     const letter = new GameObject(1057, 527, 'letter', bedroom, 6);
     letter.hide();
     letter.setOnClick(
-        () => setTextBoxConfirm("A letter... Take it?", () => {
+        () => setTextBoxConfirm("A letter you wrote a long time ago. Take it?", () => {
             freeze.style.display = 'block';
             handAnim();
         })

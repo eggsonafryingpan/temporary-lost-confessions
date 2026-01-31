@@ -14,6 +14,45 @@
     overflow: hidden;
 }
 
+#inventory {
+    width: 480px;
+    height: 99px;
+    position: absolute;
+    display: flex;
+    left: 900px;
+    z-index: 2;
+    justify-content: left;
+    align-items: center;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 1px;
+    padding-left: 20px;
+
+    scrollbar-width: thin;
+    scrollbar-color: #ccc transparent;
+}
+
+#inventory::-webkit-scrollbar {
+    height: 10px;
+}
+
+#inventory::-webkit-scrollbar-button {
+    display: none;
+    width: 0;
+    height: 0;
+    display: none;
+}
+
+#inventory::-webkit-scrollbar-track {
+    background: #4365af;
+    border-radius: 2px;
+}
+
+#inventory img {
+    display: inline-block;
+    padding: 4px;
+}
+
 #freeze {
     display: none;
     position: absolute;
