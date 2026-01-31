@@ -15,6 +15,8 @@ const world = document.getElementById("world");
 world.style.width = width + 'px';
 world.style.height = height + 'px';
 
+const freeze = document.getElementById("freeze");
+
 
 const zoom = document.getElementById("zoom");
 const zoomImg = document.getElementById("zoomImg");
@@ -136,17 +138,6 @@ function loadBedroom() {
     const mirror = new GameObject(731, 314, 'mirror', bedroom, 2);
     mirror.setOnClick(() => { setTextBox("You see yourself in a nice dress shirt.") });
 
-    const door = new GameObject(861, 286, 'door', bedroom, 2);
-    door.setOnClick(() => {
-        if (!inventory.includes(resume)) {
-            setTextBox("You try to leave, but you feel like you forgot something.");
-            // } else if (door.state != "Cat") {
-            //     setTextBox("You feel strangely pulled to the letter"); // TODO change later
-        } else {
-            setTextBoxConfirm("There's a cat shaped hole. Open the door?", () => { setRoom(flowerRoom) }); // TODO add event        
-        }
-    });
-
 
     const nightstand = new GameObject(152, 607, 'nightstand', bedroom, 2);
     nightstand.setOnClick(() => { setTextBox("A nightstand.") });
@@ -229,13 +220,6 @@ function loadBedroom() {
     });
 
 
-    const letter = new GameObject(1057, 527, 'letter', bedroom, 6);
-    letter.hide();
-    letter.setOnClick(
-        () => setTextBoxConfirm("A letter... Take it?", () => {
-            handOpen.show();
-        })
-    );
 
 
     const drawer = new GameObject(1031, 508, 'drawer', bedroom, 4);
@@ -267,40 +251,72 @@ function loadBedroom() {
     const poster2 = new GameObject(580, 349, 'poster2', bedroom, 2);
     poster2.setOnClick(() => { setTextBox("A poster of your favorite game.") });
 
-    const handClosed = new GameObject(1000, 556, 'handClosed', bedroom, 7);
+    const letter = new GameObject(1057, 527, 'letter', bedroom, 6);
+    letter.hide();
+    letter.setOnClick(
+        () => setTextBoxConfirm("A letter... Take it?", () => {
+            freeze.style.display = 'block';
+            handAnim();
+        })
+    );
+
+    const handClosed = new GameObject(1000, 0, 'handClosed', bedroom, 7);
     handClosed.hide();
     const handOpen = new GameObject(1000, -552, 'handOpen', bedroom, 7);
     handOpen.hide();
 
-    const downKF = [
-        { transform: 'translateY(0px)' },
-        { transform: 'translateY(552px)' }
-    ];
-    const downOpt = {
-        duration: 1500,
-        easing: 'ease-in-out',
-        fill: 'forwards'
-    };
-    const downAnim = handOpen.img.animate(downKF, downOpt);
+    function handAnim() {
+        const downKF = [
+            { top: '-552px' },
+            { top: '0' }
+        ];
+        const downOpt = {
+            duration: 1500,
+            easing: 'ease-in-out',
+            fill: 'forwards'
+        };
+        const downAnim = handOpen.img.animate(downKF, downOpt);
+        downAnim.pause();
 
-    downAnim.onfinish = () => {
-        handOpen.hide();
-        letter.hide();
-        handClosed.show();
-    };
-    const upKF = [
-        { transform: 'translateY(0px)' },
-        { transform: 'translateY(-556px)' }
-    ];
-    const upOpt = {
-        duration: 1500,
-        easing: 'ease-in-out',
-        fill: 'forwards'
-    };
-    const upAnim = handClosed.img.animate(upKF, upOpt);
-    upAnim.onfinish = () => {
-        handClosed.hide();
-    };
+
+        const upKF = [
+            { top: '0' },
+            { top: '-556px' }
+        ];
+        const upOpt = {
+            duration: 1500,
+            easing: 'ease-in-out',
+            fill: 'forwards'
+        };
+        const upAnim = handClosed.img.animate(upKF, upOpt);
+        upAnim.pause();
+
+
+        downAnim.onfinish = () => {
+            handOpen.hide();
+            letter.hide();
+            handClosed.show();
+            upAnim.play();
+        };
+        upAnim.onfinish = () => {
+            handClosed.hide();
+            textChain([() => setTextBox("Crap."), () => setTextBox("You can't let anyone read that letter."), () => setTextBox("You have to get it back.")]);
+            freeze.style.display = 'none';
+            door.setOnClick(() => { setTextBoxConfirm("Open the door?", () => { setRoom(flowerRoom) }) })
+        };
+
+        handOpen.show();
+        downAnim.play();
+    }
+
+    const door = new GameObject(861, 286, 'door', bedroom, 2);
+    door.setOnClick(() => {
+        if (!inventory.includes(resume)) {
+            setTextBox("You try to leave, but you feel like you forgot something.");
+        } else {
+            setTextBox("You feel strangely pulled to the letter in the drawer.");
+        }
+    });
 
 
 
@@ -347,12 +363,12 @@ function loadEscalatorRoom() {
     door1.setHighlight();
     door1.setOnClick(() => { setRoom(flowerRoom) });
 
-    const door2 = new GameObject(499, 193, 'door2', escalatorRoom, 2);
+    const door2 = new GameObject(499, 193, 'door2', escalatorRoom, 3);
     door2.setHighlight();
     door2.setOnClick(() => { setRoom(bentHallway) });
 
 
-    const escalator = new GameObject(60, 224, 'escalator', escalatorRoom, 3);
+    const escalator = new GameObject(60, 224, 'escalator', escalatorRoom, 2);
     escalator.setOnClick(() => { setTextBox("An escalator. It doesn't move. I guess it's a staircase now.") })
 }
 

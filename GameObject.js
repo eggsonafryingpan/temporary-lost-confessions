@@ -32,7 +32,7 @@ export class GameObject {
         this.img.style.display = 'block';
     }
 
-    setImgState(imgState) {
+    setImgState(imgState = "") {
         this.state = imgState;
         console.log(this.imgSrc + this.state + ".png");
         this.img.src = this.imgSrc + this.state + ".png";
@@ -75,8 +75,8 @@ export class GameObject {
 
     //only add if highlighted image is in imgs
     setHighlight() {
-        this.onEnter = () => { this.imgSrc + "Highlight" + ".png" };
-        this.onLeave = () => { this.imgSrc + ".png" };
+        this.onEnter = () => { this.setImgState("Highlight") };
+        this.onLeave = () => { this.setImgState() };
     }
 
     setInvisibleHighlight() {
@@ -84,7 +84,7 @@ export class GameObject {
             this.img.style.display = 'block';
         }
         this.onLeave = () => {
-            this.img.style.display = 'none';
+            this.img.style.visibility = 'hidden';
         }
     }
 }
