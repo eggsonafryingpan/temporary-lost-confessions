@@ -23,6 +23,7 @@ const zoomImg = document.getElementById("zoomImg");
 
 zoom.addEventListener('click', () => zoom.style.display = 'none');
 
+
 function setZoom(o) {
     if (textBox.isHidden()) {
         console.log(zoomImg);
@@ -251,6 +252,16 @@ function loadBedroom() {
     const poster2 = new GameObject(580, 349, 'poster2', bedroom, 2);
     poster2.setOnClick(() => { setTextBox("A poster of your favorite game.") });
 
+    const door = new GameObject(861, 286, 'door', bedroom, 2);
+    door.setOnClick(() => {
+        if (!inventory.includes(resume)) {
+            setTextBox("You try to leave, but you feel like you forgot something.");
+        } else {
+            setTextBox("You feel strangely pulled to the letter in the drawer.");
+        }
+    });
+
+
     const letter = new GameObject(1057, 527, 'letter', bedroom, 6);
     letter.hide();
     letter.setOnClick(
@@ -302,21 +313,18 @@ function loadBedroom() {
             handClosed.hide();
             textChain([() => setTextBox("Crap."), () => setTextBox("You can't let anyone read that letter."), () => setTextBox("You have to get it back.")]);
             freeze.style.display = 'none';
-            door.setOnClick(() => { setTextBoxConfirm("Open the door?", () => { setRoom(flowerRoom) }) })
+            door.setOnClick(() => {
+                setTextBoxConfirm("Open the door?", () => {
+                    setRoom(flowerRoom);
+                    changeBedroom()
+                })
+            })
         };
 
         handOpen.show();
         downAnim.play();
     }
 
-    const door = new GameObject(861, 286, 'door', bedroom, 2);
-    door.setOnClick(() => {
-        if (!inventory.includes(resume)) {
-            setTextBox("You try to leave, but you feel like you forgot something.");
-        } else {
-            setTextBox("You feel strangely pulled to the letter in the drawer.");
-        }
-    });
 
 
 
@@ -352,6 +360,11 @@ function loadFlowerRoom() {
 
     const magnolia = new GameObject(1197, 351, 'magnolia', flowerRoom, 3);
     magnolia.setOnClick(() => { setTextBox("A beautiful magnolia.") });
+
+    const bottomHighlight = new GameObject(0, 678, 'bottomHighlight', flowerRoom, 3);
+    bottomHighlight.setInvisibleHighlight();
+    bottomHighlight.setOnClick(() => { setRoom(bedroom) });
+
 }
 loadFlowerRoom();
 
@@ -367,7 +380,6 @@ function loadEscalatorRoom() {
     door2.setHighlight();
     door2.setOnClick(() => { setRoom(bentHallway) });
 
-
     const escalator = new GameObject(60, 224, 'escalator', escalatorRoom, 2);
     escalator.setOnClick(() => { setTextBox("An escalator. It doesn't move. I guess it's a staircase now.") })
 }
@@ -376,10 +388,15 @@ loadEscalatorRoom();
 
 
 function loadBentHallway() {
-    const highlight = new GameObject(10, 10, 'exitHighlight', bentHallway, 3);
+    const highlight = new GameObject(556, 226, 'exitHighlight', bentHallway, 3);
     highlight.setInvisibleHighlight();
     const lipstickPoster = new GameObject(1100, 150, 'lipstickPoster', bentHallway, 3);
     lipstickPoster.setOnClick(() => { setTextBox("f.l.e 50% SALE") });
+
+    const bottomHighlight = new GameObject(0, 678, 'bottomHighlight', bentHallway, 3);
+    bottomHighlight.setInvisibleHighlight();
+    bottomHighlight.setOnClick(() => { setRoom(escalatorRoom) });
+
 }
 
 loadBentHallway();

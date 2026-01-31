@@ -80,11 +80,12 @@ export class GameObject {
     }
 
     setInvisibleHighlight() {
+        this.img.style.opacity = 0;
         this.onEnter = () => {
-            this.img.style.display = 'block';
+            this.img.style.opacity = 1;
         }
         this.onLeave = () => {
-            this.img.style.visibility = 'hidden';
+            this.img.style.opacity = 0;
         }
     }
 }
