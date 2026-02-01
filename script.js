@@ -448,11 +448,15 @@ function loadFlowerRoom() {
     const flowerFrame = new GameObject(1109, 260, 'flowerFrame', flowerRoom, 2);
     flowerFrame.setOnClick(() => {
         if (inventory.has("keychain")) {
-            setTextBoxConfirm("Place lilac keychain on the frame?", () => {
+            setTextBoxConfirm("Place the lilac keychain on the frame?", () => {
                 flowerFrame.setImgState("Keychain");
+                inventoryRemove("keychain");
                 //OPEN SOMETHING TODO
             });
-        } else {
+        } else if (flowerFrame.state == "Keychain") {
+            flowerFrame.setOnClick(() => { setTextBox("A lilac and a magnolia sit side by side.") });
+        }
+        else {
             setTextBox("A wooden frame. It's missing something.");
         }
     });
