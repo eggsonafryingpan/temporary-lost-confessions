@@ -95,7 +95,7 @@ body {
 
 #textBoxText {
     position: absolute;
-    padding: 20px;
+    padding: 20px 100px 20px 20px;
     font-size: 20px;
     z-index: 10;
 
@@ -156,13 +156,36 @@ body {
 }
 
 #diaryText {
+    max-height: 648px;
     top: 0;
     left: 0;
     z-index: 17;
     position: absolute;
     padding: 60px;
-    font-size: 20px;
+    font-size: 28px;
     font-family: 'handwriting', serif;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-y: auto;
+
+    scrollbar-width: thin;
+    scrollbar-color: #ccc transparent;
+}
+
+#diaryText::-webkit-scrollbar {
+    height: 10px;
+}
+
+#diaryText::-webkit-scrollbar-button {
+    display: none;
+    width: 0;
+    height: 0;
+    display: none;
+}
+
+#diaryText::-webkit-scrollbar-track {
+    background: #4365af;
+    border-radius: 2px;
 }
 
 @keyframes upDown {

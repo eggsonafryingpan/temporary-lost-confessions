@@ -12,7 +12,10 @@ const escalatorRoom = document.getElementById("escalatorRoom");
 const bentHallway = document.getElementById("bentHallway");
 const mallRoom = document.getElementById("mallRoom");
 const museumRoom = document.getElementById("museumRoom");
-let currRoom = mallRoom;
+const swanRoom = document.getElementById("swanRoom");
+const gatchaRoom = document.getElementById("gatchaRoom");
+
+let currRoom = bedroom;
 setRoom(currRoom);
 const world = document.getElementById("world");
 world.style.width = width + 'px';
@@ -29,19 +32,29 @@ zoom.addEventListener('click', () => zoom.style.display = 'none');
 
 
 function setZoom(o) {
-    if (textBox.isHidden()) { //maybe change
-        zoom.style.display = 'flex';
-        if (o) {
-            zoomImg.src = o.imgSrc + "Zoom.png";
+    diaryText.style.display = 'none';
+    if (typeof o == "string") {
+        if (textBox.isHidden()) { //maybe change
+            zoomImg.src = 'imgs/' + o + "Zoom.png";
+            zoom.style.display = 'flex';
+        }
+    } else {
+        if (textBox.isHidden()) { //maybe change
+            if (o) {
+                zoomImg.src = o.imgSrc + "Zoom.png";
+            }
+            zoom.style.display = 'flex';
         }
     }
 }
+
 
 function setDiary(date) {
     setZoom(null);
     if (textBox.isHidden()) {
         zoomImg.src = "imgs/diary.png";
         diaryText.innerHTML = diaryEntries.get(date);
+        diaryText.style.display = 'block';
     }
 }
 
@@ -87,7 +100,11 @@ function inventoryAdd(name = "", onclick) {
 }
 
 const diaryEntries = new Map([
-    ["oct23", ""]
+    ["oct23", ""],
+    ["feb14", ""],
+    ["feb15", ""],
+    ["mar15", ""],
+    ["mar15Continued", ""]
 ]);
 
 
@@ -112,6 +129,18 @@ document.addEventListener('mousemove', (e) => {
 
 const click = new Audio('sound/click.wav');
 const serenade = new Audio('sound/schubertSerenade.mp3');
+const theSwan = new Audio('sound/theSwan.mp3');
+const deux = new Audio('sound/pasDeDeux.mp3');
+let currentSong = null;
+
+function setSong(song) {
+    if (song) {
+        currentSong.pause();
+    }
+    currentSong = song;
+    currentSong.play();
+    currentSong.loop = true;
+}
 
 
 //KATEEEEE this is how u make a new object:
@@ -150,13 +179,45 @@ const serenade = new Audio('sound/schubertSerenade.mp3');
 
 //testing change later
 
+let boxCase = null;
 function loadBedroom() {
+
+    //when player walks out and back in
+    let bedroomChanged = false;
+    function changeBedroom() {
+        if (!bedroomChanged) {
+            bedroomChanged = true;
+            alarmclock.setImgState("777");
+            alarmclock.setOnClick(() => { setTextBox("An alarm clock. It's 7:77 am.") });
+            gameWindow.setImgState("Poster");
+            gameWindow.setOnClick(() => { setTextBox("A poster of a window. It's peeling from the wall.") })
+            mirror.setOnClick(() => { setTextBox("You don't see anyone in the mirror.") })
+            cdPlayer.setOnClick(() => {
+                if (inventory.has("swanCD")) {
+                    setTextBoxConfirm('Take out the CD and play "The Swan (Carnaval of the Animals) - Best of Saint-Saëns"?',
+                        () => {
+                            setSong(theSwan);
+                            boxCase.hide();
+                            inventoryRemove("swanCD");
+
+                        }
+                    )
+                } else if (inventory.has("deuxCD")) {
+                    setTextBoxConfirm('Take out the CD and play "Pas de deux - Tchaikovsky"?', () => {
+                        setSong(deux);
+                        inventoryRemove("deuxCD");
+                    })
+                } else if (currentSong == theSwan) {
+                    setTextBox('"The Swan" plays.');
+                } else if (currentSong == deux) {
+                    setTextBox('"Pas de deux" plays.');
+                } else if (currentSong == serenade) {
+                    setTextBox('"Serenade" plays.');
+                }
+            })
+        }
+    }
     const gameWindow = new GameObject(167, 259, 'window', bedroom);
-    // gameWindow.setOnClick(() => {
-    //     if (gameWindow.state == "") {
-    //         gameWindow.setImgState("Poster");
-    //     } else { gameWindow.setImgState("") };
-    // });
     gameWindow.setOnClick(() => { setTextBox("A window. It's cold outside, you should probably keep it closed.") });
 
 
@@ -188,6 +249,7 @@ function loadBedroom() {
         setTextBoxConfirm('A CD titled in black pen: "Serenade - Franz Schubert". It\'s your favorite song. Pick it up?',
             () => {
                 inventoryAdd("serenadeCD", () => { setTextBox('"Serenade - Franz Schubert"') });
+                currentSong = serenade;
                 serenadeCD.hide()
             })
     });
@@ -238,7 +300,7 @@ function loadBedroom() {
                     () => {
                         cdPlayer.setImgState("Closed");
                         inventoryRemove("serenadeCD");
-                        serenade.play();
+                        setSong(serenade)
                         setTimeout(() => {
                             click.play();
                             puzzleDrawer.setImgState("SlightlyOpen");
@@ -247,7 +309,7 @@ function loadBedroom() {
                 () => setTextBox('"Serenade - Franz Schubert" plays. You hear a click from the desk drawer.')
             ]);
         } else if (cdPlayer.state == "Closed") {
-            setTextBox("A beautiful classical piece plays.");
+            setTextBox('"Serenade" plays.');
         } else { setTextBox("A CD player. It was your 16th birthday present.") };
     });
 
@@ -358,7 +420,7 @@ function loadBedroom() {
             door.setOnClick(() => {
                 setTextBoxConfirm("Open the door?", () => {
                     setRoom(flowerRoom);
-                    changeBedroom()
+                    changeBedroom();
                 })
             })
         };
@@ -370,21 +432,11 @@ function loadBedroom() {
 
 
 
-    //when player walks out and back in
-    function changeBedroom() {
-        alarmclock.setImgState("777");
-        alarmclock.setOnClick(() => { setTextBox("An alarm clock. It's 7:77 am.") });
-        gameWindow.setImgState("Poster");
-        gameWindow.setOnClick(() => { setTextBox("A poster of a window. It's peeling from the wall.") })
-        mirror.setOnClick(() => { setTextBox("You don't see anyone in the mirror.") })
-    }
+
 
 }
 
-
 loadBedroom();
-
-
 
 
 //Flower room
@@ -410,7 +462,6 @@ function loadFlowerRoom() {
 }
 loadFlowerRoom();
 
-
 //escalator room
 
 function loadEscalatorRoom() {
@@ -423,7 +474,7 @@ function loadEscalatorRoom() {
     door2.setOnClick(() => { setRoom(bentHallway) });
 
     const escalator = new GameObject(60, 224, 'escalator', escalatorRoom, 2);
-    escalator.setOnClick(() => { setTextBox("An escalator. It doesn't move. I guess it's a staircase now.") })
+    escalator.setOnClick(() => { setTextBox("An escalator. It doesn't move. Guess it's a staircase now.") })
 }
 
 loadEscalatorRoom();
@@ -444,17 +495,19 @@ function loadBentHallway() {
 
 loadBentHallway();
 
+let swanCDStand = null;
+
 function loadMallRoom() {
     const joeShop = new GameObject(1039, 231, 'joeShop', mallRoom, 2);
     joeShop.setOnClick(() => { setTextBox("A store that sells records and CDs. It looks very familiar.") });
     const cdDisplay = new GameObject(897, 307, 'cdDisplay', mallRoom, 2);
     cdDisplay.setOnClick(() => { setTextBox("An empty display for Joe's Records and CDs.") });
-    const swanCDStand = new GameObject(943, 332, 'cdStand', mallRoom, 3);
+    swanCDStand = new GameObject(943, 332, 'cdStand', mallRoom, 3);
     swanCDStand.hide(); //TODO KEYCHAIN
-    swanCDStand.img.addEventListener("DOMContentLoaded", () => { if (inventory.has("keychain")) swanCDStand.show() });
     swanCDStand.setOnClick(() => {
         setTextBoxConfirm('A CD. It\'s titled "The Swan (Carnaval of the Animals) - Best of Saint-Saëns".', () => {
             inventoryAdd("swanCD");
+            swanCDStand.hide();
         })
     })
     const exit1 = new GameObject(344, 289, 'exit1', mallRoom, 2);
@@ -493,3 +546,177 @@ function loadMuseumRoom() {
 
 
 loadMuseumRoom();
+
+
+function loadSwanRoom() {
+    const exit = new GameObject(186, 308, 'exit', swanRoom, 2);
+    exit.setHighlight();
+    exit.setOnClick(() => { setRoom(museumRoom) });
+    const stand = new GameObject(623, 485, 'stand', swanRoom, 2);
+    stand.setOnClick(() => { setTextBox("A marble stand for the exhibit. It has a swan engraved on it.") })
+    const deuxCD = new GameObject(694, 470, 'deuxCD', swanRoom, 4);
+    deuxCD.hide();
+    deuxCD.setOnClick(() => {
+        textChain([
+            () => setTextBoxConfirm('A CD titled "Pas de deux - Tchaikovsky". Take it?',
+                () => {
+                    inventoryAdd("deuxCD", () => { setTextBox('A CD titled "Pas de deux - Tchaikovsky"') });
+                    deuxCD.hide();
+                }),
+            () => setTextBoxConfirm("A piece of paper fell out of the CD case. Read it?", () => { setDiary("feb15") })
+        ])
+    }
+    );
+
+    const box = new GameObject(728, 508, 'box', swanRoom, 3);
+    box.setTranslate("bottomRight");
+    box.setOnClick(() => {
+        if (box.state != "Opened") {
+            setTextBoxConfirm("Open the box?",
+                () => {
+                    box.setImgState("Opened");
+                    deuxCD.show();
+                })
+        } else {
+            setTextBox("A wooden box.");
+        }
+    });
+    boxCase = new GameObject(666, 423, 'case', swanRoom, 5);
+    boxCase.setOnClick(() => { setTextBox("A thick glass case protects a wooden box. You wonder how you could open it.") });
+
+    const speaker = new GameObject(364, 166, 'speaker', swanRoom, 2);
+    speaker.setOnClick(() => {
+        if (currentSong == serenade) {
+            setTextBox('A speaker. "Serenade" plays. Is it connected to the CD player in your room? You wonder if you can change the song.')
+        } else if (currentSong == theSwan) {
+            setTextBox('A speaker. "The Swan" plays.');
+        } else if (currentSong == deux) {
+            setTextBox('A speaker. "Pas de deux" plays.')
+        } else {
+            setTextBox("A speaker.");
+        }
+    })
+
+    const diary = new GameObject(925, 641, 'diary', swanRoom, 2);
+    diary.setOnClick(() => { setDiary("feb14") });
+}
+loadSwanRoom();
+
+
+function loadGatchaRoom() {
+    const diary = new GameObject(450, 635, 'diary', gatchaRoom, 2);
+    diary.setOnClick(() => { setDiary("mar15") });
+
+    const diary2 = new GameObject(952, 605, 'diary2', gatchaRoom, 2);
+    diary2.hide();
+    diary2.setOnClick(() => { setDiary("mar15Continued") }); //TODO
+
+
+    const handClosed = new GameObject(1400, 600, 'handClosed', gatchaRoom, 7);
+    handClosed.hide();
+    const handOpen = new GameObject(848, 600, 'handOpen', gatchaRoom, 7);
+    handOpen.hide();
+
+    function handAnim() {
+        const inKF = [
+            { left: '1400px' },
+            { left: '948px' }
+        ];
+        const opt = {
+            duration: 1500,
+            easing: 'ease-in-out',
+            fill: 'forwards'
+        };
+        const inAnim = handClosed.img.animate(inKF, opt);
+        inAnim.pause();
+        const outKF = [
+            { left: '948px' },
+            { left: '1400px' }
+        ];
+        const outAnim = handOpen.img.animate(outKF, opt);
+        outAnim.pause();
+
+
+        inAnim.onfinish = () => {
+            handClosed.hide();
+            handOpen.show();
+            diary2.show();
+            outAnim.play();
+        };
+        outAnim.onfinish = () => {
+            handOpen.hide();
+        };
+
+        handClosed.show();
+        inAnim.play();
+    }
+
+    const leftGatcha = new GameObject(550, 450, 'leftGatcha', gatchaRoom, 2);
+    leftGatcha.setOnClick(() => { setTextBox("A capsule toy machine. It's empty.") });
+
+    const rightCoinSlot = new GameObject(813, 587, 'rightCoinSlot', gatchaRoom, 3);
+    rightCoinSlot.setOnClick(() => {
+        setTextBoxConfirm("Check the coin slot?", () => {
+            setTextBox("There's nothing there.");
+        })
+    });
+    const rightGatcha = new GameObject(783, 450, 'rightGatcha', gatchaRoom, 2);
+    rightGatcha.setOnClick(() => { setTextBox("A capsule toy machine. It's empty.") });
+
+    const leftCoinSlot = new GameObject(560, 587, 'leftCoinSlot', gatchaRoom, 3);
+    let leftCoinSlotRan = false;
+    leftCoinSlot.setOnClick(() => {
+        setTextBoxConfirm("Check the coin slot?", () => {
+            if (!leftCoinSlotRan) {
+                setTextBoxConfirm("Someone left a quarter. Take it?", () => {
+                    inventoryAdd("coin", () => { setTextBox("A quarter.") });
+                })
+                leftCoinSlotRan = true;
+            } else {
+                setTextBox("It's empty.");
+            }
+
+        })
+    })
+
+
+    const gatchaOut = new GameObject(697, 639, 'gatchaout', gatchaRoom, 4);
+    gatchaOut.setOnClick(() => {
+        if (gatchaOut.state == "Ball") {
+            setTextBoxConfirm("Take the capsule?", () => {
+                setZoom("gatchaRoom/keychain");
+                inventoryAdd("keychain", () => {
+                    setTextBox("A lilac keychain.");
+                });
+                gatchaOut.setImgState("");
+                swanCDStand.show();
+                handAnim();
+            })
+        } else {
+            setTextBox("Where the capsules come out.");//TODO i dont like this
+        }
+    })
+
+    const gatcha = new GameObject(675, 450, 'gatcha', gatchaRoom, 3);
+    gatcha.setOnClick(() => {
+        if (inventory.has("coin")) {
+            setTextBoxConfirm("Insert the quarter into the coin slot?", () => {
+                gatchaOut.setImgState("Ball");
+                inventoryRemove("coin");
+            });
+        } else {
+            setTextBox("A capsule toy machine. There's a couple left, but you need a quarter.")
+        }
+    });
+
+
+    const gatchaPoster = new GameObject(695, 469, 'gatchaPoster', gatchaRoom, 4);
+    gatchaPoster.setOnClick(() => { setTextBox("Flower keychains. They're made of plastic, but they look charming.") });
+
+
+    const bottomHighlight = new GameObject(0, 698, 'bottomHighlight', gatchaRoom, 3);
+    bottomHighlight.setInvisibleHighlight();
+    bottomHighlight.setOnClick(() => { setRoom(mallRoom) });
+}
+
+loadGatchaRoom();
