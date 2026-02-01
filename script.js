@@ -14,6 +14,10 @@ const mallRoom = document.getElementById("mallRoom");
 const museumRoom = document.getElementById("museumRoom");
 const swanRoom = document.getElementById("swanRoom");
 const gatchaRoom = document.getElementById("gatchaRoom");
+const subwayRoom = document.getElementById("subwayRoom")
+const gummyRoom = document.getElementById("gummyRoom");
+const classroom = document.getElementById("classroom");
+const butterflyRoom = document.getElementById("butterflyRoom");
 
 let currRoom = bedroom;
 setRoom(currRoom);
@@ -445,13 +449,18 @@ function loadFlowerRoom() {
     const door2 = new GameObject(594, 206, 'door2', flowerRoom, 2);
     door2.setHighlight();
 
+    const exit3 = new GameObject(1146, 504, 'door3', flowerRoom, 2);
+    exit3.hide();
+    exit3.setHighlight();
+    exit3.setOnClick(() => { setRoom(subwayRoom) });
+
     const flowerFrame = new GameObject(1109, 260, 'flowerFrame', flowerRoom, 2);
     flowerFrame.setOnClick(() => {
         if (inventory.has("keychain")) {
             setTextBoxConfirm("Place the lilac keychain on the frame?", () => {
                 flowerFrame.setImgState("Keychain");
                 inventoryRemove("keychain");
-                //OPEN SOMETHING TODO
+                exit3.show();
             });
         } else if (flowerFrame.state == "Keychain") {
             flowerFrame.setOnClick(() => { setTextBox("A lilac and a magnolia sit side by side.") });
@@ -467,6 +476,8 @@ function loadFlowerRoom() {
     const bottomHighlight = new GameObject(0, 678, 'bottomHighlight', flowerRoom, 3);
     bottomHighlight.setInvisibleHighlight();
     bottomHighlight.setOnClick(() => { setRoom(bedroom) });
+
+
 
 }
 loadFlowerRoom();
@@ -561,17 +572,14 @@ function loadSwanRoom() {
     const diary2 = new GameObject(644, 497, 'diary2', swanRoom, 4);
     diary2.hide();
     diary2.setOnClick(() => { setDiary("feb15") });
-    const deuxCD = new GameObject(694, 470, 'deuxCD', swanRoom, 4);
-    deuxCD.hide();
-    deuxCD.setOnClick(() => {
-        textChain([
-            () => setTextBoxConfirm('A CD titled "Pas de deux - Tchaikovsky". Take it?',
-                () => {
-                    inventoryAdd("deuxCD", () => { setTextBox('A CD titled "Pas de deux - Tchaikovsky"') });
-                    deuxCD.hide();
-                }),
-            () => setTextBoxConfirm("A piece of paper fell out of the CD case. Read it?", () => { setDiary("feb15"); diary2.show(); })
-        ])
+    const butterflyKey = new GameObject(691, 465, 'butterflyKey', swanRoom, 4);
+    butterflyKey.hide();
+    butterflyKey.setOnClick(() => {
+        setTextBoxConfirm('A key shaped like a butterfly. Take it?', () => {
+            inventoryAdd("butterflyKey", () => { setTextBox('A key shaped like a butterfly.') });
+            butterflyKey.hide();
+            diary2.show();
+        })
     }
     );
 
@@ -582,7 +590,7 @@ function loadSwanRoom() {
             setTextBoxConfirm("Open the box?",
                 () => {
                     box.setImgState("Opened");
-                    deuxCD.show();
+                    butterflyKey.show();
                 })
         } else {
             setTextBox("A wooden box.");
@@ -726,3 +734,124 @@ function loadGatchaRoom() {
 }
 
 loadGatchaRoom();
+
+
+function loadSubwayRoom() {
+    const exit1 = new GameObject(109, 254, 'exit1', subwayRoom, 2);
+    exit1.setHighlight();
+    exit1.setOnClick(() => { setRoom(flowerRoom) });
+    const exit2 = new GameObject(1227, 419, 'exit2', subwayRoom, 2);
+    exit2.setHighlight();
+    exit2.setOnClick(() => { setRoom(gummyRoom) });
+    const subwayDoor = new GameObject(620, 254, 'subwayDoor', subwayRoom, 2);
+    subwayDoor.setOnClick(() => { setTextBox("A subway door. It's askew.") });
+    const handle1 = new GameObject(1055, 254, 'handle', subwayRoom, 2);
+    handle1.setOnClick(() => { setTextBox("A subway handholds. It's collecting dust.") });
+    const handle2 = new GameObject(899, 219, 'handle', subwayRoom, 2);
+    handle2.setOnClick(() => { setTextBox("A subway handholds. It's collecting dust.") });
+    const handle3 = new GameObject(544, 139, 'handle', subwayRoom, 2);
+    handle3.setOnClick(() => { setTextBox("A subway handholds. It's collecting dust.") });
+    const handle4 = new GameObject(400, 105, 'handle', subwayRoom, 2);
+    handle4.setOnClick(() => { setTextBox("A subway handholds. It's collecting dust.") });
+}
+
+
+loadSubwayRoom();
+
+function loadGummyRoom() {
+    const sign = new GameObject(657, 271, 'sign', gummyRoom, 2);
+    sign.setOnClick(() => { setTextBox("A sign. Left: Lockers. Right: Room 101.") });
+    const rightHighlight = new GameObject(751, 80, 'rightHighlight', gummyRoom, 2);
+    rightHighlight.setInvisibleHighlight();
+    rightHighlight.setOnClick(() => { setRoom(classroom) });
+
+    const leftHighlight = new GameObject(605, 80, 'leftHighlight', gummyRoom, 2);
+    leftHighlight.setInvisibleHighlight();
+    leftHighlight.setOnClick(() => { setRoom(butterflyRoom) });
+
+    const gummy = new GameObject(542, 596, 'gummy', gummyRoom, 2);
+    gummy.setOnClick(() => { setTextBox("An empty gummy package.") });
+    const diary = new GameObject(465, 330, 'diary', gummyRoom, 2);
+    diary.setOnClick(() => { setDiary("") });
+    //set diary TODO
+
+    const bottomHighlight = new GameObject(0, 678, 'bottomHighlight', gummyRoom, 3);
+    bottomHighlight.setInvisibleHighlight();
+    bottomHighlight.setOnClick(() => { setRoom(subwayRoom) });
+}
+
+loadGummyRoom();
+
+function loadClassroom() {
+    const exit1 = new GameObject(124, 281, 'exit1', classroom, 2);
+    exit1.setHighlight();
+    exit1.setOnClick(() => { setRoom(gummyRoom) });
+    const whiteboard = new GameObject(614, 297, 'whiteboard', classroom, 2);
+    whiteboard.setOnClick(() => { setTextBox("A whiteboard. The lesson is on The Great Gatsby.") });
+    const classroomWindow = new GameObject(943, 74, 'window', classroom, 2);
+    classroomWindow.setOnClick(() => { setTextBox("A window. It's raining outside.") }); // TODO GET RAIN SOUND??
+    const teacherDesk = new GameObject(448, 418, 'teacherDesk', classroom, 2);
+    teacherDesk.setOnClick(() => { setTextBox("The teacher's desk.") });
+
+    const rightDesk = new GameObject(873, 477, 'rightDesk', classroom, 2);
+    rightDesk.setImgState("CD");
+    rightDesk.setOnClick(() => {
+        setTextBoxConfirm("A desk. Look inside?", () => {
+            if (rightDesk.state == "CD") {
+                setTextBoxConfirm('There\'s a CD titled "Pas de deux - Tchaikovsky". Take it?', () => {
+                    inventoryAdd("deuxCD", () => { setTextBox('A CD titled "Pas de deux - Tchaikovsky".') });
+                    rightDesk.setImgState("");
+                });
+            } else {
+                setTextBox("It's empty.");
+            }
+        })
+    })
+
+    const rightChair = new GameObject(922, 515, 'rightChair', classroom, 5);
+    rightChair.setOnClick(() => { setTextBox("Your seat.") });
+
+    const deuxDef = new GameObject(910, 481, 'deuxDef', classroom, 4);
+    deuxDef.setOnClick(() => { setDiary("deuxDef") }); //TODO MAKE DEUX DEF
+
+    const leftDesk = new GameObject(426, 477, 'leftDesk', classroom, 2);
+    leftDesk.setOnClick(() => {
+        setTextBoxConfirm("A desk. Look inside?", () => {
+            setTextBox("There's some papers.");
+        })
+    });
+
+    const leftChair = new GameObject(445, 512, 'leftChair', classroom, 3);
+    leftChair.setOnClick(() => { setTextBox("A chair. Someone familiar sits there.") });
+}
+
+loadClassroom();
+
+function loadButterflyRoom() {
+    const bottomHighlight = new GameObject(0, 678, 'bottomHighlight', butterflyRoom, 3);
+    bottomHighlight.setInvisibleHighlight();
+    bottomHighlight.setOnClick(() => { setRoom(gummyRoom) });
+    const butterflyDoor = new GameObject(640, 352, 'butterflyDoor', butterflyRoom, 2);
+    butterflyDoor.locked = true;
+    butterflyDoor.setOnClick(() => {
+        if (butterflyDoor.locked) {
+            if (inventory.has("butterflyKey")) {
+                setTextBoxConfirm("Use the butterfly key?", () => {
+                    butterflyDoor.locked = false;
+                    click.play();
+                })
+            } else {
+                setTextBox("It's locked.");
+            }
+        } else {
+            setTextBoxConfirm("Open the door?", () => {
+                setRoom(vaultRoom);
+            })
+        }
+    });
+    const diary = new GameObject(839, 578, 'diary', butterflyRoom, 2);
+    diary.setOnClick(() => { setDiary("") })//TODO SET DIARY
+}
+
+loadButterflyRoom();
+
