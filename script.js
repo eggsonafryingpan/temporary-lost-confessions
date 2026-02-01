@@ -177,8 +177,6 @@ function setSong(song) {
 
 // room 1 loading
 
-//testing change later
-
 let boxCase = null;
 function loadBedroom() {
 
@@ -279,7 +277,7 @@ function loadBedroom() {
             setTextBoxConfirm("Three pens you got from a job fair. Take one?",
                 () => {
                     penContainer.setImgState('PenOut');
-                    inventoryAdd("pen", () => { textBox("A pen.") }); //change to pen not pen container
+                    inventoryAdd("pen", () => { textBox("A pen.") });
                 })
         } else {
             setTextBox("Two pens you got from a job fair.");
@@ -438,7 +436,6 @@ function loadBedroom() {
 
 loadBedroom();
 
-
 //Flower room
 function loadFlowerRoom() {
     const door1 = new GameObject(112, 146, 'door1', flowerRoom, 2);
@@ -446,7 +443,6 @@ function loadFlowerRoom() {
     door1.setHighlight();
 
     const door2 = new GameObject(594, 206, 'door2', flowerRoom, 2);
-    //door2.setOnClick(() => { door2.setImgState("Highlight") });
     door2.setHighlight();
 
     const flowerFrame = new GameObject(1109, 260, 'flowerFrame', flowerRoom, 2);
@@ -488,7 +484,6 @@ function loadEscalatorRoom() {
 
 loadEscalatorRoom();
 
-
 function loadBentHallway() {
     const highlight = new GameObject(556, 226, 'exitHighlight', bentHallway, 3);
     highlight.setInvisibleHighlight();
@@ -505,14 +500,13 @@ function loadBentHallway() {
 loadBentHallway();
 
 let swanCDStand = null;
-
 function loadMallRoom() {
     const joeShop = new GameObject(1039, 231, 'joeShop', mallRoom, 2);
     joeShop.setOnClick(() => { setTextBox("A store that sells records and CDs. It looks very familiar.") });
     const cdDisplay = new GameObject(897, 307, 'cdDisplay', mallRoom, 2);
     cdDisplay.setOnClick(() => { setTextBox("An empty display for Joe's Records and CDs.") });
     swanCDStand = new GameObject(943, 332, 'cdStand', mallRoom, 3);
-    swanCDStand.hide(); //TODO KEYCHAIN
+    swanCDStand.hide();
     swanCDStand.setOnClick(() => {
         setTextBoxConfirm('A CD. It\'s titled "The Swan (Carnaval of the Animals) - Best of Saint-Saëns".', () => {
             inventoryAdd("swanCD");
@@ -539,7 +533,6 @@ function loadMallRoom() {
 
 loadMallRoom();
 
-
 function loadMuseumRoom() {
     const painting = new GameObject(462, 220, 'painting', museumRoom, 2);
     painting.setOnClick(() => { setTextBox("An oil painting littered with geometric shapes. It's very blue.") })
@@ -553,9 +546,7 @@ function loadMuseumRoom() {
     bottomHighlight.setOnClick(() => { setRoom(mallRoom) });
 }
 
-
 loadMuseumRoom();
-
 
 function loadSwanRoom() {
     const exit = new GameObject(186, 308, 'exit', swanRoom, 2);
@@ -614,14 +605,13 @@ function loadSwanRoom() {
 }
 loadSwanRoom();
 
-
 function loadGatchaRoom() {
     const diary = new GameObject(450, 635, 'diary', gatchaRoom, 2);
     diary.setOnClick(() => { setDiary("mar15") });
 
     const diary2 = new GameObject(952, 605, 'diary2', gatchaRoom, 2);
     diary2.hide();
-    diary2.setOnClick(() => { setDiary("mar15Continued") }); //TODO
+    diary2.setOnClick(() => { setDiary("mar15Continued") });
 
 
     const handClosed = new GameObject(1400, 600, 'handClosed', gatchaRoom, 7);
@@ -692,7 +682,7 @@ function loadGatchaRoom() {
     })
 
 
-    const gatchaOut = new GameObject(697, 639, 'gatchaout', gatchaRoom, 4);
+    const gatchaOut = new GameObject(697, 639, 'gatchaOut', gatchaRoom, 4);
     gatchaOut.setOnClick(() => {
         if (gatchaOut.state == "Ball") {
             setTextBoxConfirm("Take the capsule?", () => {
