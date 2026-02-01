@@ -144,7 +144,6 @@ body {
 #zoomContainer {
     z-index: 15;
     display: inline-block;
-    pointer-events: none;
     position: relative;
 }
 
@@ -156,8 +155,9 @@ body {
 }
 
 #diaryText {
-    max-height: 648px;
     top: 0;
+    bottom: 0;
+    /* new */
     left: 0;
     z-index: 17;
     position: absolute;

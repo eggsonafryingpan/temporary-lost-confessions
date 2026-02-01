@@ -53,7 +53,6 @@ export class GameObject {
 
     setImgState(imgState = "") {
         this.state = imgState;
-        console.log(this.imgSrc + this.state + ".png");
         this.img.src = this.imgSrc + this.state + ".png";
     }
 

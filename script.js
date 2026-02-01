@@ -450,7 +450,16 @@ function loadFlowerRoom() {
     door2.setHighlight();
 
     const flowerFrame = new GameObject(1109, 260, 'flowerFrame', flowerRoom, 2);
-    flowerFrame.setOnClick(() => { setTextBox("A wooden frame. It's missing something.") });
+    flowerFrame.setOnClick(() => {
+        if (inventory.has("keychain")) {
+            setTextBoxConfirm("Place lilac keychain on the frame?", () => {
+                flowerFrame.setImgState("Keychain");
+                //OPEN SOMETHING TODO
+            });
+        } else {
+            setTextBox("A wooden frame. It's missing something.");
+        }
+    });
 
     const magnolia = new GameObject(1197, 351, 'magnolia', flowerRoom, 3);
     magnolia.setOnClick(() => { setTextBox("A beautiful magnolia.") });
@@ -554,6 +563,9 @@ function loadSwanRoom() {
     exit.setOnClick(() => { setRoom(museumRoom) });
     const stand = new GameObject(623, 485, 'stand', swanRoom, 2);
     stand.setOnClick(() => { setTextBox("A marble stand for the exhibit. It has a swan engraved on it.") })
+    const diary2 = new GameObject(644, 497, 'diary2', swanRoom, 4);
+    diary2.hide();
+    diary2.setOnClick(() => { setDiary("feb15") });
     const deuxCD = new GameObject(694, 470, 'deuxCD', swanRoom, 4);
     deuxCD.hide();
     deuxCD.setOnClick(() => {
@@ -563,7 +575,7 @@ function loadSwanRoom() {
                     inventoryAdd("deuxCD", () => { setTextBox('A CD titled "Pas de deux - Tchaikovsky"') });
                     deuxCD.hide();
                 }),
-            () => setTextBoxConfirm("A piece of paper fell out of the CD case. Read it?", () => { setDiary("feb15") })
+            () => setTextBoxConfirm("A piece of paper fell out of the CD case. Read it?", () => { setDiary("feb15"); diary2.show(); })
         ])
     }
     );
