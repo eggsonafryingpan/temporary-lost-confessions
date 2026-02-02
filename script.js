@@ -58,9 +58,9 @@ function addInputListener() {
                 orreryNum++;
                 orrery.setImgState(orreryNum.toString());
                 inputs[i].disabled = true;
-                inputs[i].style.backgroundColor = "#d0e1ff";
                 if (orreryNum == 4) {
                     finalDoor.setImgState("Open");
+                    doorOpening.play();
                 }
                 inputs[i].removeEventListener('input', wrapper);
             }
@@ -201,6 +201,7 @@ const click = new Audio('sound/click.wav');
 const serenade = new Audio('sound/schubertSerenade.mp3');
 const theSwan = new Audio('sound/theSwan.mp3');
 const deux = new Audio('sound/pasDeDeux.mp3');
+const doorOpening = new Audio('sound/doorOpening.mp3');
 let currentSong = null;
 
 function setSong(song) {
@@ -968,7 +969,12 @@ function loadSpaceRoom() {
     finalDoor = new GameObject(657, 327, 'door', spaceRoom, 2);
     finalDoor.setOnClick(() => {
         if (finalDoor.state == "Open") {
-            setTextBoxConfirm("Walk through?", () => { console.log("u win ayayayy") });
+            setTextBoxConfirm("Walk through?", () => {
+                //WIN CONDITION TODO
+                // const till = document.createElement('img');
+                // till.src = "imgs/till.png";
+                // spaceRoom.appendChild(till);
+            });
         } else {
             setTextBox("A door. It's locked.");
         }
@@ -982,7 +988,8 @@ function loadSpaceRoom() {
     paper3.setOnClick(() => { setPuzzle(3) });
     const paper4 = new GameObject(1046, 333, 'paper4', spaceRoom, 2);
     paper4.setOnClick(() => { setPuzzle(4) });
-    orrery = new GameObject(555, 112, 'orrery', spaceRoom, 2); // change locatin for imgState change
+    orrery = new GameObject(513, 51, 'orrery', spaceRoom, 2); // change locatin for imgState change
+    orrery.setOnClick(() => { setTextBox("An orrery. There's 4 planets orbiting around a sun.") })
 
     const bottomHighlight = new GameObject(0, 678, 'bottomHighlight', spaceRoom, 3);
     bottomHighlight.setInvisibleHighlight();
