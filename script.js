@@ -971,9 +971,9 @@ function loadSpaceRoom() {
         if (finalDoor.state == "Open") {
             setTextBoxConfirm("Walk through?", () => {
                 //WIN CONDITION TODO
-                // const till = document.createElement('img');
-                // till.src = "imgs/till.png";
-                // spaceRoom.appendChild(till);
+                const till = document.createElement('img');
+                till.src = "imgs/till.png";
+                spaceRoom.appendChild(till);
             });
         } else {
             setTextBox("A door. It's locked.");
