@@ -14,23 +14,6 @@ export class GameObject {
         //   this.icon = null;
         this.load();
     }
-    // setIcon(src = this.name) {
-    //     this.icon = document.createElement("img");
-    //     this.icon.src = 'imgs/icon/' + src + '.png';
-    //     this.hideIcon();
-    // }
-
-    // hideIcon() {
-    //     if (this.icon) {
-    //         this.icon.style.display = 'none';
-    //     }
-    // }
-
-    // showIcon() {
-    //     if (this.icon) {
-    //         this.icon.style.display = 'inline-block';
-    //     }
-    // }
 
     setLocation(x, y) {
         this.x = x;

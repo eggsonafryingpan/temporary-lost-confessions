@@ -170,7 +170,7 @@ const diaryEntries = new Map([
     ["feb15", ""],
     ["mar15", ""],
     ["mar15Continued", ""],
-    ["may5", ""],
+    ["may6", ""],
     ["dickinson", ""],
     ["deuxDef", ""],
     ["june4", ""],
@@ -202,6 +202,7 @@ const serenade = new Audio('sound/schubertSerenade.mp3');
 const theSwan = new Audio('sound/theSwan.mp3');
 const deux = new Audio('sound/pasDeDeux.mp3');
 const doorOpening = new Audio('sound/doorOpening.mp3');
+const thud = new Audio('sound/thud.mp3');
 let currentSong = null;
 
 function setSong(song) {
@@ -277,14 +278,18 @@ function loadBedroom() {
                         }
                     )
                 } else if (inventory.has("deuxCD")) {
-                    setTextBoxConfirm('Take out the CD and play "Pas de deux - Tchaikovsky"?', () => {
-                        setSong(deux);
-                        inventoryRemove("deuxCD");
-                        vault.setImgState("Open");
-                        vault.setLocation(596, 281);
-                        dickinson.show();
-                        vaultDiary.show();
-                    })
+                    if (inventory.has("butterflyKey")) { //TODO FIX BUTTERFLY DOOR STATE EFFECTING THIS
+                        setTextBoxConfirm('Take out the CD and play "Pas de deux - Tchaikovsky"?', () => {
+                            setSong(deux);
+                            inventoryRemove("deuxCD");
+                            vault.setImgState("Open");
+                            vault.setLocation(596, 281);
+                            dickinson.show();
+                            vaultDiary.show();
+                        })
+                    } else {
+                        setTextBox("You wonder if \"The Swan\" did anything. Maybe check near the museum?");
+                    }
                 } else if (currentSong == theSwan) {
                     setTextBox('"The Swan" plays.');
                 } else if (currentSong == deux) {
@@ -793,6 +798,7 @@ function loadGatchaRoom() {
         if (inventory.has("coin")) {
             setTextBoxConfirm("Insert the quarter into the coin slot?", () => {
                 gatchaOut.setImgState("Ball");
+                thud.play();
                 inventoryRemove("coin");
             });
         } else {
