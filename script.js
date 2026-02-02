@@ -18,6 +18,8 @@ const subwayRoom = document.getElementById("subwayRoom")
 const gummyRoom = document.getElementById("gummyRoom");
 const classroom = document.getElementById("classroom");
 const butterflyRoom = document.getElementById("butterflyRoom");
+const vaultRoom = document.getElementById("vaultRoom");
+const spaceRoom = document.getElementById("spaceRoom");
 
 let currRoom = bedroom;
 setRoom(currRoom);
@@ -27,16 +29,61 @@ world.style.height = height + 'px';
 
 const freeze = document.getElementById("freeze");
 
+const puzzle1 = document.getElementById("puzzle1");
+const puzzle2 = document.getElementById("puzzle2");
+const puzzle3 = document.getElementById("puzzle3");
+const puzzle4 = document.getElementById("puzzle4");
+const puzzles = [puzzle1, puzzle2, puzzle3, puzzle4];
+
+const input1 = document.getElementById("input1");
+const input2 = document.getElementById("input2");
+const input3 = document.getElementById("input3");
+const input4 = document.getElementById("input4");
+const inputs = [input1, input2, input3, input4];
+
+const answers = ["swan", "lilac", "june", "is within our power"];
+let orreryNum = 0;
+addInputListener();
+
+function hideAllPuzzles() {
+    for (let p of puzzles) {
+        p.style.display = 'none';
+    }
+}
+
+function addInputListener() {
+    for (let i = 0; i < inputs.length; i++) {
+        inputs[i].addEventListener('input', function wrapper(e) {
+            if (e.target.value.toLowerCase() == answers[i]) {
+                orreryNum++;
+                orrery.setImgState(orreryNum.toString());
+                inputs[i].disabled = true;
+                inputs[i].style.backgroundColor = "#d0e1ff";
+                if (orreryNum == 4) {
+                    finalDoor.setImgState("Open");
+                }
+                inputs[i].removeEventListener('input', wrapper);
+            }
+        });
+    }
+}
+
+
+
 
 const zoom = document.getElementById("zoom");
 const zoomImg = document.getElementById("zoomImg");
 const diaryText = document.getElementById("diaryText");
-zoom.addEventListener('click', () => zoom.style.display = 'none');
+zoom.addEventListener('click', () => {
+    zoom.style.display = 'none';
+    diaryText.style.display = 'none';
+    hideAllPuzzles();
+
+});
 
 
 
 function setZoom(o) {
-    diaryText.style.display = 'none';
     if (typeof o == "string") {
         if (textBox.isHidden()) { //maybe change
             zoomImg.src = 'imgs/' + o + "Zoom.png";
@@ -58,7 +105,21 @@ function setDiary(date) {
     if (textBox.isHidden()) {
         zoomImg.src = "imgs/diary.png";
         diaryText.innerHTML = diaryEntries.get(date);
+        if (date == "dickinson" || date == "deuxDef") {
+            diaryText.style.fontFamily = 'serif';
+        } else {
+            diaryText.style.fontFamily = 'handwriting';
+        }
         diaryText.style.display = 'block';
+    }
+}
+
+
+function setPuzzle(num) {
+    setZoom(null);
+    if (textBox.isHidden()) {
+        puzzles[num - 1].style.display = 'inline-block';
+        zoomImg.src = "imgs/diary.png";
     }
 }
 
@@ -108,7 +169,12 @@ const diaryEntries = new Map([
     ["feb14", ""],
     ["feb15", ""],
     ["mar15", ""],
-    ["mar15Continued", ""]
+    ["mar15Continued", ""],
+    ["may5", ""],
+    ["dickinson", ""],
+    ["deuxDef", ""],
+    ["june4", ""],
+    ["june5", ""]
 ]);
 
 
@@ -182,6 +248,11 @@ function setSong(song) {
 // room 1 loading
 
 let boxCase = null;
+let vault = null;
+let dickinson = null;
+let vaultDiary = null;
+let orrery = null;
+let finalDoor = null;
 function loadBedroom() {
 
     //when player walks out and back in
@@ -208,6 +279,10 @@ function loadBedroom() {
                     setTextBoxConfirm('Take out the CD and play "Pas de deux - Tchaikovsky"?', () => {
                         setSong(deux);
                         inventoryRemove("deuxCD");
+                        vault.setImgState("Open");
+                        vault.setLocation(596, 281);
+                        dickinson.show();
+                        vaultDiary.show();
                     })
                 } else if (currentSong == theSwan) {
                     setTextBox('"The Swan" plays.');
@@ -281,7 +356,7 @@ function loadBedroom() {
             setTextBoxConfirm("Three pens you got from a job fair. Take one?",
                 () => {
                     penContainer.setImgState('PenOut');
-                    inventoryAdd("pen", () => { textBox("A pen.") });
+                    inventoryAdd("pen", () => { setTextBox("A pen.") });
                 })
         } else {
             setTextBox("Two pens you got from a job fair.");
@@ -448,6 +523,7 @@ function loadFlowerRoom() {
 
     const door2 = new GameObject(594, 206, 'door2', flowerRoom, 2);
     door2.setHighlight();
+    door2.setOnClick(() => { setRoom(spaceRoom) });
 
     const exit3 = new GameObject(1146, 504, 'door3', flowerRoom, 2);
     exit3.hide();
@@ -772,7 +848,7 @@ function loadGummyRoom() {
     const gummy = new GameObject(542, 596, 'gummy', gummyRoom, 2);
     gummy.setOnClick(() => { setTextBox("An empty gummy package.") });
     const diary = new GameObject(465, 330, 'diary', gummyRoom, 2);
-    diary.setOnClick(() => { setDiary("") });
+    diary.setOnClick(() => { setDiary("may5") });
     //set diary TODO
 
     const bottomHighlight = new GameObject(0, 678, 'bottomHighlight', gummyRoom, 3);
@@ -812,7 +888,7 @@ function loadClassroom() {
     rightChair.setOnClick(() => { setTextBox("Your seat.") });
 
     const deuxDef = new GameObject(910, 481, 'deuxDef', classroom, 4);
-    deuxDef.setOnClick(() => { setDiary("deuxDef") }); //TODO MAKE DEUX DEF
+    deuxDef.setOnClick(() => { setDiary("deuxDef") });
 
     const leftDesk = new GameObject(426, 477, 'leftDesk', classroom, 2);
     leftDesk.setOnClick(() => {
@@ -838,6 +914,7 @@ function loadButterflyRoom() {
             if (inventory.has("butterflyKey")) {
                 setTextBoxConfirm("Use the butterfly key?", () => {
                     butterflyDoor.locked = false;
+                    inventoryRemove("butterflyKey");
                     click.play();
                 })
             } else {
@@ -850,8 +927,66 @@ function loadButterflyRoom() {
         }
     });
     const diary = new GameObject(839, 578, 'diary', butterflyRoom, 2);
-    diary.setOnClick(() => { setDiary("") })//TODO SET DIARY
+    diary.setOnClick(() => { setDiary("june4") })//TODO SET DIARY
 }
 
 loadButterflyRoom();
 
+function loadVaultRoom() {
+    const twoDancers = new GameObject(619, 99, 'twoDancers', vaultRoom, 2);
+    twoDancers.setOnClick(() => { setTextBox("Two dancers.") })
+    vault = new GameObject(596, 340, 'vault', vaultRoom, 2);
+    vault.setOnClick(() => {
+        if (vault.state == "Open") {
+            setTextBox("The safe is open.");
+        } else {
+            setTextBox("A safe. It's locked.");
+        }
+    })
+    const speaker = new GameObject(399, 67, 'speaker', vaultRoom, 2);
+    speaker.setOnClick(() => {
+        if (currentSong == theSwan) {
+            setTextBox("A speaker. \"The Swan\" plays.");
+        } else if (currentSong == deux) {
+            setTextBox("A speaker. \"Pas de deux\" plays.")
+        } // SET ANOTHER SONG TODO MAYBE
+    });
+    dickinson = new GameObject(681, 475, 'dickinson', vaultRoom, 4);
+    dickinson.hide();
+    dickinson.setOnClick(() => { setDiary("dickinson") });
+    vaultDiary = new GameObject(747, 574, 'diary', vaultRoom, 2);
+    vaultDiary.setOnClick(() => { setDiary("june5") });
+    vaultDiary.hide();
+    const bottomHighlight = new GameObject(0, 678, 'bottomHighlight', vaultRoom, 3);
+    bottomHighlight.setInvisibleHighlight();
+    bottomHighlight.setOnClick(() => { setRoom(butterflyRoom) });
+}
+
+loadVaultRoom();
+
+function loadSpaceRoom() {
+    finalDoor = new GameObject(657, 327, 'door', spaceRoom, 2);
+    finalDoor.setOnClick(() => {
+        if (finalDoor.state == "Open") {
+            setTextBoxConfirm("Walk through?", () => { console.log("u win ayayayy") });
+        } else {
+            setTextBox("A door. It's locked.");
+        }
+    })
+
+    const paper1 = new GameObject(275, 333, 'paper1', spaceRoom, 2);
+    paper1.setOnClick(() => { setPuzzle(1) });
+    const paper2 = new GameObject(517, 363, 'paper2', spaceRoom, 2);
+    paper2.setOnClick(() => { setPuzzle(2) });
+    const paper3 = new GameObject(827, 363, 'paper3', spaceRoom, 2);
+    paper3.setOnClick(() => { setPuzzle(3) });
+    const paper4 = new GameObject(1046, 333, 'paper4', spaceRoom, 2);
+    paper4.setOnClick(() => { setPuzzle(4) });
+    orrery = new GameObject(555, 112, 'orrery', spaceRoom, 2); // change locatin for imgState change
+
+    const bottomHighlight = new GameObject(0, 678, 'bottomHighlight', spaceRoom, 3);
+    bottomHighlight.setInvisibleHighlight();
+    bottomHighlight.setOnClick(() => { setRoom(flowerRoom) });
+}
+
+loadSpaceRoom();

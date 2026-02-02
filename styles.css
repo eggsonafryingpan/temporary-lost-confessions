@@ -159,12 +159,11 @@ body {
 #diaryText {
     top: 0;
     bottom: 0;
-    /* new */
     left: 0;
     z-index: 17;
     position: absolute;
     padding: 60px;
-    font-size: 25px;
+    font-size: 29px;
     font-family: 'handwriting', serif;
     white-space: pre-wrap;
     word-wrap: break-word;
@@ -189,6 +188,44 @@ body {
     background: #4365af;
     border-radius: 2px;
 }
+
+.puzzle {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 17;
+    position: absolute;
+    padding: 60px;
+    display: none;
+    z-index: 16;
+    font-size: 25px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.puzzle input {
+    display: inline;
+    width: 70px;
+    font-size: 25px;
+    font-family: inherit;
+    border: 1px solid #000000;
+    padding: 2px 4px;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+#input4 {
+    width: 250px;
+}
+
+.puzzle input:disabled {
+    background-color: #d0e1ff;
+    user-select: none;
+    pointer-events: none;
+    cursor: default;
+}
+
+
+
 
 @keyframes upDown {
     0% {
