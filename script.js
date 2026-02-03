@@ -202,7 +202,6 @@ const serenade = new Audio('sound/schubertSerenade.mp3');
 const theSwan = new Audio('sound/theSwan.mp3');
 const deux = new Audio('sound/pasDeDeux.mp3');
 const doorOpening = new Audio('sound/doorOpening.mp3');
-const thud = new Audio('sound/thud.mp3');
 let currentSong = null;
 
 function setSong(song) {
@@ -278,18 +277,14 @@ function loadBedroom() {
                         }
                     )
                 } else if (inventory.has("deuxCD")) {
-                    if (inventory.has("butterflyKey")) { //TODO FIX BUTTERFLY DOOR STATE EFFECTING THIS
-                        setTextBoxConfirm('Take out the CD and play "Pas de deux - Tchaikovsky"?', () => {
-                            setSong(deux);
-                            inventoryRemove("deuxCD");
-                            vault.setImgState("Open");
-                            vault.setLocation(596, 281);
-                            dickinson.show();
-                            vaultDiary.show();
-                        })
-                    } else {
-                        setTextBox("You wonder if \"The Swan\" did anything. Maybe check near the museum?");
-                    }
+                    setTextBoxConfirm('Take out the CD and play "Pas de deux - Tchaikovsky"?', () => {
+                        setSong(deux);
+                        inventoryRemove("deuxCD");
+                        vault.setImgState("Open");
+                        vault.setLocation(596, 281);
+                        dickinson.show();
+                        vaultDiary.show();
+                    })
                 } else if (currentSong == theSwan) {
                     setTextBox('"The Swan" plays.');
                 } else if (currentSong == deux) {
@@ -798,7 +793,6 @@ function loadGatchaRoom() {
         if (inventory.has("coin")) {
             setTextBoxConfirm("Insert the quarter into the coin slot?", () => {
                 gatchaOut.setImgState("Ball");
-                thud.play();
                 inventoryRemove("coin");
             });
         } else {
@@ -855,7 +849,7 @@ function loadGummyRoom() {
     const gummy = new GameObject(542, 596, 'gummy', gummyRoom, 2);
     gummy.setOnClick(() => { setTextBox("An empty gummy package.") });
     const diary = new GameObject(465, 330, 'diary', gummyRoom, 2);
-    diary.setOnClick(() => { setDiary("may5") });
+    diary.setOnClick(() => { setDiary("may6") });
     //set diary TODO
 
     const bottomHighlight = new GameObject(0, 678, 'bottomHighlight', gummyRoom, 3);
@@ -1001,5 +995,6 @@ function loadSpaceRoom() {
     bottomHighlight.setInvisibleHighlight();
     bottomHighlight.setOnClick(() => { setRoom(flowerRoom) });
 }
+
 
 loadSpaceRoom();
