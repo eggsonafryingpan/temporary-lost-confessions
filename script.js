@@ -41,7 +41,7 @@ const input3 = document.getElementById("input3");
 const input4 = document.getElementById("input4");
 const inputs = [input1, input2, input3, input4];
 
-const answers = ["swan", "lilac", "june", "is within our power"];
+const answers = ["swan", "lilac", "stone", "is within our power"];
 let orreryNum = 0;
 addInputListener();
 
@@ -202,7 +202,6 @@ const serenade = new Audio('sound/schubertSerenade.mp3');
 const theSwan = new Audio('sound/theSwan.mp3');
 const deux = new Audio('sound/pasDeDeux.mp3');
 const doorOpening = new Audio('sound/doorOpening.mp3');
-const thud = new Audio('sound/thud.mp3');
 let currentSong = null;
 
 function setSong(song) {
@@ -799,7 +798,6 @@ function loadGatchaRoom() {
         if (inventory.has("coin")) {
             setTextBoxConfirm("Insert the quarter into the coin slot?", () => {
                 gatchaOut.setImgState("Ball");
-                thud.play();
                 inventoryRemove("coin");
             });
         } else {
@@ -856,7 +854,7 @@ function loadGummyRoom() {
     const gummy = new GameObject(542, 596, 'gummy', gummyRoom, 2);
     gummy.setOnClick(() => { setTextBox("An empty gummy package.") });
     const diary = new GameObject(465, 330, 'diary', gummyRoom, 2);
-    diary.setOnClick(() => { setDiary("may5") });
+    diary.setOnClick(() => { setDiary("may6") });
     //set diary TODO
 
     const bottomHighlight = new GameObject(0, 678, 'bottomHighlight', gummyRoom, 3);
@@ -1003,5 +1001,6 @@ function loadSpaceRoom() {
     bottomHighlight.setInvisibleHighlight();
     bottomHighlight.setOnClick(() => { setRoom(flowerRoom) });
 }
+
 
 loadSpaceRoom();
