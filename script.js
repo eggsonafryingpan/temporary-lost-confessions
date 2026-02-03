@@ -202,6 +202,8 @@ const serenade = new Audio('sound/schubertSerenade.mp3');
 const theSwan = new Audio('sound/theSwan.mp3');
 const deux = new Audio('sound/pasDeDeux.mp3');
 const doorOpening = new Audio('sound/doorOpening.mp3');
+const rain = new Audio('sound/rain.mp3');
+rain.loop = true;
 let currentSong = null;
 
 function setSong(song) {
@@ -278,7 +280,7 @@ function loadBedroom() {
                         }
                     )
                 } else if (inventory.has("deuxCD")) {
-                    if (inventory.has("butterflyKey") || butterflyDoorOpened) { //TODO FIX BUTTERFLY DOOR STATE EFFECTING THIS
+                    if (inventory.has("butterflyKey") || butterflyDoorOpened) {
                         setTextBoxConfirm('Take out the CD and play "Pas de deux - Tchaikovsky"?', () => {
                             setSong(deux);
                             inventoryRemove("deuxCD");
@@ -789,7 +791,7 @@ function loadGatchaRoom() {
                 handAnim();
             })
         } else {
-            setTextBox("Where the capsules come out.");//TODO i dont like this
+            setTextBox("You suppose this is where the capsules come out.");
         }
     })
 
@@ -845,7 +847,7 @@ function loadGummyRoom() {
     sign.setOnClick(() => { setTextBox("A sign. Left: Lockers. Right: Room 101.") });
     const rightHighlight = new GameObject(751, 80, 'rightHighlight', gummyRoom, 2);
     rightHighlight.setInvisibleHighlight();
-    rightHighlight.setOnClick(() => { setRoom(classroom) });
+    rightHighlight.setOnClick(() => { setRoom(classroom); rain.play(); });
 
     const leftHighlight = new GameObject(605, 80, 'leftHighlight', gummyRoom, 2);
     leftHighlight.setInvisibleHighlight();
@@ -855,7 +857,6 @@ function loadGummyRoom() {
     gummy.setOnClick(() => { setTextBox("An empty gummy package.") });
     const diary = new GameObject(465, 330, 'diary', gummyRoom, 2);
     diary.setOnClick(() => { setDiary("may6") });
-    //set diary TODO
 
     const bottomHighlight = new GameObject(0, 678, 'bottomHighlight', gummyRoom, 3);
     bottomHighlight.setInvisibleHighlight();
@@ -866,7 +867,7 @@ loadGummyRoom();
 function loadClassroom() {
     const exit1 = new GameObject(124, 281, 'exit1', classroom, 2);
     exit1.setHighlight();
-    exit1.setOnClick(() => { setRoom(gummyRoom) });
+    exit1.setOnClick(() => { setRoom(gummyRoom); rain.pause(); });
     const whiteboard = new GameObject(614, 297, 'whiteboard', classroom, 2);
     whiteboard.setOnClick(() => { setTextBox("A whiteboard. The lesson is on The Great Gatsby.") });
     const classroomWindow = new GameObject(943, 74, 'window', classroom, 2);
@@ -932,7 +933,7 @@ function loadButterflyRoom() {
         }
     });
     const diary = new GameObject(839, 578, 'diary', butterflyRoom, 2);
-    diary.setOnClick(() => { setDiary("june4") })//TODO SET DIARY
+    diary.setOnClick(() => { setDiary("june4") });
 }
 loadButterflyRoom();
 
