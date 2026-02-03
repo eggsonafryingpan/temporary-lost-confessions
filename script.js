@@ -861,7 +861,6 @@ function loadGummyRoom() {
     bottomHighlight.setInvisibleHighlight();
     bottomHighlight.setOnClick(() => { setRoom(subwayRoom) });
 }
-
 loadGummyRoom();
 
 function loadClassroom() {
@@ -906,7 +905,6 @@ function loadClassroom() {
     const leftChair = new GameObject(445, 512, 'leftChair', classroom, 3);
     leftChair.setOnClick(() => { setTextBox("A chair. Someone familiar sits there.") });
 }
-
 loadClassroom();
 
 function loadButterflyRoom() {
@@ -936,7 +934,6 @@ function loadButterflyRoom() {
     const diary = new GameObject(839, 578, 'diary', butterflyRoom, 2);
     diary.setOnClick(() => { setDiary("june4") })//TODO SET DIARY
 }
-
 loadButterflyRoom();
 
 function loadVaultRoom() {
@@ -968,7 +965,6 @@ function loadVaultRoom() {
     bottomHighlight.setInvisibleHighlight();
     bottomHighlight.setOnClick(() => { setRoom(butterflyRoom) });
 }
-
 loadVaultRoom();
 
 function loadSpaceRoom() {
@@ -1001,6 +997,4 @@ function loadSpaceRoom() {
     bottomHighlight.setInvisibleHighlight();
     bottomHighlight.setOnClick(() => { setRoom(flowerRoom) });
 }
-
-
 loadSpaceRoom();
