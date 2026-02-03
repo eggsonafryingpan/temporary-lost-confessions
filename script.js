@@ -701,7 +701,7 @@ function loadSwanRoom() {
 }
 loadSwanRoom();
 
-function loadGatchaRoom() {
+function loadGatchaRoom() { // create overlay effect
     const diary = new GameObject(450, 635, 'diary', gatchaRoom, 2);
     diary.setOnClick(() => { setDiary("mar15") });
 
