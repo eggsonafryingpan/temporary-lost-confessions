@@ -258,5 +258,5 @@ body {
     src: url('fonts/handwritingFont.ttf');
     font-weight: normal;
     font-style: normal;
-    font-display: fallback
+    font-display: fallback;
 }
