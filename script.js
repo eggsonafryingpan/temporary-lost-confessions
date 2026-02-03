@@ -41,7 +41,7 @@ const input3 = document.getElementById("input3");
 const input4 = document.getElementById("input4");
 const inputs = [input1, input2, input3, input4];
 
-const answers = ["swan", "lilac", "june", "is within our power"];
+const answers = ["swan", "lilac", "stone", "is within our power"];
 let orreryNum = 0;
 addInputListener();
 
