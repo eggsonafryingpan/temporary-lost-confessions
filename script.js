@@ -255,6 +255,7 @@ let dickinson = null;
 let vaultDiary = null;
 let orrery = null;
 let finalDoor = null;
+let butterflyDoorOpened = false;
 function loadBedroom() {
 
     //when player walks out and back in
@@ -278,7 +279,7 @@ function loadBedroom() {
                         }
                     )
                 } else if (inventory.has("deuxCD")) {
-                    if (inventory.has("butterflyKey")) { //TODO FIX BUTTERFLY DOOR STATE EFFECTING THIS
+                    if (inventory.has("butterflyKey") || butterflyDoorOpened) { //TODO FIX BUTTERFLY DOOR STATE EFFECTING THIS
                         setTextBoxConfirm('Take out the CD and play "Pas de deux - Tchaikovsky"?', () => {
                             setSong(deux);
                             inventoryRemove("deuxCD");
@@ -920,6 +921,7 @@ function loadButterflyRoom() {
         if (butterflyDoor.locked) {
             if (inventory.has("butterflyKey")) {
                 setTextBoxConfirm("Use the butterfly key?", () => {
+                    butterflyDoorOpened = true;
                     butterflyDoor.locked = false;
                     inventoryRemove("butterflyKey");
                     click.play();
