@@ -21,7 +21,7 @@ const butterflyRoom = document.getElementById("butterflyRoom");
 const vaultRoom = document.getElementById("vaultRoom");
 const spaceRoom = document.getElementById("spaceRoom");
 
-let currRoom = bedroom;
+let currRoom = vaultRoom;
 setRoom(currRoom);
 const world = document.getElementById("world");
 world.style.width = width + 'px';
@@ -71,6 +71,7 @@ function addInputListener() {
 
 
 
+
 const zoom = document.getElementById("zoom");
 const zoomImg = document.getElementById("zoomImg");
 const diaryText = document.getElementById("diaryText");
@@ -78,10 +79,33 @@ zoom.addEventListener('click', () => {
     zoom.style.display = 'none';
     diaryText.style.display = 'none';
     hideAllPuzzles();
+    if (currentZoom == "dickinson") {
+        currentZoom = "";
+        playCutscene("locker");
+    }
 
 });
 
 
+const cutscene = document.getElementById("cutscene");
+const playedCutscenes = [];
+function playCutscene(name) {
+    if (!playedCutscenes.includes(name)) {
+        if (name == "locker") {
+            cutscene.src = "cutscenes/" + name + ".mp4";
+            cutscene.style.display = 'block';
+            vaultDiary.show();
+            playedCutscenes.push(name);
+        }
+    }
+}
+
+cutscene.addEventListener("ended", () => {
+    //song.pause TODO 
+    cutscene.style.display = 'none';
+});
+
+let currentZoom = "";
 
 function setZoom(o) {
     if (typeof o == "string") {
@@ -206,14 +230,16 @@ const rain = new Audio('sound/rain.mp3');
 rain.loop = true;
 let currentSong = null;
 
+
 function setSong(song) {
-    if (song) {
+    if (currentSong) {
         currentSong.pause();
     }
     currentSong = song;
     currentSong.play();
     currentSong.loop = true;
 }
+
 
 
 //KATEEEEE this is how u make a new object:
@@ -287,7 +313,6 @@ function loadBedroom() {
                             vault.setImgState("Open");
                             vault.setLocation(596, 281);
                             dickinson.show();
-                            vaultDiary.show();
                         })
                     } else {
                         setTextBox("You wonder if \"The Swan\" did anything. Maybe check near the museum?");
@@ -958,13 +983,16 @@ function loadVaultRoom() {
     });
     dickinson = new GameObject(681, 475, 'dickinson', vaultRoom, 4);
     dickinson.hide();
-    dickinson.setOnClick(() => { setDiary("dickinson") });
+    dickinson.setOnClick(() => { currentZoom = "dickinson"; setDiary("dickinson") });
     vaultDiary = new GameObject(747, 574, 'diary', vaultRoom, 2);
     vaultDiary.setOnClick(() => { setDiary("june5") });
     vaultDiary.hide();
     const bottomHighlight = new GameObject(0, 678, 'bottomHighlight', vaultRoom, 3);
     bottomHighlight.setInvisibleHighlight();
     bottomHighlight.setOnClick(() => { setRoom(butterflyRoom) });
+    vault.setImgState("Open");
+    vault.setLocation(596, 281);
+    dickinson.show();
 }
 loadVaultRoom();
 

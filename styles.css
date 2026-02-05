@@ -3,6 +3,7 @@
     border: 1px solid #000000;
     user-select: none;
     -webkit-user-select: none;
+    overflow: hidden;
 }
 
 .room {
@@ -259,4 +260,16 @@ body {
     font-weight: normal;
     font-style: normal;
     font-display: fallback;
+}
+
+
+#cutscene {
+    display: none;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    z-index: 20;
 }
