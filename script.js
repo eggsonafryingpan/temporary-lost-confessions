@@ -21,7 +21,7 @@ const butterflyRoom = document.getElementById("butterflyRoom");
 const vaultRoom = document.getElementById("vaultRoom");
 const spaceRoom = document.getElementById("spaceRoom");
 
-let currRoom = vaultRoom;
+let currRoom = bedroom;
 setRoom(currRoom);
 const world = document.getElementById("world");
 world.style.width = width + 'px';
@@ -96,6 +96,7 @@ function playCutscene(name) {
             cutscene.style.display = 'block';
             vaultDiary.show();
             playedCutscenes.push(name);
+            //TODO set song clair de lune
         }
     }
 }
@@ -990,9 +991,6 @@ function loadVaultRoom() {
     const bottomHighlight = new GameObject(0, 678, 'bottomHighlight', vaultRoom, 3);
     bottomHighlight.setInvisibleHighlight();
     bottomHighlight.setOnClick(() => { setRoom(butterflyRoom) });
-    vault.setImgState("Open");
-    vault.setLocation(596, 281);
-    dickinson.show();
 }
 loadVaultRoom();
 
