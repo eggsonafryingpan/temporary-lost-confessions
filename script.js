@@ -81,6 +81,7 @@ zoom.addEventListener('click', () => {
     hideAllPuzzles();
     if (currentZoom == "dickinson") {
         currentZoom = "";
+        currentSong.pause();
         playCutscene("locker");
     }
 
@@ -96,13 +97,13 @@ function playCutscene(name) {
             cutscene.style.display = 'block';
             vaultDiary.show();
             playedCutscenes.push(name);
-            //TODO set song clair de lune
+            setSong(lockerMusic);
         }
     }
 }
 
 cutscene.addEventListener("ended", () => {
-    //song.pause TODO 
+    lockerMusic.pause();
     cutscene.style.display = 'none';
 });
 
@@ -228,6 +229,8 @@ const theSwan = new Audio('sound/theSwan.mp3');
 const deux = new Audio('sound/pasDeDeux.mp3');
 const doorOpening = new Audio('sound/doorOpening.mp3');
 const rain = new Audio('sound/rain.mp3');
+
+const lockerMusic = new Audio('cutscenes/lockerMusic.mp3')
 rain.loop = true;
 let currentSong = null;
 
