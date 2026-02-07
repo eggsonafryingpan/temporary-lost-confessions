@@ -21,7 +21,7 @@ const butterflyRoom = document.getElementById("butterflyRoom");
 const vaultRoom = document.getElementById("vaultRoom");
 const spaceRoom = document.getElementById("spaceRoom");
 
-let currRoom = bedroom;
+let currRoom = vaultRoom;
 setRoom(currRoom);
 const world = document.getElementById("world");
 world.style.width = width + 'px';
@@ -71,6 +71,7 @@ function addInputListener() {
 
 
 
+
 const zoom = document.getElementById("zoom");
 const zoomImg = document.getElementById("zoomImg");
 const diaryText = document.getElementById("diaryText");
@@ -78,10 +79,33 @@ zoom.addEventListener('click', () => {
     zoom.style.display = 'none';
     diaryText.style.display = 'none';
     hideAllPuzzles();
+    if (currentZoom == "dickinson") {
+        currentZoom = "";
+        playCutscene("locker");
+    }
 
 });
 
 
+const cutscene = document.getElementById("cutscene");
+const playedCutscenes = [];
+function playCutscene(name) {
+    if (!playedCutscenes.includes(name)) {
+        if (name == "locker") {
+            cutscene.src = "cutscenes/" + name + ".mp4";
+            cutscene.style.display = 'block';
+            vaultDiary.show();
+            playedCutscenes.push(name);
+        }
+    }
+}
+
+cutscene.addEventListener("ended", () => {
+    //song.pause TODO 
+    cutscene.style.display = 'none';
+});
+
+let currentZoom = "";
 
 function setZoom(o) {
     if (typeof o == "string") {
@@ -202,16 +226,20 @@ const serenade = new Audio('sound/schubertSerenade.mp3');
 const theSwan = new Audio('sound/theSwan.mp3');
 const deux = new Audio('sound/pasDeDeux.mp3');
 const doorOpening = new Audio('sound/doorOpening.mp3');
+const rain = new Audio('sound/rain.mp3');
+rain.loop = true;
 let currentSong = null;
 
+
 function setSong(song) {
-    if (song) {
+    if (currentSong) {
         currentSong.pause();
     }
     currentSong = song;
     currentSong.play();
     currentSong.loop = true;
 }
+
 
 
 //KATEEEEE this is how u make a new object:
@@ -254,6 +282,7 @@ let dickinson = null;
 let vaultDiary = null;
 let orrery = null;
 let finalDoor = null;
+let butterflyDoorOpened = false;
 function loadBedroom() {
 
     //when player walks out and back in
@@ -277,14 +306,17 @@ function loadBedroom() {
                         }
                     )
                 } else if (inventory.has("deuxCD")) {
-                    setTextBoxConfirm('Take out the CD and play "Pas de deux - Tchaikovsky"?', () => {
-                        setSong(deux);
-                        inventoryRemove("deuxCD");
-                        vault.setImgState("Open");
-                        vault.setLocation(596, 281);
-                        dickinson.show();
-                        vaultDiary.show();
-                    })
+                    if (inventory.has("butterflyKey") || butterflyDoorOpened) {
+                        setTextBoxConfirm('Take out the CD and play "Pas de deux - Tchaikovsky"?', () => {
+                            setSong(deux);
+                            inventoryRemove("deuxCD");
+                            vault.setImgState("Open");
+                            vault.setLocation(596, 281);
+                            dickinson.show();
+                        })
+                    } else {
+                        setTextBox("You wonder if \"The Swan\" did anything. Maybe check near the museum?");
+                    }
                 } else if (currentSong == theSwan) {
                     setTextBox('"The Swan" plays.');
                 } else if (currentSong == deux) {
@@ -694,7 +726,7 @@ function loadSwanRoom() {
 }
 loadSwanRoom();
 
-function loadGatchaRoom() {
+function loadGatchaRoom() { // create overlay effect
     const diary = new GameObject(450, 635, 'diary', gatchaRoom, 2);
     diary.setOnClick(() => { setDiary("mar15") });
 
@@ -784,7 +816,7 @@ function loadGatchaRoom() {
                 handAnim();
             })
         } else {
-            setTextBox("Where the capsules come out.");//TODO i dont like this
+            setTextBox("You suppose this is where the capsules come out.");
         }
     })
 
@@ -840,7 +872,7 @@ function loadGummyRoom() {
     sign.setOnClick(() => { setTextBox("A sign. Left: Lockers. Right: Room 101.") });
     const rightHighlight = new GameObject(751, 80, 'rightHighlight', gummyRoom, 2);
     rightHighlight.setInvisibleHighlight();
-    rightHighlight.setOnClick(() => { setRoom(classroom) });
+    rightHighlight.setOnClick(() => { setRoom(classroom); rain.play(); });
 
     const leftHighlight = new GameObject(605, 80, 'leftHighlight', gummyRoom, 2);
     leftHighlight.setInvisibleHighlight();
@@ -850,19 +882,17 @@ function loadGummyRoom() {
     gummy.setOnClick(() => { setTextBox("An empty gummy package.") });
     const diary = new GameObject(465, 330, 'diary', gummyRoom, 2);
     diary.setOnClick(() => { setDiary("may6") });
-    //set diary TODO
 
     const bottomHighlight = new GameObject(0, 678, 'bottomHighlight', gummyRoom, 3);
     bottomHighlight.setInvisibleHighlight();
     bottomHighlight.setOnClick(() => { setRoom(subwayRoom) });
 }
-
 loadGummyRoom();
 
 function loadClassroom() {
     const exit1 = new GameObject(124, 281, 'exit1', classroom, 2);
     exit1.setHighlight();
-    exit1.setOnClick(() => { setRoom(gummyRoom) });
+    exit1.setOnClick(() => { setRoom(gummyRoom); rain.pause(); });
     const whiteboard = new GameObject(614, 297, 'whiteboard', classroom, 2);
     whiteboard.setOnClick(() => { setTextBox("A whiteboard. The lesson is on The Great Gatsby.") });
     const classroomWindow = new GameObject(943, 74, 'window', classroom, 2);
@@ -901,7 +931,6 @@ function loadClassroom() {
     const leftChair = new GameObject(445, 512, 'leftChair', classroom, 3);
     leftChair.setOnClick(() => { setTextBox("A chair. Someone familiar sits there.") });
 }
-
 loadClassroom();
 
 function loadButterflyRoom() {
@@ -914,6 +943,7 @@ function loadButterflyRoom() {
         if (butterflyDoor.locked) {
             if (inventory.has("butterflyKey")) {
                 setTextBoxConfirm("Use the butterfly key?", () => {
+                    butterflyDoorOpened = true;
                     butterflyDoor.locked = false;
                     inventoryRemove("butterflyKey");
                     click.play();
@@ -928,9 +958,8 @@ function loadButterflyRoom() {
         }
     });
     const diary = new GameObject(839, 578, 'diary', butterflyRoom, 2);
-    diary.setOnClick(() => { setDiary("june4") })//TODO SET DIARY
+    diary.setOnClick(() => { setDiary("june4") });
 }
-
 loadButterflyRoom();
 
 function loadVaultRoom() {
@@ -954,15 +983,17 @@ function loadVaultRoom() {
     });
     dickinson = new GameObject(681, 475, 'dickinson', vaultRoom, 4);
     dickinson.hide();
-    dickinson.setOnClick(() => { setDiary("dickinson") });
+    dickinson.setOnClick(() => { currentZoom = "dickinson"; setDiary("dickinson") });
     vaultDiary = new GameObject(747, 574, 'diary', vaultRoom, 2);
     vaultDiary.setOnClick(() => { setDiary("june5") });
     vaultDiary.hide();
     const bottomHighlight = new GameObject(0, 678, 'bottomHighlight', vaultRoom, 3);
     bottomHighlight.setInvisibleHighlight();
     bottomHighlight.setOnClick(() => { setRoom(butterflyRoom) });
+    vault.setImgState("Open");
+    vault.setLocation(596, 281);
+    dickinson.show();
 }
-
 loadVaultRoom();
 
 function loadSpaceRoom() {
@@ -995,6 +1026,4 @@ function loadSpaceRoom() {
     bottomHighlight.setInvisibleHighlight();
     bottomHighlight.setOnClick(() => { setRoom(flowerRoom) });
 }
-
-
 loadSpaceRoom();
