@@ -34,6 +34,10 @@ export class GameObject {
         this.img.style.display = 'block';
     }
 
+    isShown() {
+        return this.img.style.display != 'none';
+    }
+
     setImgState(imgState = "") {
         this.state = imgState;
         this.img.src = this.imgSrc + this.state + ".png";

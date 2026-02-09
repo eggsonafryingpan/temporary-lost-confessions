@@ -20,9 +20,11 @@ const classroom = document.getElementById("classroom");
 const butterflyRoom = document.getElementById("butterflyRoom");
 const vaultRoom = document.getElementById("vaultRoom");
 const spaceRoom = document.getElementById("spaceRoom");
+const windRoom = document.getElementById("windRoom");
 
 let currRoom = bedroom;
 setRoom(currRoom);
+
 const world = document.getElementById("world");
 world.style.width = width + 'px';
 world.style.height = height + 'px';
@@ -54,6 +56,11 @@ function hideAllPuzzles() {
 function addInputListener() {
     for (let i = 0; i < inputs.length; i++) {
         inputs[i].addEventListener('input', function wrapper(e) {
+            if (e.target.value.toLowerCase() == "ivantill") {
+                const till = document.createElement('img');
+                till.src = "imgs/till.png";
+                spaceRoom.appendChild(till);
+            }
             if (e.target.value.toLowerCase() == answers[i]) {
                 orreryNum++;
                 orrery.setImgState(orreryNum.toString());
@@ -71,6 +78,7 @@ function addInputListener() {
 
 
 
+const lockerMusic = new Audio('cutscenes/lockerMusic.mp3');
 
 const zoom = document.getElementById("zoom");
 const zoomImg = document.getElementById("zoomImg");
@@ -82,7 +90,7 @@ zoom.addEventListener('click', () => {
     if (currentZoom == "dickinson") {
         currentZoom = "";
         currentSong.pause();
-        playCutscene("locker");
+        playCutscene("locker", lockerMusic);
     }
 
 });
@@ -90,14 +98,16 @@ zoom.addEventListener('click', () => {
 
 const cutscene = document.getElementById("cutscene");
 const playedCutscenes = [];
-function playCutscene(name) {
+function playCutscene(name, music = null) {
     if (!playedCutscenes.includes(name)) {
+        cutscene.src = "cutscenes/" + name + ".mp4";
+        cutscene.style.display = 'block';
+        playedCutscenes.push(name);
         if (name == "locker") {
-            cutscene.src = "cutscenes/" + name + ".mp4";
-            cutscene.style.display = 'block';
             vaultDiary.show();
-            playedCutscenes.push(name);
-            setSong(lockerMusic);
+        }
+        if (music) {
+            setSong(music);
         }
     }
 }
@@ -229,8 +239,11 @@ const theSwan = new Audio('sound/theSwan.mp3');
 const deux = new Audio('sound/pasDeDeux.mp3');
 const doorOpening = new Audio('sound/doorOpening.mp3');
 const rain = new Audio('sound/rain.mp3');
+const thud = new Audio('sound/thud.mp3');
+const wind = new Audio('sound/wind.mp3');
+const bang = new Audio('sound/bang.mp3');
 
-const lockerMusic = new Audio('cutscenes/lockerMusic.mp3')
+wind.loop = true;
 rain.loop = true;
 let currentSong = null;
 
@@ -279,6 +292,12 @@ function setSong(song) {
 // }
 
 // room 1 loading
+
+function loadActI() {
+    playCutscene("actI");
+
+}
+loadActI();
 
 let boxCase = null;
 let vault = null;
@@ -830,6 +849,7 @@ function loadGatchaRoom() { // create overlay effect
             setTextBoxConfirm("Insert the quarter into the coin slot?", () => {
                 gatchaOut.setImgState("Ball");
                 inventoryRemove("coin");
+                thud.play();
             });
         } else {
             setTextBox("A capsule toy machine. There's a couple left, but you need a quarter.")
@@ -1002,10 +1022,10 @@ function loadSpaceRoom() {
     finalDoor.setOnClick(() => {
         if (finalDoor.state == "Open") {
             setTextBoxConfirm("Walk through?", () => {
-                //WIN CONDITION TODO
-                const till = document.createElement('img');
-                till.src = "imgs/till.png";
-                spaceRoom.appendChild(till);
+                setRoom(windRoom);
+                currentSong.pause();
+                wind.play();
+
             });
         } else {
             setTextBox("A door. It's locked.");
@@ -1020,7 +1040,7 @@ function loadSpaceRoom() {
     paper3.setOnClick(() => { setPuzzle(3) });
     const paper4 = new GameObject(1046, 333, 'paper4', spaceRoom, 2);
     paper4.setOnClick(() => { setPuzzle(4) });
-    orrery = new GameObject(513, 51, 'orrery', spaceRoom, 2); // change locatin for imgState change
+    orrery = new GameObject(513, 51, 'orrery', spaceRoom, 2);
     orrery.setOnClick(() => { setTextBox("An orrery. There's 4 planets orbiting around a sun.") })
 
     const bottomHighlight = new GameObject(0, 678, 'bottomHighlight', spaceRoom, 3);
@@ -1028,3 +1048,111 @@ function loadSpaceRoom() {
     bottomHighlight.setOnClick(() => { setRoom(flowerRoom) });
 }
 loadSpaceRoom();
+
+function loadWindRoom() {
+
+    const walls = new GameObject(0, 0, 'walls', windRoom, 2);
+    walls.setOnClick(() => { setTextBox("A white void.") });
+
+    const shredder = new GameObject(679, 486, 'shredder', windRoom, 4);
+    shredder.setOnClick(() => {
+        if (!inventory.has("letter") || walls.state == "Open") {
+            setTextBox("A paper shredder.")
+        } else {
+            setTextBoxConfirm("Shred the letter?", () => yesYesYes(), () => noNoNo())
+        }
+    });
+
+    const platform = new GameObject(951, 788, 'platform', windRoom, 3);
+    platform.setTranslate("bottomRight");
+
+    const letter = new GameObject(681, 594, 'letter', windRoom, 4);
+    letter.setOnClick(() => {
+        setTextBoxConfirm("Take the letter?", () => {
+            inventoryAdd("letter", () => { setTextBox("The letter.") });
+            letter.hide();
+        })
+    });
+
+    const bottomHighlight = new GameObject(0, 708, 'bottomHighlight', windRoom, 5);
+    bottomHighlight.pressed = false;
+    bottomHighlight.setInvisibleHighlight();
+    bottomHighlight.setOnClick(() => {
+        if (platform.state == "") {
+            platform.setImgState("Back");
+            shredder.hide();
+            if (!inventory.has("letter")) {
+                letter.hide();
+            }
+            if (!bottomHighlight.pressed) {
+                setTextBox("You turn around but the door is gone.");
+            }
+        } else {
+            if (!inventory.has("letter")) {
+                letter.show();
+            }
+            platform.setImgState("");
+            shredder.show();
+        }
+        bottomHighlight.pressed = true;
+    });
+
+
+
+
+
+
+    function yesYesYes() {
+        setTextBoxConfirm("Are you sure?", () => {
+            setTextBoxConfirm("Are you certain?", () => {
+                setTextBoxConfirm("Do you want to reconsider?", () => { }, () => {
+                    setTextBoxConfirm("Is this your final decision?", () => {
+                        location.reload(true);
+                    })
+                })
+            })
+        })
+    };
+
+    function noNoNo() {
+        setTextBoxConfirm("You need to shred it.", () => { }, () => {
+            setTextBoxConfirm("You have to.", () => { }, () => {
+                setTextBoxConfirm("It's no use.", () => { }, () => {
+                    setTextBoxConfirm("There's no exit here don't you see that?", () => { }, () => {
+                        setTextBoxConfirm("You shouldn't have written it in the first place", () => { }, () => {
+                            textChain([
+                                () => setTextBox("Alright..."),
+                                () => setTextBox("Do you remember what happened after the incident?"),
+                                () => setTextBox("You avoided them for the rest of the week."),
+                                () => setTextBox("You muted your phone and blocked them."),
+                                () => setTextBox("It's been three years."),
+                                () => setTextBox("Were you afraid?"),
+                                () => setTextBox("Then why did you keep the letter?"),
+                                () => setTextBoxConfirm("Do you want to continue?", () => {
+                                    walls.setOnClick(() => {
+                                        if (platform.state == "Back") {
+                                            setTextBox("A white void. It feels a little off.");
+                                        } else {
+                                            setTextBoxConfirm("Push?", () => {
+                                                walls.setImgState("Open");
+                                                walls.setOnClick(() => { });
+                                                bottomHighlight.hide();
+                                                platform.hide();
+                                                wind.pause();
+                                                bang.play();
+                                            });
+                                        }
+                                    })
+                                }, () => {
+                                    location.reload(true);
+                                })
+                            ])
+                        })
+                    })
+                })
+            })
+        })
+    }
+}
+
+loadWindRoom();
