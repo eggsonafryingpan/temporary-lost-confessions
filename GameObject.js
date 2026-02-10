@@ -4,15 +4,31 @@ export class GameObject {
         this.imgSrc = imgSrc;
         this.x = x;
         this.y = y;
-        this.img
+        this.img;
         this.state = "";
         this.parent = parent;
         this.zIndex = zIndex;
         this.onClick = null;
         this.onEnter = null;
         this.onLeave = null;
-        //   this.icon = null;
+        this.onMouseDown = null;
+        this.onMouseMove = null;
+        this.onMouseUp = null;
         this.load();
+    }
+
+    setRotation(deg) {
+        this.img.style.transform = "rotate(" + deg + "deg)";
+    }
+
+    setPivot(x, y) {
+        this.img.style.transformOrigin = x + "px " + y + "px";
+    }
+    getWidth() {
+        return this.img.offsetWidth;
+    }
+    getHeight() {
+        return this.img.offsetHeight;
     }
 
     setLocation(x, y) {
@@ -62,6 +78,9 @@ export class GameObject {
         });
         this.img.addEventListener('mouseenter', () => { if (this.onEnter) this.onEnter() });
         this.img.addEventListener('mouseleave', () => { if (this.onLeave) this.onLeave() });
+        this.img.addEventListener('mousedown', () => { if (this.onMouseDown) this.onMouseDown() });
+        this.img.addEventListener('mousemove', () => { if (this.onMouseMove) this.onMouseMove() });
+        this.img.addEventListener('mouseup', () => { if (this.onMouseUp) this.onMouseUp() });
     }
 
     setTranslate(translate) {
@@ -72,6 +91,19 @@ export class GameObject {
 
     setOnClick(func) {
         this.onClick = func;
+    }
+
+    setOnMouseDown(func) {
+        this.onMouseDown = func;
+    }
+    setOnMouseMove(func) {
+        this.onMouseMove = func;
+    }
+    setOnMouseUp(func) {
+        this.onMouseUp = func;
+    }
+    setOnLeave(func) {
+        this.onLeave = func;
     }
 
     remove() {

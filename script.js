@@ -5,6 +5,14 @@ import { GameIcon } from './GameIcon.js';
 export const width = 1400;
 export const height = 788;
 
+let mouseY;
+let mouseX;
+
+//NOT BASED ON SCREEN BASED ON FULL WINDOW
+document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+});
 
 const bedroom = document.getElementById("bedroom");
 const flowerRoom = document.getElementById("flowerRoom");
@@ -21,6 +29,7 @@ const butterflyRoom = document.getElementById("butterflyRoom");
 const vaultRoom = document.getElementById("vaultRoom");
 const spaceRoom = document.getElementById("spaceRoom");
 const windRoom = document.getElementById("windRoom");
+const radioZoom = document.getElementById("radioZoom");
 
 let currRoom = bedroom;
 setRoom(currRoom);
@@ -242,7 +251,9 @@ const rain = new Audio('sound/rain.mp3');
 const thud = new Audio('sound/thud.mp3');
 const wind = new Audio('sound/wind.mp3');
 const bang = new Audio('sound/bang.mp3');
+const radioStatic = new Audio('sound/radioStatic.mp3');
 
+radioStatic.loop = true;
 wind.loop = true;
 rain.loop = true;
 let currentSong = null;
@@ -257,39 +268,6 @@ function setSong(song) {
     currentSong.loop = true;
 }
 
-
-
-//KATEEEEE this is how u make a new object:
-// const [objName] = new GameObject(
-// [x],
-// [y],
-// [file name without .png or the folders its in],
-// [room its in aka the folder its in],
-// [z index/layer its on])
-
-//Example (the img is at imgs/test/flower.png but you only need to put 'flower')
-// const flower = new GameObject(750, 470, 'flower', test, 5);
-
-
-//How to set what it does when its click:
-// [varName].setOnClick( () => {[function where something happens]})
-// In the example I use setTextBox() and setTextBoxConfirm()
-
-// How to use setTextBox():
-//setTextBox([text that pops up])  --> function handles the rest
-
-//How to use setTextBoxConfirm():
-//setTextBoxConfirm([text],[function of what happen when you click yes], [function of what happens when you click no]);
-
-//Example:
-// flower.setOnClick(() => { setTextBox("A flower.") });
-// flower.setOnClick(() => { setTextBoxConfirm("Do u want the flower?, yesFunction(), noFunction()")});
-// yesFunction() {
-//  blah blah blah
-// }
-// noFunction() {
-//  blah blah blah
-// }
 
 // room 1 loading
 
@@ -306,6 +284,10 @@ let vaultDiary = null;
 let orrery = null;
 let finalDoor = null;
 let butterflyDoorOpened = false;
+
+let currentRadioSong;
+
+
 function loadBedroom() {
 
     //when player walks out and back in
@@ -653,9 +635,10 @@ function loadMallRoom() {
     const cdDisplay = new GameObject(897, 307, 'cdDisplay', mallRoom, 2);
     cdDisplay.setOnClick(() => { setTextBox("An empty display for Joe's Records and CDs.") });
     swanCDStand = new GameObject(943, 332, 'cdStand', mallRoom, 3);
+    swanCDStand.setHighlight();
     swanCDStand.hide();
     swanCDStand.setOnClick(() => {
-        setTextBoxConfirm('A CD. It\'s titled "The Swan (Carnaval of the Animals) - Best of Saint-Saëns".', () => {
+        setTextBoxConfirm('A CD. It\'s titled "The Swan (Carnaval of the Animals) - Best of Saint-Saëns". Take it?', () => {
             inventoryAdd("swanCD");
             swanCDStand.hide();
         })
@@ -1100,8 +1083,6 @@ function loadWindRoom() {
 
 
 
-
-
     function yesYesYes() {
         setTextBoxConfirm("Are you sure?", () => {
             setTextBoxConfirm("Are you certain?", () => {
@@ -1156,3 +1137,66 @@ function loadWindRoom() {
 }
 
 loadWindRoom();
+
+const radioFreq = new Map([
+    [theSwan, 655],
+    [deux, 878]
+]);
+
+function loadRadioSound() {
+    theSwan.volume = 0;
+    theSwan.play();
+    deux.volume = 0;
+    deux.play();
+    radioStatic.play();
+}
+function loadRadioZoom() {
+    const arm = new GameObject(705, 352, 'arm', radioZoom, 3);
+    arm.setPivot(16, 311);
+    arm.img.style.pointerEvents = 'none';
+
+    const coil = new GameObject(594, 356, 'coil', radioZoom, 2);
+    coil.setOnClick(() => { loadRadioSound(); coil.setOnClick(() => { }) });
+
+    let isMouseDown = false;
+    coil.setOnMouseDown(() => {
+        isMouseDown = true;
+        console.log(isMouseDown);
+    })
+    document.addEventListener('mouseup', () => {
+        isMouseDown = false;
+        console.log(isMouseDown);
+    })
+
+
+    coil.setOnMouseMove(() => {
+        if (!isMouseDown) return;
+        const rect = coil.img.getBoundingClientRect();
+        const x = mouseX - rect.left;
+        const theta = (x / coil.getWidth() * 50 - 25) * 1.1;
+        arm.setRotation(theta);
+
+        const armFreq = x / coil.getWidth() * 400 + 600;
+        radioFreq.forEach((freq, song) => {
+            let distance = Math.abs(armFreq - freq);
+            let volume = Math.exp(-1 * distance * 0.2);
+            if (volume < 0.01) {
+                volume = 0;
+            }
+            song.volume = volume;
+            if (volume > 0) {
+                radioStatic.volume = 1 - volume;
+            }
+            console.log(radioStatic.volume)
+            if (volume > 0.5) {
+                currentRadioSong = song;
+            }
+        });
+    })
+
+
+}
+
+loadRadioZoom();
+
+//setRoom(radioZoom);
