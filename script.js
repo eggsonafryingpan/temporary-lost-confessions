@@ -1200,3 +1200,4 @@ function loadRadioZoom() {
 loadRadioZoom();
 
 //setRoom(radioZoom);
+
