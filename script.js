@@ -14,6 +14,8 @@ document.addEventListener('mousemove', (e) => {
     mouseY = e.clientY;
 });
 
+const eventBus = new EventTarget();
+
 const bedroom = document.getElementById("bedroom");
 const flowerRoom = document.getElementById("flowerRoom");
 const escalatorRoom = document.getElementById("escalatorRoom");
@@ -732,7 +734,7 @@ function loadSwanRoom() {
 }
 loadSwanRoom();
 
-function loadGatchaRoom() { // create overlay effect
+function loadGatchaRoom() { // todo create overlay effect
     const diary = new GameObject(450, 635, 'diary', gatchaRoom, 2);
     diary.setOnClick(() => { setDiary("mar15") });
 
@@ -1134,6 +1136,12 @@ function loadWindRoom() {
             })
         })
     }
+
+    //TODO HAIHAIH IMPORTMANT THIS I RADIO BROADCAST TEST
+    // bus.addEventListener("radioChange", () => {
+    //  if (currentRadioSong=="jfdlksf") {
+    //     img.setImgState("fdsjkljfdslkf");
+    // });
 }
 
 loadWindRoom();
@@ -1190,6 +1198,8 @@ function loadRadioZoom() {
             console.log(radioStatic.volume)
             if (volume > 0.5) {
                 currentRadioSong = song;
+                const event = new Event("myCustomEvent");
+                eventBus.dispatchEvent(new CustomEvent("radioChange"));
             }
         });
     })
