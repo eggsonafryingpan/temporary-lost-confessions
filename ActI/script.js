@@ -267,6 +267,11 @@ const wind = new Audio('sound/wind.mp3');
 const bang = new Audio('sound/bang.mp3');
 const radioStatic = new Audio('sound/radioStatic.mp3');
 
+const star = new Audio('sound/star.mp3');
+const circle = new Audio('sound/circle.mp3');
+const heart = new Audio('sound/heart.mp3');
+const square = new Audio('sound/square.mp3');
+
 radioStatic.loop = true;
 wind.loop = true;
 rain.loop = true;
@@ -1159,18 +1164,25 @@ function loadWindRoom() {
 loadWindRoom();
 
 const radioFreq = new Map([
-    [theSwan, 655],
-    [deux, 878]
+    [star, 655],
+    [circle, 710],
+    [square, 820],
+    [heart, 980]
 ]);
 
+
 function loadRadioSound() {
-    theSwan.volume = 0;
-    theSwan.play();
-    deux.volume = 0;
-    deux.play();
+    radioFreq.forEach((freq, song) => {
+        song.volume = 0;
+        song.play();
+        song.loop = true
+    })
     radioStatic.play();
 }
 function loadRadioZoom() {
+    const bottomHighlight = new GameObject(0, 678, 'bottomHighlight', radioZoom, 3);
+    bottomHighlight.setInvisibleHighlight();
+    bottomHighlight.setOnClick(() => { setRoom(a) });
     const arm = new GameObject(705, 352, 'arm', radioZoom, 3);
     arm.setPivot(16, 311);
     arm.img.style.pointerEvents = 'none';
@@ -1181,11 +1193,9 @@ function loadRadioZoom() {
     let isMouseDown = false;
     coil.setOnMouseDown(() => {
         isMouseDown = true;
-        console.log(isMouseDown);
     })
     document.addEventListener('mouseup', () => {
         isMouseDown = false;
-        console.log(isMouseDown);
     })
 
 
@@ -1207,7 +1217,6 @@ function loadRadioZoom() {
             if (volume > 0) {
                 radioStatic.volume = 1 - volume;
             }
-            console.log(radioStatic.volume)
             if (volume > 0.5) {
                 currentRadioSong = song;
                 const event = new Event("myCustomEvent");
@@ -1224,98 +1233,220 @@ loadRadioZoom();
 
 function loadA() {
     const amp = new GameObject(545, 467, 'amp', a, 2);
+    amp.setOnClick(() => { setTextBox("An amplifier.") });
     const radio = new GameObject(536, 551, 'radio', a, 3);
+    radio.setOnClick(() => { setRoom(radioZoom) });
+
     const starDoor = new GameObject(316, 300, 'starDoor', a, 2);
+    starDoor.setOnClick(() => { setTextBox("It's locked.") })
     eventBus.addEventListener("radioChange", () => {
-        if (currentRadioSong == theSwan) {
-            starDoor.setOnClick(() => { setTextBox("It's unlocked. Open it?") })
+        if (currentRadioSong == star) {
+            starDoor.setOnClick(() => { setTextBoxConfirm("It's unlocked. Open it?", () => { setRoom(b) }) });
+        } else {
+            starDoor.setOnClick(() => { setTextBox("It's locked.") })
         }
     });
     const door2 = new GameObject(838, 171, 'door2', a, 2);
     door2.setHighlight();
+    door2.nextRoom = f;
+    door2.setOnClick(() => {
+        setRoom(door2.nextRoom);
+        if (door2.nextRoom == f) {
+            door2.nextRoom = g;
+        } else {
+            door2.nextRoom = f;
+        }
+    })
 }
-
+loadA();
 function loadB() {
     const door1 = new GameObject(148, 311, 'door1', b, 2);
     door1.setHighlight();
+    door1.setOnClick(() => {
+        setRoom(c);
+    })
     const door2 = new GameObject(573, 263, 'door2', b, 2);
     door2.setHighlight();
+    door2.setOnClick(() => {
+        setRoom(ladderRoom);
+    })
     const door3 = new GameObject(1207, 414, 'door3Highlight', b, 2);
     door3.setInvisibleHighlight();
+    door3.setOnClick(() => {
+        setRoom(a);
+    });
     const rocks = new GameObject(608, 370, 'rocks', b, 2);
+    rocks.setOnClick(() => { setTextBox("A rock climbing wall.") })
 }
+loadB();
 
 function loadC() {
-    const door2 = new GameObject(668, 217, 'door2', c, 2);
+    const door2 = new GameObject(324, 368, 'door2', c, 2);
     door2.setHighlight();
+    door2.setOnClick(() => { setRoom(j) })//MAYBE ADD ANOTHER ROOM TODO
     const heartDoor = new GameObject(893, 224, 'heartDoor', c, 2);
+    heartDoor.setOnClick(() => { setTextBox("It's locked.") })
+    eventBus.addEventListener("radioChange", () => {
+        if (currentRadioSong == heart) {
+            heartDoor.setOnClick(() => { setTextBoxConfirm("It's unlocked. Open it?", () => { setRoom(d) }) });
+        } else {
+            heartDoor.setOnClick(() => { setTextBox("It's locked.") })
+        }
+    });
     const door1 = new GameObject(434, 649, 'door1', c, 2);
+    door1.setOnClick(() => { setRoom(b) });
+    door1.setHighlight();
     const cobweb = new GameObject(583, 137, 'cobweb', c, 2);
+    cobweb.setOnClick(() => { setTextBox("A cobweb.") });
 }
+loadC();
 
 function loadD() {
     const door1 = new GameObject(848, 142, 'door1', d, 2);
     door1.setHighlight();
+    door1.setOnClick(() => { setRoom(ladderRoom) });
     const ladder = new GameObject(588, 590, 'ladder', d, 2);
+    //TODO PICK UP LADDER
     const bottomHighlight = new GameObject(0, 678, 'bottomHighlight', d, 3);
     bottomHighlight.setInvisibleHighlight();
-    bottomHighlight.setOnClick();
+    bottomHighlight.setOnClick(() => { setRoom(c) });
 }
+loadD();
 
 function loadF() {
     const ladder = new GameObject(963, 528, 'ladder', f, 2);
+    ladder.setOnClick(() => { setTextBox("A ladder. It leads into a swimming pool, but you can't see the bottom.") })
     const door1 = new GameObject(598, 371, 'door1', f, 2);
     door1.setHighlight();
+    door1.setOnClick(() => {
+        setRoom(j);
+    })
     const bottomHighlight = new GameObject(0, 678, 'bottomHighlight', f, 3);
     bottomHighlight.setInvisibleHighlight();
-    bottomHighlight.setOnClick();
+    bottomHighlight.setOnClick(() => { setRoom(a) });
 }
+loadF();
 
+//TODO FIX G
+let paper;
+let paperRipped;
 function loadG() {
-    const paper = new GameObject(980, 257, 'paper', g, 2);
-    //set highlight later
-    const squareDoor = new GameObject(627, 270, 'squareDoor', g, 2);
     const bottomHighlight = new GameObject(0, 678, 'bottomHighlight', g, 3);
     bottomHighlight.setInvisibleHighlight();
-    bottomHighlight.setOnClick();
+    bottomHighlight.setOnClick(() => { setRoom(a) });
+    paper = new GameObject(980, 257, 'paper', g, 2);
+    paperRipped = new GameObject(980, 257, 'paperRipped', g, 2);
+    paperRipped.hide();
+    paperRipped.setHighlight();
+    paperRipped.setOnClick(() => {
+        setTextBoxConfirm("Crawl through?", () => {
+            setRoom(i);
+        })
+    })
+    paper.setOnClick(() => {
+        setTextBox("A poster taped on the wall.")
+    })
+    const squareDoor = new GameObject(627, 270, 'squareDoor', g, 2);
+    squareDoor.setOnClick(() => { setTextBox("It's locked.") })
+    eventBus.addEventListener("radioChange", () => {
+        if (currentRadioSong == square) {
+            squareDoor.setOnClick(() => { setTextBoxConfirm("It's unlocked. Open it?", () => { setRoom(i) }) });
+        } else {
+            squareDoor.setOnClick(() => { setTextBox("It's locked.") })
+        }
+    });
+
 }
+loadG();
 
 function loadH() {
     const door1 = new GameObject(831, 269, 'door1', h, 2);
     door1.setHighlight();
+    door1.setOnClick(() => {
+        setRoom(ladderRoom);
+    })
     const ladder = new GameObject(379, 363, 'ladder', h, 2);
-
-
+    //TODO LADDER RETRIEVE
+    const bottomHighlight = new GameObject(0, 678, 'bottomHighlight', h, 3);
+    bottomHighlight.setInvisibleHighlight();
+    bottomHighlight.setOnClick(setRoom(f));
 }
+loadH();
 
 function loadI() {
     const circleDoor = new GameObject(1067, 307, 'circleDoor', i, 2);
+    circleDoor.setOnClick(() => { setTextBox("It's locked.") })
+    eventBus.addEventListener("radioChange", () => {
+        if (currentRadioSong == circle) {
+            circleDoor.setOnClick(() => { setTextBoxConfirm("It's unlocked. Open it?", () => { setRoom(h) }) });
+        } else {
+            circleDoor.setOnClick(() => { setTextBox("It's locked.") })
+        }
+    });
     const door1 = new GameObject(391, 357, 'door1', i, 2);
+    door1.setOnClick(() => {
+        setRoom(g);
+    })
     const hole = new GameObject(733, 359, 'hole', i, 2);
-    //set change to ripped
-
+    const holeRipped = new GameObject(733, 359, 'holeRipped', i, 2);
+    holeRipped.hide();
+    holeRipped.setHighlight();
+    holeRipped.setOnClick(() => {
+        setTextBoxConfirm("Crawl through the hole?", () => {
+            setRoom(g);
+        })
+    })
+    hole.setOnClick(() => {
+        setTextBoxConfirm("A hole in the wall. There's a piece of paper covering it. Punch it?", () => {
+            hole.hide()
+            holeRipped.show();
+            paper.hide()
+            paperRipped.show();
+        });
+    })
 }
+loadI();
 
 function loadJ() {
     const heartDoor = new GameObject(926, 304, 'heartDoor', j, 2);
+    heartDoor.setOnClick(() => { setTextBox("It's locked.") })
+    eventBus.addEventListener("radioChange", () => {
+        if (currentRadioSong == heart) {
+            heartDoor.setOnClick(() => { setTextBoxConfirm("It's unlocked. Open it?", () => { setRoom(k) }) });
+        } else {
+            heartDoor.setOnClick(() => { setTextBox("It's locked.") })
+        }
+    });
     const door1 = new GameObject(239, 318, 'door1', j, 2);
     door1.setHighlight();
+    door1.setOnClick(() => { setRoom(b) });
     const bottomHighlight = new GameObject(0, 678, 'bottomHighlight', j, 3);
     bottomHighlight.setInvisibleHighlight();
-    bottomHighlight.setOnClick();
+    bottomHighlight.setOnClick(() => { setRoom(f) });
 }
+loadJ();
 
 function loadK() {
     const ladder = new GameObject(196, 555, 'ladder', k, 2);
-    const window = new GameObject(530, 282, 'window', k, 2);
+    //ladder retrieve
+    const frostyWindow = new GameObject(530, 282, 'window', k, 2);
+    frostyWindow.setOnClick(() => {
+        setTextBox("A frosted window. You only see sky behind it.")
+    })
     const bottomHighlight = new GameObject(0, 678, 'bottomHighlight', k, 3);
     bottomHighlight.setInvisibleHighlight();
-    bottomHighlight.setOnClick();
+    bottomHighlight.setOnClick(() => { setRoom(j) });
 }
+loadK();
 
 function loadLadderRoom() {
     const ladder = new GameObject(771, 678, 'ladder', ladderRoom, 2);
-    const bottomHighlight = new GameObject(0, 678, 'bottomHighlight', k, 3);
+    ladder.setTranslate("bottomLeft")
+    const bottomHighlight = new GameObject(0, 678, 'bottomHighlight', ladderRoom, 3);
     bottomHighlight.setInvisibleHighlight();
-    bottomHighlight.setOnClick();
+    bottomHighlight.setOnClick(() => { setRoom(b) });
 }
+loadLadderRoom();
+
+setRoom(a);
+loadRadioSound();
