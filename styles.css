@@ -1,0 +1,18 @@
+#world {
+    position: relative;
+    border: 1px solid #000000;
+    user-select: none;
+    -webkit-user-select: none;
+    overflow: hidden;
+}
+
+
+#screen {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    cursor: url('imgs/mouse.png'), auto;
+}

@@ -54,6 +54,8 @@ world.style.height = height + 'px';
 
 const freeze = document.getElementById("freeze");
 
+const inventoryBox = document.getElementById("inventory");
+
 const puzzle1 = document.getElementById("puzzle1");
 const puzzle2 = document.getElementById("puzzle2");
 const puzzle3 = document.getElementById("puzzle3");
@@ -126,13 +128,17 @@ function playCutscene(name, music = null) {
     if (!playedCutscenes.includes(name)) {
         cutscene.src = "cutscenes/" + name + ".mp4";
         cutscene.style.display = 'block';
-        lastCutsceneSound = music;
         playedCutscenes.push(name);
         if (name == "locker") {
             vaultDiary.show();
         }
         if (music) {
             setSong(music);
+            lastCutsceneSound = music;
+        }
+        if (name == "actI") {
+            currRoom.style.visibility = "hidden";
+            inventoryBox.style.visibility = "hidden";
         }
     }
 }
@@ -144,6 +150,10 @@ cutscene.addEventListener("ended", () => {
     cutscene.style.display = 'none';
     if (playedCutscenes[playedCutscenes.length - 1] == "tram") {
         loadRadioSound();
+    }
+    if (playedCutscenes[playedCutscenes.length - 1] == "actI") {
+        currRoom.style.visibility = "visible";
+        inventoryBox.style.visibility = "visible";
     }
 });
 
