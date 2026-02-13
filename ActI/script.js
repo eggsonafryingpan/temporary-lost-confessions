@@ -163,14 +163,18 @@ function setZoom(o) {
     if (typeof o == "string") {
         if (textBox.isHidden()) { //maybe change
             zoomImg.src = 'imgs/' + o + "Zoom.png";
-            zoom.style.display = 'flex';
+            zoomImg.onload = () => {
+                zoom.style.display = 'flex';
+            };
         }
     } else {
         if (textBox.isHidden()) { //maybe change
             if (o) {
                 zoomImg.src = o.imgSrc + "Zoom.png";
             }
-            zoom.style.display = 'flex';
+            zoomImg.onload = () => {
+                zoom.style.display = 'flex';
+            };
         }
     }
 }
