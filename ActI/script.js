@@ -33,6 +33,18 @@ const spaceRoom = document.getElementById("spaceRoom");
 const windRoom = document.getElementById("windRoom");
 const radioZoom = document.getElementById("radioZoom");
 
+const a = document.getElementById("a");
+const b = document.getElementById("b");
+const c = document.getElementById("c");
+const d = document.getElementById("d");
+const f = document.getElementById("f");
+const g = document.getElementById("g");
+const h = document.getElementById("h");
+const i = document.getElementById("i");
+const j = document.getElementById("j")
+const k = document.getElementById("k");
+const ladderRoom = document.getElementById("ladderRoom");
+
 let currRoom = bedroom;
 setRoom(currRoom);
 
@@ -1138,7 +1150,7 @@ function loadWindRoom() {
     }
 
     //TODO HAIHAIH IMPORTMANT THIS I RADIO BROADCAST TEST
-    // bus.addEventListener("radioChange", () => {
+    // eventBus.addEventListener("radioChange", () => {
     //  if (currentRadioSong=="jfdlksf") {
     //     img.setImgState("fdsjkljfdslkf");
     // });
@@ -1209,5 +1221,101 @@ function loadRadioZoom() {
 
 loadRadioZoom();
 
-//setRoom(radioZoom);
 
+function loadA() {
+    const amp = new GameObject(545, 467, 'amp', a, 2);
+    const radio = new GameObject(536, 551, 'radio', a, 3);
+    const starDoor = new GameObject(316, 300, 'starDoor', a, 2);
+    eventBus.addEventListener("radioChange", () => {
+        if (currentRadioSong == theSwan) {
+            starDoor.setOnClick(() => { setTextBox("It's unlocked. Open it?") })
+        }
+    });
+    const door2 = new GameObject(838, 171, 'door2', a, 2);
+    door2.setHighlight();
+}
+
+function loadB() {
+    const door1 = new GameObject(148, 311, 'door1', b, 2);
+    door1.setHighlight();
+    const door2 = new GameObject(573, 263, 'door2', b, 2);
+    door2.setHighlight();
+    const door3 = new GameObject(1207, 414, 'door3Highlight', b, 2);
+    door3.setInvisibleHighlight();
+    const rocks = new GameObject(608, 370, 'rocks', b, 2);
+}
+
+function loadC() {
+    const door2 = new GameObject(668, 217, 'door2', c, 2);
+    door2.setHighlight();
+    const heartDoor = new GameObject(893, 224, 'heartDoor', c, 2);
+    const door1 = new GameObject(434, 649, 'door1', c, 2);
+    const cobweb = new GameObject(583, 137, 'cobweb', c, 2);
+}
+
+function loadD() {
+    const door1 = new GameObject(848, 142, 'door1', d, 2);
+    door1.setHighlight();
+    const ladder = new GameObject(588, 590, 'ladder', d, 2);
+    const bottomHighlight = new GameObject(0, 678, 'bottomHighlight', d, 3);
+    bottomHighlight.setInvisibleHighlight();
+    bottomHighlight.setOnClick();
+}
+
+function loadF() {
+    const ladder = new GameObject(963, 528, 'ladder', f, 2);
+    const door1 = new GameObject(598, 371, 'door1', f, 2);
+    door1.setHighlight();
+    const bottomHighlight = new GameObject(0, 678, 'bottomHighlight', f, 3);
+    bottomHighlight.setInvisibleHighlight();
+    bottomHighlight.setOnClick();
+}
+
+function loadG() {
+    const paper = new GameObject(980, 257, 'paper', g, 2);
+    //set highlight later
+    const squareDoor = new GameObject(627, 270, 'squareDoor', g, 2);
+    const bottomHighlight = new GameObject(0, 678, 'bottomHighlight', g, 3);
+    bottomHighlight.setInvisibleHighlight();
+    bottomHighlight.setOnClick();
+}
+
+function loadH() {
+    const door1 = new GameObject(831, 269, 'door1', h, 2);
+    door1.setHighlight();
+    const ladder = new GameObject(379, 363, 'ladder', h, 2);
+
+
+}
+
+function loadI() {
+    const circleDoor = new GameObject(1067, 307, 'circleDoor', i, 2);
+    const door1 = new GameObject(391, 357, 'door1', i, 2);
+    const hole = new GameObject(733, 359, 'hole', i, 2);
+    //set change to ripped
+
+}
+
+function loadJ() {
+    const heartDoor = new GameObject(926, 304, 'heartDoor', j, 2);
+    const door1 = new GameObject(239, 318, 'door1', j, 2);
+    door1.setHighlight();
+    const bottomHighlight = new GameObject(0, 678, 'bottomHighlight', j, 3);
+    bottomHighlight.setInvisibleHighlight();
+    bottomHighlight.setOnClick();
+}
+
+function loadK() {
+    const ladder = new GameObject(196, 555, 'ladder', k, 2);
+    const window = new GameObject(530, 282, 'window', k, 2);
+    const bottomHighlight = new GameObject(0, 678, 'bottomHighlight', k, 3);
+    bottomHighlight.setInvisibleHighlight();
+    bottomHighlight.setOnClick();
+}
+
+function loadLadderRoom() {
+    const ladder = new GameObject(771, 678, 'ladder', ladderRoom, 2);
+    const bottomHighlight = new GameObject(0, 678, 'bottomHighlight', k, 3);
+    bottomHighlight.setInvisibleHighlight();
+    bottomHighlight.setOnClick();
+}
