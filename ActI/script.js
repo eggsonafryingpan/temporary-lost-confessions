@@ -1196,11 +1196,18 @@ function loadRadioZoom() {
     })
     document.addEventListener('mouseup', () => {
         isMouseDown = false;
+        radioUpdate();
     })
+
+
 
 
     coil.setOnMouseMove(() => {
         if (!isMouseDown) return;
+        radioUpdate();
+    })
+
+    function radioUpdate() {
         const rect = coil.img.getBoundingClientRect();
         const x = mouseX - rect.left;
         const theta = (x / coil.getWidth() * 50 - 25) * 1.1;
@@ -1210,20 +1217,19 @@ function loadRadioZoom() {
         radioFreq.forEach((freq, song) => {
             let distance = Math.abs(armFreq - freq);
             let volume = Math.exp(-1 * distance * 0.2);
-            if (volume < 0.01) {
+            if (volume < 0.001) {
                 volume = 0;
             }
             song.volume = volume;
-            if (volume > 0) {
+            if (song.volume > 0) {
                 radioStatic.volume = 1 - volume;
             }
-            if (volume > 0.5) {
+            if (song.volume > 0.5) {
                 currentRadioSong = song;
-                const event = new Event("myCustomEvent");
                 eventBus.dispatchEvent(new CustomEvent("radioChange"));
             }
         });
-    })
+    }
 
 
 }
@@ -1306,7 +1312,16 @@ function loadD() {
     door1.setHighlight();
     door1.setOnClick(() => { setRoom(ladderRoom) });
     const ladder = new GameObject(588, 590, 'ladder', d, 2);
-    //TODO PICK UP LADDER
+    ladder.setOnClick(() => {
+        setTextBoxConfirm("Take the ladder?", () => {
+            if (inventory.has("ladder")) {
+                setTextBox("You're already holding a ladder. You should probably set it down somewhere.");
+            } else {
+                ladder.hide();
+                inventory.add("ladder");
+            }
+        })
+    })
     const bottomHighlight = new GameObject(0, 678, 'bottomHighlight', d, 3);
     bottomHighlight.setInvisibleHighlight();
     bottomHighlight.setOnClick(() => { setRoom(c) });
@@ -1366,10 +1381,19 @@ function loadH() {
         setRoom(ladderRoom);
     })
     const ladder = new GameObject(379, 363, 'ladder', h, 2);
-    //TODO LADDER RETRIEVE
+    ladder.setOnClick(() => {
+        setTextBoxConfirm("Take the ladder?", () => {
+            if (inventory.has("ladder")) {
+                setTextBox("You're already holding a ladder. You should probably set it down somewhere.");
+            } else {
+                ladder.hide();
+                inventory.add("ladder");
+            }
+        })
+    })
     const bottomHighlight = new GameObject(0, 678, 'bottomHighlight', h, 3);
     bottomHighlight.setInvisibleHighlight();
-    bottomHighlight.setOnClick(setRoom(f));
+    bottomHighlight.setOnClick(() => { setRoom(f) });
 }
 loadH();
 
@@ -1428,7 +1452,16 @@ loadJ();
 
 function loadK() {
     const ladder = new GameObject(196, 555, 'ladder', k, 2);
-    //ladder retrieve
+    ladder.setOnClick(() => {
+        setTextBoxConfirm("Take the ladder?", () => {
+            if (inventory.has("ladder")) {
+                setTextBox("You're already holding a ladder. You should probably set it down somewhere.");
+            } else {
+                ladder.hide();
+                inventory.add("ladder");
+            }
+        })
+    })
     const frostyWindow = new GameObject(530, 282, 'window', k, 2);
     frostyWindow.setOnClick(() => {
         setTextBox("A frosted window. You only see sky behind it.")
@@ -1441,7 +1474,20 @@ loadK();
 
 function loadLadderRoom() {
     const ladder = new GameObject(771, 678, 'ladder', ladderRoom, 2);
-    ladder.setTranslate("bottomLeft")
+    ladder.setTranslate("bottomRight");
+    ladder.currentStateNum = 0;
+    ladder.setOnClick(() => {
+        if (inventory.has("ladder")) {
+            setTextBoxConfirm("Place the ladder?", () => {
+                inventoryRemove("ladder");
+                ladder.currentStateNum++;
+                ladder.setImgState(ladder.currentStateNum.toString());
+            })
+
+        } else if (ladder.currentStateNum == 0) {
+            setTextBox("You wonder if you can reach the top.");
+        }
+    })
     const bottomHighlight = new GameObject(0, 678, 'bottomHighlight', ladderRoom, 3);
     bottomHighlight.setInvisibleHighlight();
     bottomHighlight.setOnClick(() => { setRoom(b) });
