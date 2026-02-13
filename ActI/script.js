@@ -121,10 +121,12 @@ zoom.addEventListener('click', () => {
 
 const cutscene = document.getElementById("cutscene");
 const playedCutscenes = [];
+let lastCutsceneSound;
 function playCutscene(name, music = null) {
     if (!playedCutscenes.includes(name)) {
         cutscene.src = "cutscenes/" + name + ".mp4";
         cutscene.style.display = 'block';
+        lastCutsceneSound = music;
         playedCutscenes.push(name);
         if (name == "locker") {
             vaultDiary.show();
@@ -136,8 +138,13 @@ function playCutscene(name, music = null) {
 }
 
 cutscene.addEventListener("ended", () => {
-    lockerMusic.pause();
+    if (lastCutsceneSound) {
+        lastCutsceneSound.pause();
+    }
     cutscene.style.display = 'none';
+    if (playedCutscenes[playedCutscenes.length - 1] == "tram") {
+        loadRadioSound();
+    }
 });
 
 let currentZoom = "";
@@ -266,6 +273,8 @@ const thud = new Audio('sound/thud.mp3');
 const wind = new Audio('sound/wind.mp3');
 const bang = new Audio('sound/bang.mp3');
 const radioStatic = new Audio('sound/radioStatic.mp3');
+const tramSound = new Audio('sound/tramSound.mp3');
+tramSound.loop = false;
 
 const star = new Audio('sound/star.mp3');
 const circle = new Audio('sound/circle.mp3');
@@ -1099,6 +1108,17 @@ function loadWindRoom() {
         bottomHighlight.pressed = true;
     });
 
+    const tram = new GameObject(816, 271, 'tram', windRoom, 3);
+    tram.hide();
+    tram.setOnClick(() => {
+        setTextBoxConfirm("Aboard the tram?", () => {
+            playCutscene("tram", tramSound);
+            setTimeout(() => {
+                setRoom(a);
+            }, 1000);
+        })
+    })
+
 
 
 
@@ -1128,18 +1148,19 @@ function loadWindRoom() {
                                 () => setTextBox("It's been three years."),
                                 () => setTextBox("Were you afraid?"),
                                 () => setTextBox("Then why did you keep the letter?"),
-                                () => setTextBoxConfirm("Do you want to continue?", () => {
+                                () => setTextBoxConfirm("Do you want to continue the game?", () => {
                                     walls.setOnClick(() => {
                                         if (platform.state == "Back") {
                                             setTextBox("A white void. It feels a little off.");
                                         } else {
-                                            setTextBoxConfirm("Push?", () => {
+                                            setTextBoxConfirm("A white void. Push?", () => {
                                                 walls.setImgState("Open");
                                                 walls.setOnClick(() => { });
                                                 bottomHighlight.hide();
                                                 platform.hide();
                                                 wind.pause();
                                                 bang.play();
+                                                tram.show();
                                             });
                                         }
                                     })
@@ -1153,12 +1174,6 @@ function loadWindRoom() {
             })
         })
     }
-
-    //TODO HAIHAIH IMPORTMANT THIS I RADIO BROADCAST TEST
-    // eventBus.addEventListener("radioChange", () => {
-    //  if (currentRadioSong=="jfdlksf") {
-    //     img.setImgState("fdsjkljfdslkf");
-    // });
 }
 
 loadWindRoom();
@@ -1188,15 +1203,14 @@ function loadRadioZoom() {
     arm.img.style.pointerEvents = 'none';
 
     const coil = new GameObject(594, 356, 'coil', radioZoom, 2);
-    coil.setOnClick(() => { loadRadioSound(); coil.setOnClick(() => { }) });
+    // coil.setOnClick(() => { loadRadioSound(); coil.setOnClick(() => { }) });
 
     let isMouseDown = false;
     coil.setOnMouseDown(() => {
         isMouseDown = true;
     })
-    document.addEventListener('mouseup', () => {
+    radioZoom.addEventListener('mouseup', () => {
         isMouseDown = false;
-        radioUpdate();
     })
 
 
@@ -1217,14 +1231,14 @@ function loadRadioZoom() {
         radioFreq.forEach((freq, song) => {
             let distance = Math.abs(armFreq - freq);
             let volume = Math.exp(-1 * distance * 0.2);
-            if (volume < 0.001) {
+            if (volume < 0.005) {
                 volume = 0;
             }
             song.volume = volume;
-            if (song.volume > 0) {
+            if (volume > 0) {
                 radioStatic.volume = 1 - volume;
             }
-            if (song.volume > 0.5) {
+            if (volume > 0.5) {
                 currentRadioSong = song;
                 eventBus.dispatchEvent(new CustomEvent("radioChange"));
             }
@@ -1263,6 +1277,8 @@ function loadA() {
             door2.nextRoom = f;
         }
     })
+    const paper = new GameObject(842, 578, 'paper', a, 2);
+    //todo
 }
 loadA();
 function loadB() {
@@ -1279,17 +1295,20 @@ function loadB() {
     const door3 = new GameObject(1207, 414, 'door3Highlight', b, 2);
     door3.setInvisibleHighlight();
     door3.setOnClick(() => {
-        setRoom(a);
+        setRoom(j);
     });
     const rocks = new GameObject(608, 370, 'rocks', b, 2);
     rocks.setOnClick(() => { setTextBox("A rock climbing wall.") })
+    const bottomHighlight = new GameObject(0, 678, 'bottomHighlight', b, 3);
+    bottomHighlight.setInvisibleHighlight();
+    bottomHighlight.setOnClick(() => { setRoom(a) });
 }
 loadB();
 
 function loadC() {
     const door2 = new GameObject(324, 368, 'door2', c, 2);
     door2.setHighlight();
-    door2.setOnClick(() => { setRoom(j) })//MAYBE ADD ANOTHER ROOM TODO
+    door2.setOnClick(() => { setRoom(a) })//MAYBE ADD ANOTHER ROOM TODO
     const heartDoor = new GameObject(893, 224, 'heartDoor', c, 2);
     heartDoor.setOnClick(() => { setTextBox("It's locked.") })
     eventBus.addEventListener("radioChange", () => {
@@ -1318,7 +1337,7 @@ function loadD() {
                 setTextBox("You're already holding a ladder. You should probably set it down somewhere.");
             } else {
                 ladder.hide();
-                inventory.add("ladder");
+                inventoryAdd("ladder");
             }
         })
     })
@@ -1342,7 +1361,6 @@ function loadF() {
 }
 loadF();
 
-//TODO FIX G
 let paper;
 let paperRipped;
 function loadG() {
@@ -1354,7 +1372,7 @@ function loadG() {
     paperRipped.hide();
     paperRipped.setHighlight();
     paperRipped.setOnClick(() => {
-        setTextBoxConfirm("Crawl through?", () => {
+        setTextBoxConfirm("Crawl through the hole?", () => {
             setRoom(i);
         })
     })
@@ -1387,13 +1405,13 @@ function loadH() {
                 setTextBox("You're already holding a ladder. You should probably set it down somewhere.");
             } else {
                 ladder.hide();
-                inventory.add("ladder");
+                inventoryAdd("ladder");
             }
         })
     })
     const bottomHighlight = new GameObject(0, 678, 'bottomHighlight', h, 3);
     bottomHighlight.setInvisibleHighlight();
-    bottomHighlight.setOnClick(() => { setRoom(f) });
+    bottomHighlight.setOnClick(() => { setRoom(c) });
 }
 loadH();
 
@@ -1458,7 +1476,7 @@ function loadK() {
                 setTextBox("You're already holding a ladder. You should probably set it down somewhere.");
             } else {
                 ladder.hide();
-                inventory.add("ladder");
+                inventoryAdd("ladder");
             }
         })
     })
@@ -1486,6 +1504,10 @@ function loadLadderRoom() {
 
         } else if (ladder.currentStateNum == 0) {
             setTextBox("You wonder if you can reach the top.");
+        } else if (ladder.currentStateNum == 3) {
+            setTextBoxConfirm("Climb up?", () => {
+                //TODO NEXT PART
+            })
         }
     })
     const bottomHighlight = new GameObject(0, 678, 'bottomHighlight', ladderRoom, 3);
@@ -1493,6 +1515,3 @@ function loadLadderRoom() {
     bottomHighlight.setOnClick(() => { setRoom(b) });
 }
 loadLadderRoom();
-
-setRoom(a);
-loadRadioSound();
