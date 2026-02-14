@@ -1227,7 +1227,7 @@ function loadWindRoom() {
                                                 platform.hide();
                                                 wind.pause();
                                                 bang.play();
-                                                tram.show(); // TODO REMOVE HAND EVENT LATER
+                                                tram.show();
                                                 document.addEventListener('click', randomAddHand);
                                             });
                                         }
@@ -1578,6 +1578,7 @@ function loadLadderRoom() {
             setTextBoxConfirm("Climb up?", () => {
                 //TODO NEXT PART
                 overlay.style.display = 'none'; //hide all hands
+                document.removeEventListener('click', randomAddHand);
             })
         } else {
             setTextBox("It doesn't reach the top yet.")
@@ -1588,6 +1589,3 @@ function loadLadderRoom() {
     bottomHighlight.setOnClick(() => { setRoom(b) });
 }
 loadLadderRoom();
-
-document.addEventListener('click', randomAddHand);
-setRoom(a)
