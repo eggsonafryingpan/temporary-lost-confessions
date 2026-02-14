@@ -84,6 +84,21 @@ body {
     -webkit-user-select: none;
 }
 
+#overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 20;
+    user-select: none;
+    -webkit-user-select: none;
+    pointer-events: none;
+    top: 0;
+    left: 0;
+}
+
+#overlay img {
+    pointer-events: auto;
+}
 
 
 #textBox {

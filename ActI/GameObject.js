@@ -36,6 +36,7 @@ export class GameObject {
         this.y = y;
         this.img.style.left = this.x + 'px';
         this.img.style.top = this.y + 'px';
+        console.log(x + "  " + y)
     }
 
     getImgElement() {
@@ -88,6 +89,7 @@ export class GameObject {
             this.img.style.transform = 'translate(-100%, -100%)';
         }
     }
+
 
     setOnClick(func) {
         this.onClick = func;

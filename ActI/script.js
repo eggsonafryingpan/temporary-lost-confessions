@@ -54,6 +54,61 @@ world.style.height = height + 'px';
 
 const freeze = document.getElementById("freeze");
 
+const overlay = document.getElementById("overlay");
+
+function addHand() { // top left{left top} bottomRight{right bottom}
+    let side = Math.floor(Math.random() * 4);
+    const hand = new GameObject(0, 0, 'handOverlay', overlay, 22);
+    console.log("side" + side)
+    console.log("rot" + (90 * side))
+    hand.setRotation(90 * side);
+    switch (side) {
+        case 0:
+            hand.setLocation(0, Math.floor(Math.random() * 450) + 100);
+            hand.setOnClick(() => {
+                hand.setLocation(hand.x - 50, hand.y);
+                if (hand.x <= -424) {
+                    hand.remove();
+                }
+            })
+            break;
+        case 1:
+            hand.setLocation(Math.floor(Math.random() * 1050) + 100, 0);
+            hand.setOnClick(() => {
+                hand.setLocation(hand.x, hand.y - 50);
+                if (hand.y <= -424) {
+                    hand.remove();
+                }
+            })
+            break;
+        case 2:
+            hand.setLocation(1400 - 424, Math.floor(Math.random() * 500) + 100);
+            hand.setOnClick(() => {
+                hand.setLocation(hand.x + 50, hand.y);
+                if (hand.x >= 1400 + 424) {
+                    hand.remove();
+                }
+            })
+            break;
+        case 3:
+            hand.setLocation(Math.floor(Math.random() * 1100) + 100, 788 - 300);
+            hand.setOnClick(() => {
+                hand.setLocation(hand.x, hand.y + 50);
+                if (hand.y >= 788 + 424) {
+                    hand.remove();
+                }
+            })
+            break;
+    }
+
+}
+
+function randomAddHand() {
+    if (Math.random() < 0.05) {
+        addHand();
+    }
+}
+
 const inventoryBox = document.getElementById("inventory");
 
 const puzzle1 = document.getElementById("puzzle1");
@@ -1174,7 +1229,8 @@ function loadWindRoom() {
                                                 platform.hide();
                                                 wind.pause();
                                                 bang.play();
-                                                tram.show();
+                                                tram.show(); // TODO REMOVE HAND EVENT LATER
+                                                document.addEventListener('click', randomAddHand);
                                             });
                                         }
                                     })
@@ -1528,3 +1584,6 @@ function loadLadderRoom() {
     bottomHighlight.setOnClick(() => { setRoom(b) });
 }
 loadLadderRoom();
+
+document.addEventListener('click', randomAddHand);
+setRoom(a)
