@@ -36,7 +36,6 @@ export class GameObject {
         this.y = y;
         this.img.style.left = this.x + 'px';
         this.img.style.top = this.y + 'px';
-        console.log(x + "  " + y)
     }
 
     getImgElement() {

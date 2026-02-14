@@ -59,12 +59,10 @@ const overlay = document.getElementById("overlay");
 function addHand() { // top left{left top} bottomRight{right bottom}
     let side = Math.floor(Math.random() * 4);
     const hand = new GameObject(0, 0, 'handOverlay', overlay, 22);
-    console.log("side" + side)
-    console.log("rot" + (90 * side))
     hand.setRotation(90 * side);
     switch (side) {
         case 0:
-            hand.setLocation(0, Math.floor(Math.random() * 450) + 100);
+            hand.setLocation(0, Math.floor(Math.random() * 500) + 50);
             hand.setOnClick(() => {
                 hand.setLocation(hand.x - 50, hand.y);
                 if (hand.x <= -424) {
@@ -73,7 +71,7 @@ function addHand() { // top left{left top} bottomRight{right bottom}
             })
             break;
         case 1:
-            hand.setLocation(Math.floor(Math.random() * 1050) + 100, 0);
+            hand.setLocation(Math.floor(Math.random() * 1000) + 50, 0);
             hand.setOnClick(() => {
                 hand.setLocation(hand.x, hand.y - 50);
                 if (hand.y <= -424) {
@@ -82,7 +80,7 @@ function addHand() { // top left{left top} bottomRight{right bottom}
             })
             break;
         case 2:
-            hand.setLocation(1400 - 424, Math.floor(Math.random() * 500) + 100);
+            hand.setLocation(1400 - 424, Math.floor(Math.random() * 500) + 50);
             hand.setOnClick(() => {
                 hand.setLocation(hand.x + 50, hand.y);
                 if (hand.x >= 1400 + 424) {
@@ -91,7 +89,7 @@ function addHand() { // top left{left top} bottomRight{right bottom}
             })
             break;
         case 3:
-            hand.setLocation(Math.floor(Math.random() * 1100) + 100, 788 - 300);
+            hand.setLocation(Math.floor(Math.random() * 1100) + 50, 788 - 300);
             hand.setOnClick(() => {
                 hand.setLocation(hand.x, hand.y + 50);
                 if (hand.y >= 788 + 424) {
@@ -417,7 +415,7 @@ function loadBedroom() {
                             dickinson.show();
                         })
                     } else {
-                        setTextBox("You wonder if \"The Swan\" did anything. Maybe check near the museum?");
+                        setTextBox("You want to hear the song for a little longer. Maybe check the room with the swan?");
                     }
                 } else if (currentSong == theSwan) {
                     setTextBox('"The Swan" plays.');
@@ -1000,7 +998,7 @@ function loadClassroom() {
     const whiteboard = new GameObject(614, 297, 'whiteboard', classroom, 2);
     whiteboard.setOnClick(() => { setTextBox("A whiteboard. The lesson is on The Great Gatsby.") });
     const classroomWindow = new GameObject(943, 74, 'window', classroom, 2);
-    classroomWindow.setOnClick(() => { setTextBox("A window. It's raining outside.") }); // TODO GET RAIN SOUND??
+    classroomWindow.setOnClick(() => { setTextBox("A window. It's raining outside.") });
     const teacherDesk = new GameObject(448, 418, 'teacherDesk', classroom, 2);
     teacherDesk.setOnClick(() => { setTextBox("The teacher's desk.") });
 
@@ -1083,7 +1081,7 @@ function loadVaultRoom() {
             setTextBox("A speaker. \"The Swan\" plays.");
         } else if (currentSong == deux) {
             setTextBox("A speaker. \"Pas de deux\" plays.")
-        } // SET ANOTHER SONG TODO MAYBE
+        }
     });
     dickinson = new GameObject(681, 475, 'dickinson', vaultRoom, 4);
     dickinson.hide();
@@ -1307,8 +1305,13 @@ function loadRadioZoom() {
             if (volume > 0) {
                 radioStatic.volume = 1 - volume;
             }
+            if (currentRadioSong && currentRadioSong.volume < 0.6) {
+                currentRadioSong = null;
+                console.log(currentRadioSong);
+            }
             if (volume > 0.5) {
                 currentRadioSong = song;
+                console.log(song);
                 eventBus.dispatchEvent(new CustomEvent("radioChange"));
             }
         });
@@ -1576,10 +1579,13 @@ function loadLadderRoom() {
         } else if (ladder.currentStateNum == 3) {
             setTextBoxConfirm("Climb up?", () => {
                 //TODO NEXT PART
+                overlay.style.display = 'none'; //hide all hands
             })
+        } else {
+            setTextBox("It doesn't reach the top yet.")
         }
     })
-    const bottomHighlight = new GameObject(0, 678, 'bottomHighlight', ladderRoom, 3);
+    const bottomHighlight = new GameObject(0, 708, 'bottomHighlight', ladderRoom, 3);
     bottomHighlight.setInvisibleHighlight();
     bottomHighlight.setOnClick(() => { setRoom(b) });
 }
