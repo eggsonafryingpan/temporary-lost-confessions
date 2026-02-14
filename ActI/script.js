@@ -32,6 +32,7 @@ const vaultRoom = document.getElementById("vaultRoom");
 const spaceRoom = document.getElementById("spaceRoom");
 const windRoom = document.getElementById("windRoom");
 const radioZoom = document.getElementById("radioZoom");
+const finalRoom = document.getElementById("finalRoom");
 
 const a = document.getElementById("a");
 const b = document.getElementById("b");
@@ -287,8 +288,10 @@ const inventory = new Map();
 
 
 function inventoryRemove(name = "") {
-    inventory.get(name).hide();
-    inventory.delete(name);
+    if (inventory.get(name)) {
+        inventory.get(name).hide();
+        inventory.delete(name);
+    }
 }
 
 function inventoryAdd(name = "", onclick) {
@@ -1193,7 +1196,7 @@ function loadWindRoom() {
         setTextBoxConfirm("Are you sure?", () => {
             setTextBoxConfirm("Are you certain?", () => {
                 setTextBoxConfirm("Do you want to reconsider?", () => { }, () => {
-                    setTextBoxConfirm("Is this your final decision?", () => {
+                    setTextBoxConfirm("Is this your final decision? (There is no going back)", () => {
                         location.reload(true);
                     })
                 })
@@ -1206,7 +1209,7 @@ function loadWindRoom() {
             setTextBoxConfirm("You have to.", () => { }, () => {
                 setTextBoxConfirm("It's no use.", () => { }, () => {
                     setTextBoxConfirm("There's no exit here don't you see that?", () => { }, () => {
-                        setTextBoxConfirm("You shouldn't have written it in the first place", () => { }, () => {
+                        setTextBoxConfirm("You shouldn't have written it in the first place.", () => { }, () => {
                             textChain([
                                 () => setTextBox("Alright..."),
                                 () => setTextBox("Do you remember what happened after the incident?"),
@@ -1564,6 +1567,7 @@ function loadLadderRoom() {
     const ladder = new GameObject(771, 678, 'ladder', ladderRoom, 2);
     ladder.setTranslate("bottomRight");
     ladder.currentStateNum = 0;
+
     ladder.setOnClick(() => {
         if (inventory.has("ladder")) {
             setTextBoxConfirm("Place the ladder?", () => {
@@ -1576,7 +1580,9 @@ function loadLadderRoom() {
             setTextBox("You wonder if you can reach the top.");
         } else if (ladder.currentStateNum == 3) {
             setTextBoxConfirm("Climb up?", () => {
-                //TODO NEXT PART
+                setRoom(finalRoom);
+                currentRadioSong.pause();
+                radioStatic.pause();
                 overlay.style.display = 'none'; //hide all hands
                 document.removeEventListener('click', randomAddHand);
             })
@@ -1589,3 +1595,30 @@ function loadLadderRoom() {
     bottomHighlight.setOnClick(() => { setRoom(b) });
 }
 loadLadderRoom();
+
+function loadFinalRoom() {
+    const postbox = new GameObject(627, 260, 'postbox', finalRoom, 2);
+    postbox.setOnClick(() => {
+        setTextBoxConfirm("Send the letter?", () => {
+            setTextBoxConfirm("But other people will see.", () => {
+                setTextBoxConfirm("What if they say no?", () => {
+                    textChain([
+                        () => setTextBox("What if-"),
+                        () => setTextBoxConfirm("Send your letter?", () => {
+                            inventoryRemove("letter");
+                            setSong(serenade);
+                            setTextBox("No matter how much or how often people hurt each other, loving someone is never a waste.");
+                            setTimeout(() => {
+                                window.location.href = "../index.html"
+                            }, 11000);
+                        })
+                    ])
+                })
+            })
+        })
+    })
+}
+loadFinalRoom();
+
+setRoom(ladderRoom);
+loadRadioSound();
