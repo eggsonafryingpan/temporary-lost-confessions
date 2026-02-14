@@ -1619,6 +1619,3 @@ function loadFinalRoom() {
     })
 }
 loadFinalRoom();
-
-setRoom(ladderRoom);
-loadRadioSound();
