@@ -1307,11 +1307,9 @@ function loadRadioZoom() {
             }
             if (currentRadioSong && currentRadioSong.volume < 0.6) {
                 currentRadioSong = null;
-                console.log(currentRadioSong);
             }
             if (volume > 0.5) {
                 currentRadioSong = song;
-                console.log(song);
                 eventBus.dispatchEvent(new CustomEvent("radioChange"));
             }
         });
