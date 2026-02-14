@@ -1222,12 +1222,11 @@ function loadRadioZoom() {
     let isMouseDown = false;
     coil.setOnMouseDown(() => {
         isMouseDown = true;
+        radioUpdate();
     })
     radioZoom.addEventListener('mouseup', () => {
         isMouseDown = false;
     })
-
-
 
 
     coil.setOnMouseMove(() => {
@@ -1282,7 +1281,7 @@ function loadA() {
     });
     const door2 = new GameObject(838, 171, 'door2', a, 2);
     door2.setHighlight();
-    door2.nextRoom = f;
+    door2.nextRoom = g;
     door2.setOnClick(() => {
         setRoom(door2.nextRoom);
         if (door2.nextRoom == f) {
@@ -1292,7 +1291,7 @@ function loadA() {
         }
     })
     const paper = new GameObject(842, 578, 'paper', a, 2);
-    //todo
+    paper.setOnClick(() => { setZoom(paper) });
 }
 loadA();
 function loadB() {
@@ -1322,14 +1321,14 @@ loadB();
 function loadC() {
     const door2 = new GameObject(324, 368, 'door2', c, 2);
     door2.setHighlight();
-    door2.setOnClick(() => { setRoom(a) })//MAYBE ADD ANOTHER ROOM TODO
-    const heartDoor = new GameObject(893, 224, 'heartDoor', c, 2);
-    heartDoor.setOnClick(() => { setTextBox("It's locked.") })
+    door2.setOnClick(() => { setRoom(g) })//MAYBE ADD ANOTHER ROOM TODO
+    const circleDoor = new GameObject(893, 218, 'circleDoor', c, 2);
+    circleDoor.setOnClick(() => { setTextBox("It's locked.") })
     eventBus.addEventListener("radioChange", () => {
-        if (currentRadioSong == heart) {
-            heartDoor.setOnClick(() => { setTextBoxConfirm("It's unlocked. Open it?", () => { setRoom(d) }) });
+        if (currentRadioSong == circle) {
+            circleDoor.setOnClick(() => { setTextBoxConfirm("It's unlocked. Open it?", () => { setRoom(d) }) });
         } else {
-            heartDoor.setOnClick(() => { setTextBox("It's locked.") })
+            circleDoor.setOnClick(() => { setTextBox("It's locked.") })
         }
     });
     const door1 = new GameObject(434, 649, 'door1', c, 2);
