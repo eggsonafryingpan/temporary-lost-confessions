@@ -551,7 +551,7 @@ function loadBedroom() {
     const puzzleDrawer = new GameObject(1122, 558, 'puzzleDrawer', bedroom, 5);
     puzzleDrawer.setOnClick(() => {
         if (puzzleDrawer.state == "")
-            setTextBox('A locked drawer. There\'s a sticky note. It says: "Secret Drawer: Open with     favorite song".');
+            setTextBox('A locked drawer. There\'s a sticky note. It says: "Secret Drawer: Play favorite song to open".');
         else if (puzzleDrawer.state == "SlightlyOpen")
             setTextBoxConfirm("It's unlocked. Open it?", () => {
                 puzzleDrawer.setImgState("Open");
@@ -559,7 +559,7 @@ function loadBedroom() {
                 letter.show();
             })
         else {
-            setTextBox('An opened drawer. There\'s a sticky note. It says: "Secret Drawer: Open with favorite song"');
+            setTextBox('An opened drawer. There\'s a sticky note. It says: "Secret Drawer: Play favorite song to open"');
         }
     });
     puzzleDrawer.setTranslate("bottomRight");
