@@ -1493,7 +1493,7 @@ function loadH() {
                 setTextBox("You're already holding a ladder. You should probably set it down somewhere.");
             } else {
                 ladder.hide();
-                inventoryAdd("ladder");
+                inventoryAdd("ladder", () => setTextBox("A ladder."));
             }
         })
     })
@@ -1568,7 +1568,7 @@ function loadK() {
                 setTextBox("You're already holding a ladder. You should probably set it down somewhere.");
             } else {
                 ladder.hide();
-                inventoryAdd("ladder");
+                inventoryAdd("ladder", () => setTextBox("A ladder."));
             }
         })
     })
@@ -1687,5 +1687,10 @@ document.addEventListener("keydown", (e) => {
     }
     if (input.endsWith("lilac")) {
         inventoryAdd("keychain");
+    }
+    if (input.endsWith("mizisua")) {
+        const mizisua = document.createElement('img');
+        mizisua.src = "imgs/mizisua.png";
+        currRoom.appendChild(mizisua);
     }
 })
