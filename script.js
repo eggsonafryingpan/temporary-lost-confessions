@@ -1,6 +1,15 @@
 const title = document.getElementById("title");
 const play = document.getElementById("play");
 const homeScreen = document.getElementById("homeScreen");
+const doors = document.getElementById("doors");
+const door1 = document.getElementById("door1");
+const door2 = document.getElementById("door2");
+
+door1.src = "imgs/door1.png";
+door2.src = "imgs/door2.png";
+
+
+
 title.src = "imgs/title1.png";
 
 setInterval(() => {
@@ -12,9 +21,24 @@ setInterval(() => {
 }, 600);
 
 play.addEventListener('click', () => {
-    homeScreen.classList.add('flyUp');
+    homeScreen.classList.add('flyOut');
+    doors.classList.add("flyIn");
 })
 
-function loadDoors() {
+doors.addEventListener('animationend', () => {
+    door1.addEventListener("mouseenter", () => {
+        door1.src = "imgs/door1Opened.png";
+    })
 
-}
+    door1.addEventListener("mouseleave", () => {
+        door1.src = "imgs/door1.png";
+    })
+
+    door2.addEventListener("mouseenter", () => {
+        door2.src = "imgs/door2Opened.png";
+    })
+
+    door2.addEventListener("mouseleave", () => {
+        door2.src = "imgs/door2.png";
+    })
+});
