@@ -14,8 +14,10 @@ document.addEventListener('mousemove', (e) => {
     mouseY = e.clientY;
 });
 
-const preloadingDesk = new Image();
-preloadingDesk.src = "imgs/bedroom/drawerOpened.png";
+const preloadingPuzzleDrawerOpened = new Image();
+preloadingPuzzleDrawerOpened.src = "imgs/bedroom/puzzleDrawerOpen.png";
+const preloadingPuzleDrawerSlightlyopened = new Image();
+preloadingPuzleDrawerSlightlyopened.src = "imgs/bedroom/puzzleDrawerSlightlyOpen.png";
 
 const eventBus = new EventTarget();
 
