@@ -103,7 +103,7 @@ function addHand() { // top left{left top} bottomRight{right bottom}
 }
 
 function randomAddHand() {
-    if (Math.random() < 0.05) {
+    if (Math.random() < 0.1) {
         addHand();
     }
 }
@@ -187,6 +187,7 @@ function playCutscene(name, music = null) {
             vaultDiary.show();
         }
         if (music) {
+            cutscene.addEventListener('onload')
             setSong(music);
             lastCutsceneSound = music;
         }
@@ -310,7 +311,8 @@ const diaryEntries = new Map([
     ["dickinson", ""],
     ["deuxDef", ""],
     ["june4", ""],
-    ["june5", ""]
+    ["june5", ""],
+    ["feb9", ""]
 ]);
 
 
@@ -361,8 +363,10 @@ function setSong(song) {
     if (currentSong) {
         currentSong.pause();
     }
+    song.currentTime = 0;
     currentSong = song;
     currentSong.play();
+
     currentSong.loop = true;
 }
 
@@ -373,7 +377,6 @@ function loadActI() {
     playCutscene("actI");
 
 }
-loadActI();
 
 let boxCase = null;
 let vault = null;
@@ -945,6 +948,9 @@ function loadGatchaRoom() { // todo create overlay effect
     const bottomHighlight = new GameObject(0, 698, 'bottomHighlight', gatchaRoom, 3);
     bottomHighlight.setInvisibleHighlight();
     bottomHighlight.setOnClick(() => { setRoom(mallRoom) });
+
+    const overlay = new GameObject(0, 0, 'overlay', gatchaRoom, 7);
+    overlay.setOverlay();
 }
 
 loadGatchaRoom();
@@ -1339,6 +1345,9 @@ function loadA() {
             starDoor.setOnClick(() => { setTextBox("It's locked.") })
         }
     });
+    const diary = new GameObject(454, 370, 'diary', a, 2);
+    diary.setOnClick(() => { setDiary("feb9") });
+
     const door2 = new GameObject(838, 171, 'door2', a, 2);
     door2.setHighlight();
     door2.nextRoom = g;
@@ -1417,6 +1426,8 @@ function loadD() {
     const bottomHighlight = new GameObject(0, 678, 'bottomHighlight', d, 3);
     bottomHighlight.setInvisibleHighlight();
     bottomHighlight.setOnClick(() => { setRoom(c) });
+    const overlay = new GameObject(0, 0, 'overlay', d, 5);
+    overlay.setOverlay();
 }
 loadD();
 
@@ -1461,7 +1472,8 @@ function loadG() {
             squareDoor.setOnClick(() => { setTextBox("It's locked.") })
         }
     });
-
+    const chair = new GameObject(280, 311, 'chair', g, 2);
+    chair.setOnClick(() => { setTextBox("A seat for a movie theater. They might have installed it wrong.") })
 }
 loadG();
 
@@ -1485,6 +1497,10 @@ function loadH() {
     const bottomHighlight = new GameObject(0, 678, 'bottomHighlight', h, 3);
     bottomHighlight.setInvisibleHighlight();
     bottomHighlight.setOnClick(() => { setRoom(c) });
+    const space = new GameObject(269, 81, 'space', h, 2);
+    space.setOnClick(() => { setTextBox("A hole in the ceiling. You can see the night sky.") });
+    const overlay = new GameObject(0, 0, 'overlay', h, 8);
+    overlay.setOverlay();
 }
 loadH();
 
@@ -1581,9 +1597,9 @@ function loadLadderRoom() {
         } else if (ladder.currentStateNum == 3) {
             setTextBoxConfirm("Climb up?", () => {
                 setRoom(finalRoom);
+                overlay.style.display = 'none';
                 currentRadioSong.pause();
                 radioStatic.pause();
-                overlay.style.display = 'none'; //hide all hands
                 document.removeEventListener('click', randomAddHand);
             })
         } else {
@@ -1593,6 +1609,9 @@ function loadLadderRoom() {
     const bottomHighlight = new GameObject(0, 708, 'bottomHighlight', ladderRoom, 3);
     bottomHighlight.setInvisibleHighlight();
     bottomHighlight.setOnClick(() => { setRoom(b) });
+
+    const pipe = new GameObject(449, 176, 'pipe', ladderRoom, 2);
+    pipe.setOnClick(() => { setTextBox("You look inside and see a postbox in the distance.") });
 }
 loadLadderRoom();
 
@@ -1619,3 +1638,6 @@ function loadFinalRoom() {
     })
 }
 loadFinalRoom();
+
+
+

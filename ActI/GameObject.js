@@ -17,6 +17,10 @@ export class GameObject {
         this.load();
     }
 
+    setOverlay() {
+        this.img.style.pointerEvents = "none";
+    }
+
     setRotation(deg) {
         this.img.style.transform = "rotate(" + deg + "deg)";
     }

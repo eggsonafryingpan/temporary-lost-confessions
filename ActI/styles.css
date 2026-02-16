@@ -92,8 +92,6 @@ body {
     user-select: none;
     -webkit-user-select: none;
     pointer-events: none;
-    top: 0;
-    left: 0;
 }
 
 #overlay img {
