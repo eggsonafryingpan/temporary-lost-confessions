@@ -103,7 +103,7 @@ function addHand() { // top left{left top} bottomRight{right bottom}
 }
 
 function randomAddHand() {
-    if (Math.random() < 0.1) {
+    if (Math.random() < 0.05) {
         addHand();
     }
 }
@@ -187,9 +187,10 @@ function playCutscene(name, music = null) {
             vaultDiary.show();
         }
         if (music) {
-            cutscene.addEventListener('onload')
             setSong(music);
             lastCutsceneSound = music;
+            music.currentTime = cutscene.currentTime
+
         }
         if (name == "actI") {
             currRoom.style.visibility = "hidden";
@@ -339,6 +340,7 @@ const click = new Audio('sound/click.wav');
 const serenade = new Audio('sound/schubertSerenade.mp3');
 const theSwan = new Audio('sound/theSwan.mp3');
 const deux = new Audio('sound/pasDeDeux.mp3');
+const reverie = new Audio('sound/reverie.mp3');
 const doorOpening = new Audio('sound/doorOpening.mp3');
 const rain = new Audio('sound/rain.mp3');
 const thud = new Audio('sound/thud.mp3');
@@ -1191,6 +1193,7 @@ function loadWindRoom() {
             playCutscene("tram", tramSound);
             setTimeout(() => {
                 setRoom(a);
+                document.addEventListener('click', randomAddHand);
             }, 1000);
         })
     })
@@ -1225,6 +1228,7 @@ function loadWindRoom() {
                                 () => setTextBox("Were you afraid?"),
                                 () => setTextBox("Then why did you keep the letter?"),
                                 () => setTextBoxConfirm("Do you want to continue the game?", () => {
+                                    shredder.setOnClick(() => { setTextBox("A paper shredder.") })
                                     walls.setOnClick(() => {
                                         if (platform.state == "Back") {
                                             setTextBox("A white void. It feels a little off.");
@@ -1237,7 +1241,6 @@ function loadWindRoom() {
                                                 wind.pause();
                                                 bang.play();
                                                 tram.show();
-                                                document.addEventListener('click', randomAddHand);
                                             });
                                         }
                                     })
@@ -1257,7 +1260,7 @@ loadWindRoom();
 
 const radioFreq = new Map([
     [star, 655],
-    [circle, 710],
+    [circle, 720], // offset to make it easier to see
     [square, 820],
     [heart, 980]
 ]);
@@ -1623,13 +1626,19 @@ function loadFinalRoom() {
                 setTextBoxConfirm("What if they say no?", () => {
                     textChain([
                         () => setTextBox("What if-"),
+                        () => setTextBox("There's no stopping you is there?"),
+                        () => setTextBox("Good luck..."),
                         () => setTextBoxConfirm("Send your letter?", () => {
                             inventoryRemove("letter");
-                            setSong(serenade);
-                            setTextBox("No matter how much or how often people hurt each other, loving someone is never a waste.");
-                            setTimeout(() => {
-                                window.location.href = "../index.html"
-                            }, 11000);
+                            setSong(reverie);
+                            textChain([
+                                () => setTextBox("No matter how much or how often people hurt each other, loving someone is never a waste."),
+                                () => setTextBoxConfirm("Return to menu?", () => { window.location.href = "../index.html" }, () => {
+                                    postbox.setOnClick(() => {
+                                        setTextBoxConfirm("Return to menu?", () => { window.location.href = "../index.html" });
+                                    })
+                                })
+                            ])
                         })
                     ])
                 })
@@ -1638,6 +1647,3 @@ function loadFinalRoom() {
     })
 }
 loadFinalRoom();
-
-
-
