@@ -1601,7 +1601,9 @@ function loadLadderRoom() {
             setTextBoxConfirm("Climb up?", () => {
                 setRoom(finalRoom);
                 overlay.style.display = 'none';
-                currentRadioSong.pause();
+                if (currentRadioSong) {
+                    currentRadioSong.pause();
+                }
                 radioStatic.pause();
                 document.removeEventListener('click', randomAddHand);
             })
@@ -1647,3 +1649,43 @@ function loadFinalRoom() {
     })
 }
 loadFinalRoom();
+
+
+//cheatcodes
+
+let lastInputs = [];
+
+document.addEventListener("keydown", (e) => {
+    lastInputs.push(e.key);
+    if (lastInputs > 10) {
+        lastInputs.shift();
+    }
+    const input = lastInputs.join("");
+    if (input.endsWith("radio")) {
+        setRoom(a);
+        loadRadioSound();
+    }
+    if (input.endsWith("ladder")) {
+        inventoryAdd("ladder");
+    }
+    if (input.endsWith("cutscene")) {
+        setSong(deux);
+        setRoom(vaultRoom);
+        vault.setImgState("Open");
+        vault.setLocation(596, 281);
+        dickinson.show();
+    }
+    if (input.endsWith("final")) {
+        setRoom(finalRoom);
+    }
+    if (input.endsWith("home")) {
+        window.location.href = "../index.html"
+    }
+
+    if (input.endsWith("leave")) {
+        setRoom(flowerRoom);
+    }
+    if (input.endsWith("lilac")) {
+        inventoryAdd("keychain");
+    }
+})
