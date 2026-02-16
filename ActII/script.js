@@ -14,6 +14,9 @@ document.addEventListener('mousemove', (e) => {
     mouseY = e.clientY;
 });
 
+const preloadingDesk = new Image();
+preloadingDesk.src = "imgs/bedroom/drawerOpened.png";
+
 const eventBus = new EventTarget();
 
 const bedroom = document.getElementById("bedroom");

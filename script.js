@@ -26,7 +26,7 @@ play.addEventListener('click', () => {
 })
 
 doors.addEventListener('animationend', () => {
-    door1.addEventListener("mouseenter", () => {
+    door1.addEventListener("mouseover", () => {
         door1.src = "imgs/door1Opened.png";
     })
 
@@ -34,7 +34,7 @@ doors.addEventListener('animationend', () => {
         door1.src = "imgs/door1.png";
     })
 
-    door2.addEventListener("mouseenter", () => {
+    door2.addEventListener("mouseover", () => {
         door2.src = "imgs/door2Opened.png";
     })
 
