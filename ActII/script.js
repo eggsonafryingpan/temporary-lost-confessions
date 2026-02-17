@@ -21,6 +21,9 @@ puzzlePreload2.src = "imgs/bedroom/puzzleDrawerSlightlyOpen.png";
 const iconPreload = new Image();
 iconPreload.src = "imgs/icon/serenadeCD.png";
 
+const cdPreload = new Image();
+cdPreload.src = "imgs/bedroom/cdPlayerClosed.png";
+
 const eventBus = new EventTarget();
 
 const bedroom = document.getElementById("bedroom");
