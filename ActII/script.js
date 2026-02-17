@@ -19,7 +19,7 @@ puzzlePreload1.src = "imgs/bedroom/puzzleDrawerOpen.png";
 const puzzlePreload2 = new Image();
 puzzlePreload2.src = "imgs/bedroom/puzzleDrawerSlightlyOpen.png";
 const iconPreload = new Image();
-iconPreload.src = "imgs/icon/serenadeCD";
+iconPreload.src = "imgs/icon/serenadeCD.png";
 
 const eventBus = new EventTarget();
 
