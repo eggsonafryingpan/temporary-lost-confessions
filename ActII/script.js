@@ -1691,6 +1691,9 @@ document.addEventListener("keydown", (e) => {
     }
     const input = lastInputs.join("");
     if (input.endsWith("radio")) {
+        if (currentSong) {
+            currentSong.pause();
+        }
         setRoom(a);
         loadRadioSound();
     }
