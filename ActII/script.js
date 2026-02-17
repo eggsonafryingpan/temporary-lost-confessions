@@ -56,8 +56,8 @@ const j = document.getElementById("j")
 const k = document.getElementById("k");
 const ladderRoom = document.getElementById("ladderRoom");
 
-let currRoom = bedroom;
-setRoom(currRoom);
+let currRoom;
+setRoom(bedroom);
 
 const world = document.getElementById("world");
 world.style.width = width + 'px';
@@ -270,8 +270,10 @@ function setPuzzle(num) {
 }
 
 function setRoom(room) {
-    currRoom.style.display = 'none';
     room.style.display = 'block';
+    if (currRoom) {
+        currRoom.style.display = 'none';
+    }
     currRoom = room;
 }
 
