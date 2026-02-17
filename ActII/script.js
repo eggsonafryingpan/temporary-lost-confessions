@@ -1714,7 +1714,7 @@ document.addEventListener("keydown", (e) => {
     if (input.endsWith("leave")) {
         setRoom(flowerRoom);
     }
-    if (input.endsWith("lilac")) {
+    if (input.endsWith("keychain")) {
         inventoryAdd("keychain");
     }
     if (input.endsWith("mizisua")) {
