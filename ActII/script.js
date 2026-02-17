@@ -557,12 +557,22 @@ function loadBedroom() {
         } else { setTextBox("A CD player. It was your 16th birthday present.") };
     });
 
+    const letter = new GameObject(1057, 527, 'letter', bedroom, 6);
+    letter.hide();
+
+
     const resume = new GameObject(1053, 529, 'resume', bedroom, 7);
     resume.hide();
     resume.setOnClick(() => {
         setTextBoxConfirm("It's your resume! You need it for the job interview today. Pick it up?",
             () => {
                 inventoryAdd("resume", () => { setTextBox("Your resume.") });
+                letter.setOnClick(
+                    () => setTextBoxConfirm("A letter you wrote a long time ago. Take it?", () => {
+                        freeze.style.display = 'block';
+                        handAnim();
+                    })
+                );
                 resume.hide();
             }
         )
@@ -610,14 +620,7 @@ function loadBedroom() {
     });
 
 
-    const letter = new GameObject(1057, 527, 'letter', bedroom, 6);
-    letter.hide();
-    letter.setOnClick(
-        () => setTextBoxConfirm("A letter you wrote a long time ago. Take it?", () => {
-            freeze.style.display = 'block';
-            handAnim();
-        })
-    );
+
 
     const handClosed = new GameObject(1000, 0, 'handClosed', bedroom, 7);
     handClosed.hide();

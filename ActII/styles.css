@@ -106,7 +106,7 @@ body {
     user-select: none;
     -webkit-user-select: none;
     pointer-events: none;
-    animation: fadeOut 3s forwards;
+    animation: fadeOut 4s forwards;
 }
 
 @keyframes fadeOut {
