@@ -1,0 +1,278 @@
+#world {
+    position: relative;
+    border: 1px solid #000000;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.room {
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    overflow: hidden;
+}
+
+#screen {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+}
+
+#inventory {
+    width: 463px;
+    height: 115px;
+    position: absolute;
+    display: flex;
+    left: 921px;
+    bottom: 673px;
+    z-index: 2;
+    justify-content: left;
+    align-items: center;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 1px;
+    padding-left: 20px;
+
+    scrollbar-width: thin;
+    scrollbar-color: #ccc transparent;
+}
+
+
+
+#inventory::-webkit-scrollbar {
+    height: 10px;
+}
+
+#inventory::-webkit-scrollbar-button {
+    display: none;
+    width: 0;
+    height: 0;
+    display: none;
+}
+
+#inventory::-webkit-scrollbar-track {
+    background: #4365af;
+    border-radius: 2px;
+}
+
+#inventory img {
+    display: inline-block;
+    padding: 4px;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+    -moz-user-select: none;
+}
+
+#textBox {
+    display: none;
+    width: 906px;
+    height: 156px;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    user-select: none;
+    -webkit-user-select: none;
+    z-index: 10;
+}
+
+#textBox img {
+    position: absolute;
+    -webkit-user-drag: none;
+}
+
+#textBoxText {
+    position: absolute;
+    padding: 20px;
+    font-size: 20px;
+    z-index: 10;
+
+}
+
+#textBoxConfirm {
+    display: none;
+    left: 80%;
+    top: 60%;
+    position: absolute;
+    font-size: 20px;
+    z-index: 10;
+}
+
+#textBoxConfirmYes {
+    display: inline-block;
+    padding: 0 20px 0 20px;
+}
+
+#textBoxConfirmYes:hover {
+    color: rgb(255, 255, 255);
+    background-color: rgb(141, 142, 212);
+}
+
+#textBoxConfirmNo {
+    display: inline-block;
+    padding: 0 20px 0 20px;
+}
+
+#textBoxConfirmNo:hover {
+    color: rgb(255, 255, 255);
+    background-color: rgb(141, 142, 212);
+}
+
+#zoom {
+    width: 100%;
+    height: 100%;
+    z-index: 15;
+    display: none;
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+
+}
+
+#zoomContent {
+    position: relative;
+    display: inline-block;
+}
+
+#zoomImg {
+    user-select: none;
+    -webkit-user-select: none;
+    z-index: 16;
+}
+
+#diaryText {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 17;
+    position: absolute;
+    padding: 60px;
+    font-size: 29px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-y: auto;
+    font-family: "Reenie Beanie", cursive;
+
+    scrollbar-width: thin;
+    scrollbar-color: #ccc transparent;
+}
+
+#diaryText::-webkit-scrollbar {
+    height: 10px;
+}
+
+#diaryText::-webkit-scrollbar-button {
+    display: none;
+    width: 0;
+    height: 0;
+    display: none;
+}
+
+#diaryText::-webkit-scrollbar-track {
+    background: #4365af;
+    border-radius: 2px;
+}
+
+.diaryImg {
+    display: block;
+    max-width: 80%;
+    margin: 20px auto;
+}
+
+
+#display {
+    font-size: 60px;
+    color: #271b38;
+    /* display: block; */
+    z-index: 20;
+    position: absolute;
+    text-align: center;
+    width: 60x;
+    transform: translate(105px, -485px);
+}
+
+#keys {
+    position: absolute;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    transform: translate(415px, -330px);
+    /* position: relative; */
+    z-index: 20;
+    grid-template-columns: 45px 45px 45px;
+    grid-template-rows: 45px 45px 45px 45px;
+
+}
+
+#keys button {
+    font-family: "Tiny5", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    background-color: transparent;
+    color: #4c2b7a;
+    border: none;
+    position: relative;
+    z-index: 20;
+}
+
+
+#pause {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    background: #ffffff;
+    opacity: 0;
+    z-index: 25;
+}
+
+.hidden {
+    display: none;
+}
+
+@keyframes upDown {
+    0% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}
+
+#arrow {
+    position: absolute;
+    left: 850px;
+    top: 35px;
+    animation: upDown 1.2s ease-in-out infinite;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid rgb(38, 41, 95);
+}
+
+.tiny5-regular {
+    font-family: "Tiny5", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.reenie-beanie-regular {
+    font-family: "Reenie Beanie", cursive;
+    font-weight: 400;
+    font-style: normal;
+}
