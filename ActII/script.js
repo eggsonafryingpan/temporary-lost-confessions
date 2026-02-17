@@ -14,10 +14,12 @@ document.addEventListener('mousemove', (e) => {
     mouseY = e.clientY;
 });
 
-const preloadingPuzzleDrawerOpened = new Image();
-preloadingPuzzleDrawerOpened.src = "imgs/bedroom/puzzleDrawerOpen.png";
-const preloadingPuzleDrawerSlightlyopened = new Image();
-preloadingPuzleDrawerSlightlyopened.src = "imgs/bedroom/puzzleDrawerSlightlyOpen.png";
+const puzzlePreload1 = new Image();
+puzzlePreload1.src = "imgs/bedroom/puzzleDrawerOpen.png";
+const puzzlePreload2 = new Image();
+puzzlePreload2.src = "imgs/bedroom/puzzleDrawerSlightlyOpen.png";
+const iconPreload = new Image();
+iconPreload.src = "imgs/icon/serenadeCD";
 
 const eventBus = new EventTarget();
 
@@ -342,23 +344,39 @@ document.addEventListener('mousemove', (e) => {
 
 
 const click = new Audio('sound/click.wav');
+click.load();
 const serenade = new Audio('sound/schubertSerenade.mp3');
+serenade.load();
 const theSwan = new Audio('sound/theSwan.mp3');
+theSwan.load();
 const deux = new Audio('sound/pasDeDeux.mp3');
+deux.load();
 const reverie = new Audio('sound/reverie.mp3');
+reverie.load();
 const doorOpening = new Audio('sound/doorOpening.mp3');
+doorOpening.load();
 const rain = new Audio('sound/rain.mp3');
+rain.load();
 const thud = new Audio('sound/thud.mp3');
+thud.load();
 const wind = new Audio('sound/wind.mp3');
+wind.load();
 const bang = new Audio('sound/bang.mp3');
+bang.load();
 const radioStatic = new Audio('sound/radioStatic.mp3');
+radioStatic.load();
 const tramSound = new Audio('sound/tramSound.mp3');
+tramSound.load();
 tramSound.loop = false;
 
 const star = new Audio('sound/star.mp3');
+star.load();
 const circle = new Audio('sound/circle.mp3');
+circle.load();
 const heart = new Audio('sound/heart.mp3');
+heart.load();
 const square = new Audio('sound/square.mp3');
+square.load();
 
 radioStatic.loop = true;
 wind.loop = true;
