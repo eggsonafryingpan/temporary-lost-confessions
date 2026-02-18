@@ -14,6 +14,19 @@ document.addEventListener('mousemove', (e) => {
     mouseY = e.clientY;
 });
 
+[
+    "radioZoom", "bedroom", "flowerRoom", "escalatorRoom", "bentHallway",
+    "mallRoom", "museumRoom", "swanRoom", "gatchaRoom", "subwayRoom",
+    "gummyRoom", "classroom", "butterflyRoom", "vaultRoom", "spaceRoom",
+    "windRoom", "finalRoom", "a", "b", "c", "d", "f", "g", "h", "i", "j", "k",
+    "ladderRoom"
+].forEach(name => {
+    const img = new Image();
+    img.src = 'imgs/room/' + name + '.png';
+});
+
+
+
 const puzzlePreload1 = new Image();
 puzzlePreload1.src = "imgs/bedroom/puzzleDrawerOpen.png";
 const puzzlePreload2 = new Image();

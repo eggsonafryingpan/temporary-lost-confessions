@@ -6,7 +6,7 @@
 }
 
 .room {
-    display: none;
+    display:none;
     position: absolute;
     width: 100%;
     height: 100%;
@@ -33,8 +33,8 @@ body {
     height: 115px;
     position: absolute;
     display: flex;
-    left: 921px;
-    bottom: 673px;
+    top: 0;
+    right: 0;
     z-index: 2;
     justify-content: left;
     align-items: center;
@@ -73,7 +73,6 @@ body {
     -webkit-user-drag: none;
     -moz-user-select: none;
 }
-
 #textBox {
     display: none;
     width: 906px;
@@ -93,6 +92,7 @@ body {
 #textBoxText {
     position: absolute;
     padding: 20px;
+    padding-right:40px;
     font-size: 20px;
     z-index: 10;
 
@@ -137,7 +137,6 @@ body {
     align-items: center;
 
 }
-
 #zoomContent {
     position: relative;
     display: inline-block;
@@ -160,7 +159,7 @@ body {
     white-space: pre-wrap;
     word-wrap: break-word;
     overflow-y: auto;
-    font-family: "Reenie Beanie", cursive;
+      font-family: "Reenie Beanie", cursive;
 
     scrollbar-width: thin;
     scrollbar-color: #ccc transparent;
@@ -199,20 +198,25 @@ body {
     width: 60x;
     transform: translate(105px, -485px);
 }
-
 #keys {
     position: absolute;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3,1fr);
     transform: translate(415px, -330px);
     /* position: relative; */
     z-index: 20;
     grid-template-columns: 45px 45px 45px;
     grid-template-rows: 45px 45px 45px 45px;
+    
+}
+
+#key {
+    transform: translate(630px, -80px);
+    z-index: 20;
 
 }
 
-#keys button {
+#keypad button{
     font-family: "Tiny5", sans-serif;
     font-weight: 400;
     font-style: normal;
@@ -228,7 +232,7 @@ body {
     position: fixed;
     width: 100vw;
     height: 100vh;
-    top: 0;
+      top: 0;
     left: 0;
     background: #ffffff;
     opacity: 0;
@@ -266,13 +270,14 @@ body {
 }
 
 .tiny5-regular {
-    font-family: "Tiny5", sans-serif;
-    font-weight: 400;
-    font-style: normal;
+  font-family: "Tiny5", sans-serif;
+  font-weight: 400;
+  font-style: normal;
 }
 
 .reenie-beanie-regular {
-    font-family: "Reenie Beanie", cursive;
-    font-weight: 400;
-    font-style: normal;
+  font-family: "Reenie Beanie", cursive;
+  font-weight: 400;
+  font-style: normal;
 }
+

@@ -22,6 +22,7 @@ const finale = document.getElementById("finale");
 
 
 
+
 // TEMPORARY
 let currRoom = bedroom2;
 setRoom(currRoom);
@@ -164,6 +165,7 @@ document.addEventListener('mousemove', (e) => {
 
 const handOpen = new GameObject(700,-600, "hand", bedroom2, 25);
 handOpen.hide();
+const ambiance = new Audio("sound/ambiance.mp3");
 
 const handClose = new GameObject(700,0, "handClose", bedroom2, 25);
 handClose.hide();
@@ -206,6 +208,9 @@ function handMove(){
             handClose.hide();
             unpause();
             setTextBox("The letter! You need to get that back before anybody sees.");
+            ambiance.loop = true;
+                        ambiance.play();
+
         };
 
         handOpen.show();
@@ -231,6 +236,7 @@ const note3 = new Audio('sound/Dflat.mp3');
 const note4 = new Audio('sound/F.mp3');
 const ocean = new Audio('sound/ocean.mp3');
 const boom = new Audio('sound/boom.mp3');
+const shine = new Audio('sound/shine.mp3');
 const unlocked = new Audio('sound/unlock.mp3');
 // const ambiance = new Audio('sound/ambiance.mp3');
 // ambiance.loop = true;
@@ -516,6 +522,7 @@ function loadSpace(){
         stars.push("d");
         deneb.setTransparent(1);
         checkTri();
+        shine.play();
     }
         
     })
@@ -526,6 +533,8 @@ function loadSpace(){
         stars.push("v")
         vega.setTransparent(1);
         checkTri();
+        shine.play();
+
         }
         
 
@@ -534,10 +543,11 @@ function loadSpace(){
     altair.setTransparent(0);
     altair.setOnClick(()=>{
         if(!stars.includes("a")){
-             stars.push("a");
+        stars.push("a");
         altair.setTransparent(1);
         checkTri();
-            
+        shine.play();
+
         }
        
 
@@ -788,6 +798,7 @@ function playNote(note){
             tides.setImgState('Back');
             clam.show();
             shellPuzzle = true;
+            setText("You remember now. It was Serenade which was composed by Franz Schubert for a poem.")
         }else{
             notesPlayed = [];
             count = 0;
@@ -863,8 +874,11 @@ function loadLibrary(){
     
 }
 loadLibrary();
+
+
 function loadBedroom(){
     // let paint = false;
+    
     const waves = new GameObject(983, 340, 'waves', bedroom2, 2)
     waves.setOnClick(()=>{
         
@@ -874,6 +888,7 @@ function loadBedroom(){
                 inventoryRemove("paint");
                 inventoryRemove("brush");
                 waves.remove();
+                setTextBox("Strange, that was never there before. It looks very familiar. You try to paint over it, but nothing seems to work.")
             });
         }else{
             setTextBox("A painting you made on the wall a while ago. You need to remove it before you move. Once you get that paint..");
@@ -892,10 +907,13 @@ function loadBedroom(){
 
                     // Set up click for safe
                     safe.setOnClick(() => {
-                        keypadEnable = true;
+                        if(!safeOpen){
+                            keypadEnable = true;
                         keypad.style.display = "block";
                         display.style.display = "block";
-                        setZoom(safe); // show safe in zoom
+                        setZoom(safe); 
+                        }
+                        // show safe in zoom
                     });
 
                     // Now show the safe in the room visually
@@ -967,9 +985,15 @@ function loadBedroom(){
         }else if(input.length < 4){
             input += val;
         }
+    
         display.textContent = input.padEnd(4, "-");
     })
 
+    key.addEventListener('click', (e) => {
+        keypadEnable = false;
+         zoom.style.display = 'none';
+        keypad.style.display = 'none';
+    })
 
 
 
